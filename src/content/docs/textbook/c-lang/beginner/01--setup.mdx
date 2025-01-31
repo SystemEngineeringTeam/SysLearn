@@ -1,0 +1,105 @@
+---
+title: 環境構築
+description: このチャプターでは、快適に XCode/VSCode で快適な C 言語を書くための秘訣を教えます。
+slug: textbook/c-lang/beginner/setup
+
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+<Aside type="caution">
+
+前バージョンの Cook Zip をお使いの方へ  
+バージョンアップが必要です！ [下のセクション ↗](#前バージョンの%20Cook%20Zip%20をお使いの方へ) で確認してください。
+
+</Aside>
+
+皆さん XCode には慣れましたか？ C 言語とはお友達になれましたか？
+
+VSCode で C 言語を快適に書くために..。
+
+- F5 (Fn + F5) での自動コンパイル & 実行
+- 自動補完 (IntelliSense)
+- ブレークポイントでのデバッグ
+- エラーのインライン表示
+  などなど多数の機能を簡単に使えるようにした zip を配布します。
+
+動作環境は macOS のみです. ご自由にお使いください。
+URL: https://assets.wappon28.dev/public/AIT/c-lang-base.zip
+
+<video controls width="480" alt="2024-05-23_0.03.33.mp4 (6.6 MB)" src="https://esa-storage-tokyo.s3-ap-northeast-1.amazonaws.com/uploads/production/attachments/19973/2024/06/12/163736/2e5af6a7-605d-4a78-b6d5-a369a813bdea.mp4"></video>
+
+あと、提出物 (ZIP) を作るちょっとしたプログラムを作りました！ コンピューターリテラシーで導入したであろう HomeBrew を使ってインストールとアップデートができます. ターミナルや、VSCode 内のターミナルで
+
+```sh
+brew install wappon28dev/tap/cook-zip
+```
+
+をしたあと,
+
+```sh
+cook-zip
+```
+
+とすると、対話式のプログラムが起動するので、それに従うと提出物が作成されます！ 次のコマンドはどこの作業ディレクトリーでも実行できます。
+
+<video controls width="480" alt="-5971937336374499908.mp4 (4.2 MB)" src="https://esa-storage-tokyo.s3-ap-northeast-1.amazonaws.com/uploads/production/attachments/19973/2024/06/16/163736/8a2f8169-9eaf-4061-a0d7-57a258d4905c.mp4"></video>
+
+あと、書き出された zip は一時ディレクトリに保存されているので、内容物を確認後、自身でバックアップしてくださいね。
+
+また、提出物のフォーマットが変更される場合も考慮して、簡単にアップデートできるように,
+
+```sh
+brew upgrade cook-zip
+```
+
+と打つとできるようにしました. 指示があった場合にすると良いと思います！
+
+### 前バージョンの Cook Zip をお使いの方へ
+
+> [!NOTE]
+> tl;dr
+>
+> 1. 数回前から提出物のフォーマットが変更された
+> 1. それに伴って、Cook Zip をアップデートする必要がある
+> 1. 既に存在する Cook Zip を削除し、新しいバージョンを `brew install wappon28dev/tap/cook-zip` でインストールする
+
+2 回前あたりから、課題、チャレンジ問題の提出物のフォーマットが変更されました.  
+具体的には、学籍番号の `k` が大文字から小文字に変更されました。
+
+[第 6 回](https://cms.aitech.ac.jp/pluginfile.php/527782/mod_resource/content/3/issues06.md.html#提出するファイル構成-1) ... [第 8 回](https://cms.aitech.ac.jp/pluginfile.php/527790/mod_resource/content/3/issues08.md.html#提出するファイル構成-1) - 演習問題と課題の詳細資料 - Moodle (7 回目は課題なし)
+
+```diff
+ - k2****_issues.zip
+-  - 06_issue1_K20000.c
+-  - 06_challenge1_K20000.c // 任意提出
+ - k2****_issues.zip
++  - 08_issue1_k20000.c
++  - 08_challenge1_k20000.c // 任意提出
+```
+
+それに伴い、Cook Zip のバージョンアップが必要です。
+
+第 8 回でケースの変更に私が気づくことができず、Cook Zip ユーザーのほとんどが大文字のまま提出されているかと思います. 確認の術はありませんが、減点されていた場合は申し訳ないです。
+
+(一応、追加情報を入れておくと、macOS で使われているディスクフォーマットである APFS は、ファイル名の大文字小文字を区別しない[^1] ので、もしかしたら問題になっていないかもしれません.)
+
+第 9 回の提出にはまだ時間があるので、次の手順で Cook Zip のバージョンアップを行ってください。
+
+1. 旧バージョンの Cook Zip を削除 (Finder や VSCode 上から削除 または `rm ./cook-zip`)
+1. 新バージョンの Cook Zip をインストール
+
+   ```sh
+   brew install wappon28dev/tap/cook-zip
+   ```
+
+1. 新しいバージョンで再度、提出物を作成  
+   次のコマンドはどこの作業ディレクトリーでも実行できます。
+
+   ```sh
+   cook-zip
+   ```
+
+また今後のために、`brew upgrade cook-zip` でアップデートできるようにしてあります。
+
+[^1]: [Mac の大文字と小文字を区別するファイルシステムとの非互換性 - Steam サポート ↗](https://help.steampowered.com/ja/faqs/view/0395-A862-13F3-6E82#:~:text=%E3%80%8CJournaled%20HFS%E3%80%8D%E3%80%81%E3%80%8CAPFS,%E3%81%93%E3%81%A8%E3%82%92%E7%A4%BA%E3%81%97%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99%E3%80%82)

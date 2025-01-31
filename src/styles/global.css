@@ -1,0 +1,16 @@
+@view-transition {navigation: auto}
+
+::view-transition-group(root) {
+  animation-duration: 200ms;
+}
+
+body {
+  font-family: 'Inter Variable', 'Noto Sans JP Variable', sans-serif;
+  font-feature-settings: 'palt';
+  scroll-behavior: smooth;
+
+  /* ref: https://ics.media/entry/240411/#%E3%81%BE%E3%81%A8%E3%82%81 */
+  overflow-wrap: anywhere;
+  word-break: normal;
+  line-break: strict;
+}

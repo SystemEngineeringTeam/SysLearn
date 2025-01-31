@@ -1,0 +1,45 @@
+---
+import type { Props } from "@astrojs/starlight/props";
+import { TabItem } from "@astrojs/starlight/components";
+import Default from "@astrojs/starlight/components/Sidebar.astro";
+import type { SidebarEntry } from 'node_modules/@astrojs/starlight/utils/navigation';
+import Tabs from "./sidebar/Tabs.astro";
+
+const { sidebar } = Astro.props;
+type Group = Extract<SidebarEntry, { type: "group" }>;
+
+// ref: https://github.com/withastro/docs/blob/0c889925e52236ce38a71db9937e80941d52131d/src/components/starlight/Sidebar.astro#L55
+function isCurrent(sidebar: SidebarEntry[]): boolean {
+  return sidebar
+    .map((entry) => (entry.type === 'link' ? entry.isCurrent : isCurrent(entry.entries)))
+    .some((entry) => entry === true);
+}
+
+---
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const currentElem = document.querySelector<HTMLUListElement>(":where(.v-tabs div)[role=tabpanel] > [data-is-current=true]");
+    if (currentElem == null) return;
+
+    const tabIdx = currentElem.parentElement?.id.split("-").at(-1);
+    if (tabIdx == null) return;
+    
+    const targetElem = document.getElementById(`tab-${tabIdx}`);
+    if (targetElem != null) {
+      targetElem.click();
+      targetElem.blur();
+    }
+  });
+</script>
+
+<Tabs>
+  {sidebar.map((s) => (
+    <TabItem label={s.label}>
+      <div data-is-current={isCurrent([s])}>
+        <Default {...Astro.props} sidebar={(s as Group).entries} />
+      </div>
+    </TabItem>
+  ))}
+</Tabs>
+

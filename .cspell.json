@@ -1,0 +1,30 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "ignorePaths": [
+    "node_modules",
+    "/package.json",
+    "src/assets/icons"
+  ],
+  "words": [
+    "antfu",
+    "astro",
+    "astrojs",
+    "consts",
+    "Elems",
+    "figcaption",
+    "fontsource",
+    "github",
+    "gtag",
+    "hackathon",
+    "hackathons",
+    "iconify",
+    "JPDOC",
+    "noto",
+    "nowrap",
+    "palt",
+    "pandacss",
+    "partytown",
+    "rgba"
+  ]
+}
