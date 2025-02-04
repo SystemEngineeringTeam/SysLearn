@@ -1,31 +1,17 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
+title: SysLearn
 template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
-  actions:
-    - text: C言語の基礎を学ぶ
-      link: /textbook/c-lang/beginner
-      icon: right-arrow
-      variant: minimal
+  image:
+    file: ../../assets/icons/logo/Sysnyan2.png
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-## Next steps
+## コース一覧
+<a href="./textbook/c-lang/beginner"><Card title="C言語" description="学習コース" /></a>
+<a href="./textbook/c-lang/intermediate"><Card title="Web" description="学習コース" /></a>
+<a href="./textbook/c-lang/advanced"><Card title="Kotlin" description="学習コース" /></a>
+<a href="./textbook/c-lang/algorithm"><Card title="Unity" description="学習コース" /></a>
 
-<CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
-</CardGrid>
+
