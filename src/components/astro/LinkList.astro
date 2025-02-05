@@ -1,0 +1,23 @@
+---
+import { getCollection } from "astro:content";
+import "@/styles/components.css";
+
+const links = await getCollection("docs");
+
+// ファイル名が00から始まるものだけを取得
+const filteredLinks = links.filter((link) => {
+  const fileName = link.filePath?.split("/").pop(); // 最後の要素を取得
+  return fileName?.startsWith("00");
+});
+---
+
+  <div class="link-list">
+    {filteredLinks.map((link) => (
+        <a href={link.id} class="link-card">
+          <p class="link-card-title">
+          {link.data.title}
+          </p>
+        </a>
+    ))}
+  </div>
+
