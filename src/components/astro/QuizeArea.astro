@@ -1,0 +1,30 @@
+---
+
+import "@/styles/components.css";
+
+const {quize, ans,kaisetu} = Astro.props;
+
+---
+
+
+
+<div class="quize-area">
+    <h3>問題</h3>
+    <p>{quize}</p>
+</div>
+
+<div class="ans-area">
+  <input type="checkbox" id="accordion1" class="accordion-checkbox">
+  <label for="accordion1" class="accordion-label">
+      <span class="accordion-title">答え</span>
+      <span class="accordion-icon"></span>
+  </label>
+
+  <div class="accordion-content">
+    <p>回答: {ans}</p>
+    <p>{kaisetu}</p>
+  </div>
+</div>
+
+
+

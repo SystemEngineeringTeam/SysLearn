@@ -8,8 +8,10 @@ import compress from "astro-compress";
 import icon from "astro-icon";
 import metaTags from "astro-meta-tags";
 
+
 // https://astro.build/config
 export default defineConfig({
+
   integrations: [
     metaTags(),
     icon({
@@ -56,6 +58,7 @@ export default defineConfig({
         "src/styles/global.css",
         "src/styles/fonts.css",
       ],
+      
       sidebar: [
         {
           label: "ホーム",
@@ -88,11 +91,12 @@ export default defineConfig({
             },
             {
               label: "ハッカソン出れるもんコース",
-              autogenerate: { directory: "textbook/web/web/for-hackathons" },
+              autogenerate: { directory: "textbook/web/for-hackathons" },
             },
           ],
         },
       ],
+
     }),
     react(),
   ],

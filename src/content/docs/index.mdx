@@ -5,11 +5,13 @@ hero:
   image:
     file: ../../assets/icons/logo/Sysnyan2.png
 ---
-
+import "@/styles/home.css";
 import { Card, CardGrid } from '@astrojs/starlight/components';
 import LinkList from '../../components/astro/LinkList.astro';
 
+
+
 ## コース一覧
 
-<LinkList />
+<LinkList client:only/>
 

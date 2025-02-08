@@ -6,18 +6,46 @@ const links = await getCollection("docs");
 
 // ファイル名が00から始まるものだけを取得
 const filteredLinks = links.filter((link) => {
-  const fileName = link.filePath?.split("/").pop(); // 最後の要素を取得
+  const fileName = link.filePath?.split("/").pop();
   return fileName?.startsWith("00");
 });
+
+// フォルダごとのファイル数を集計
+const folderFileCounts = links.reduce((acc: { [key: string]: number }, link) => {
+  const pathParts = link.filePath?.split("/");  
+  const folderName:string|undefined = pathParts?.slice(-2, -1)[0]; // フォルダ名を取得
+
+  if (folderName) {
+    if (!acc[folderName]) {
+      acc[folderName] = 0; 
+    }
+    acc[folderName]++; 
+  }
+
+  return acc;
+}, {});
+
+
+// function loadProgress(folderName: string) {
+//     return localStorage.getItem(folderName) || 0;
+// }
+
+
 ---
 
-  <div class="link-list">
-    {filteredLinks.map((link) => (
-        <a href={link.id} class="link-card">
-          <p class="link-card-title">
-          {link.data.title}
-          </p>
-        </a>
-    ))}
-  </div>
+<div class="link-list">
+  {filteredLinks.map((link) => {
+    const pathParts = link.filePath?.split("/");  
+    const folderName = pathParts?.slice(-2, -1)[0]; // フォルダ名を取得
+    const allFilesCount = folderName ? folderFileCounts[folderName] || 0 : 0; 
 
+    return (
+      <a href={link.id} class="link-card">
+        <p class="link-card-title">
+          {link.data.title}
+        </p>
+        <p class="link-card-achievement">達成度:{loadProgress(folderName || '')}/{allFilesCount}</p>
+      </a>
+    );
+  })}
+</div>
