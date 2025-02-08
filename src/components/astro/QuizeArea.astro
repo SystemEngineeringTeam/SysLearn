@@ -1,6 +1,7 @@
 ---
 
 import "@/styles/components.css";
+import LocalTest from "../react/LocalTest.jsx";
 
 const {quize, ans,kaisetu} = Astro.props;
 
@@ -25,6 +26,8 @@ const {quize, ans,kaisetu} = Astro.props;
     <p>{kaisetu}</p>
   </div>
 </div>
+
+<LocalTest client:only />
 
 
 

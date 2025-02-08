@@ -1,51 +1,56 @@
 ---
 import { getCollection } from "astro:content";
+import Achive from "../react/Achive.jsx";
 import "@/styles/components.css";
 
+// 非同期処理でデータを取得
 const links = await getCollection("docs");
 
-// ファイル名が00から始まるものだけを取得
+// 00から始まるものだけを取得
 const filteredLinks = links.filter((link) => {
-  const fileName = link.filePath?.split("/").pop();
-  return fileName?.startsWith("00");
+    const fileName = link.filePath?.split("/").pop();
+    return fileName?.startsWith("00");
 });
 
-// フォルダごとのファイル数を集計
+// フォルダごとのファイル数をカウント
 const folderFileCounts = links.reduce((acc: { [key: string]: number }, link) => {
-  const pathParts = link.filePath?.split("/");  
-  const folderName:string|undefined = pathParts?.slice(-2, -1)[0]; // フォルダ名を取得
+    const pathParts = link.filePath?.split("/");
+    const folderName: string | undefined = pathParts?.slice(-2, -1)[0];
 
-  if (folderName) {
+    if (folderName) {
     if (!acc[folderName]) {
-      acc[folderName] = 0; 
+        acc[folderName] = 0;
     }
-    acc[folderName]++; 
-  }
-
-  return acc;
+    acc[folderName]++;
+    }
+    return acc;
 }, {});
-
-
-// function loadProgress(folderName: string) {
-//     return localStorage.getItem(folderName) || 0;
-// }
-
-
 ---
 
 <div class="link-list">
-  {filteredLinks.map((link) => {
-    const pathParts = link.filePath?.split("/");  
-    const folderName = pathParts?.slice(-2, -1)[0]; // フォルダ名を取得
-    const allFilesCount = folderName ? folderFileCounts[folderName] || 0 : 0; 
+    {filteredLinks.map((link) => {
+    const pathParts = link.filePath?.split("/");
+    const folderName = pathParts?.slice(-2, -1)[0];
+    const allFilesCount = folderName ? folderFileCounts[folderName] || 0 : 0;
 
     return (
-      <a href={link.id} class="link-card">
+        <a href={link.id} class="link-card">
         <p class="link-card-title">
-          {link.data.title}
+            {link.data.title}
         </p>
-        <p class="link-card-achievement">達成度:{loadProgress(folderName || '')}/{allFilesCount}</p>
-      </a>
+        <p class="link-card-achievement">
+            {folderName ? (
+            <script type="module">
+                if (typeof window !== 'undefined') {
+                document.querySelector('.link-card-achievement').innerText = `達成度: ${localStorage.getItem(folderName) || 0} / ${allFilesCount}`;
+                }
+            </script>
+            ) : (
+            `達成度: 0 / ${allFilesCount}`
+            )}
+        </p>
+        <Achive folderName={folderName} client:load />/{allFilesCount}
+        </a>
     );
-  })}
+    })}
 </div>
