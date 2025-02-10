@@ -1,20 +1,28 @@
-.link-card{
-    margin-top:20px;
-    font-size: 20px;
-    color:black;
-    text-decoration: none;
-    display: flex;
-    border: 1px solid rgb(0, 0, 0);
-    padding: 30px;
+.link-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  text-decoration: none;
+  color: black;
 }
 .link-card:hover{
     background-color: rgb(218, 245, 249);
     color: white;
 }
 .link-card-title{
+    flex: 1;
     font-size: 20px;
     color:black;
 }
+
+.link-card-achive {
+  white-space: nowrap;
+}
+
 
 .quize-area{
     color:black;

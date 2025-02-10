@@ -38,10 +38,7 @@ const folderFileCounts = links.reduce((acc: { [key: string]: number }, link) => 
         <p class="link-card-title">
             {link.data.title}
         </p>
-        <p class="link-card-achievement">
-
-        </p>
-        <Achive folderName={folderName} client:load />/{allFilesCount}
+        <Achive folderName={folderName} allFilesCount={allFilesCount} client:load />
         </a>
     );
     })}

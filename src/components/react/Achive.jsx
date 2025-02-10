@@ -1,7 +1,7 @@
 // Achive.jsx
 import { useState, useEffect } from "react";
 
-function Achive({ folderName }) {
+function Achive({ folderName,allFilesCount }) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -12,8 +12,8 @@ function Achive({ folderName }) {
   }, [folderName]);
 
   return (
-    <p className="link-card-achievement">
-      達成度: {progress}
+    <p>
+      達成度: {progress}/{allFilesCount}
     </p>
   );
 }
