@@ -39,15 +39,7 @@ const folderFileCounts = links.reduce((acc: { [key: string]: number }, link) => 
             {link.data.title}
         </p>
         <p class="link-card-achievement">
-            {folderName ? (
-            <script type="module">
-                if (typeof window !== 'undefined') {
-                document.querySelector('.link-card-achievement').innerText = `達成度: ${localStorage.getItem(folderName) || 0} / ${allFilesCount}`;
-                }
-            </script>
-            ) : (
-            `達成度: 0 / ${allFilesCount}`
-            )}
+
         </p>
         <Achive folderName={folderName} client:load />/{allFilesCount}
         </a>
