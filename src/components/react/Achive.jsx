@@ -11,6 +11,7 @@ function Achive({ folderName,allFilesCount }) {
     }
   }, [folderName]);
 
+
   return (
     <p>
       達成度: {progress}/{allFilesCount}
