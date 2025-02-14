@@ -1,16 +1,15 @@
-// Achive.jsx
 import { useEffect, useState } from "react";
 
 type AchiveProps = {
   allFilesCount: number;
-  folderName: string|undefined;
-}
+  folderName: string | undefined;
+};
 
-function Achive({ folderName, allFilesCount }: AchiveProps) {
+const Achive: React.FC <AchiveProps> = ({ folderName, allFilesCount }) => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const savedProgress = localStorage.getItem(folderName);
+    const savedProgress = localStorage.getItem(folderName ?? "");
     if (savedProgress !== null) {
       setProgress(Number(savedProgress));
     }
@@ -21,6 +20,6 @@ function Achive({ folderName, allFilesCount }: AchiveProps) {
       {`達成度:${progress}/${allFilesCount}`}
     </p>
   );
-}
+};
 
 export default Achive;

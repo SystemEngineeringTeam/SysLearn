@@ -1,5 +1,4 @@
 ---
-import SendLocal from "@/components/react/SendLocal.tsx";
 import "@/styles/components.css";
 
 const { quize, ans, kaisetu } = Astro.props;
@@ -22,5 +21,3 @@ const { quize, ans, kaisetu } = Astro.props;
     <p>{kaisetu}</p>
   </div>
 </div>
-
-<SendLocal client:only="react" />
