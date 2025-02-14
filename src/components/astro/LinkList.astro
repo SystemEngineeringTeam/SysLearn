@@ -14,7 +14,7 @@ const filteredLinks = links.filter(
 // フォルダごとのファイル数をカウント
 const folderFileCounts = links.reduce(
   (acc: { [key: string]: number }, link) => {
-    const folderName = link.filePath && path.basename(link.filePath);
+    const folderName = link.filePath ? path.basename(path.dirname(link.filePath)) : undefined;
 
     if (folderName) {
       if (!acc[folderName]) {
@@ -31,8 +31,7 @@ const folderFileCounts = links.reduce(
 <div class="link-list">
   {
     filteredLinks.map((link) => {
-      const pathParts = link.filePath?.split("/");
-      const folderName = pathParts?.slice(-2, -1)[0];
+      const folderName = link.filePath ? path.basename(path.dirname(link.filePath)) : undefined;
       const allFilesCount = folderFileCounts[folderName ?? ""] ?? 0;
 
       return (
