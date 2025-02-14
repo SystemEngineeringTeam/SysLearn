@@ -1,6 +1,6 @@
 ---
+import Achive from "@/components/react/Achive.jsx";
 import { getCollection } from "astro:content";
-import Achive from "../react/Achive.jsx";
 import "@/styles/components.css";
 
 // 非同期処理でデータを取得
@@ -8,38 +8,45 @@ const links = await getCollection("docs");
 
 // 00から始まるものだけを取得
 const filteredLinks = links.filter((link) => {
-    const fileName = link.filePath?.split("/").pop();
-    return fileName?.startsWith("00");
+  const fileName = link.filePath?.split("/").pop();
+  return fileName?.startsWith("00");
 });
 
 // フォルダごとのファイル数をカウント
-const folderFileCounts = links.reduce((acc: { [key: string]: number }, link) => {
+const folderFileCounts = links.reduce(
+  (acc: { [key: string]: number }, link) => {
     const pathParts = link.filePath?.split("/");
     const folderName: string | undefined = pathParts?.slice(-2, -1)[0];
 
     if (folderName) {
-    if (!acc[folderName]) {
+      if (!acc[folderName]) {
         acc[folderName] = 0;
-    }
-    acc[folderName]++;
+      }
+      acc[folderName]++;
     }
     return acc;
-}, {});
+  },
+  {},
+);
 ---
 
 <div class="link-list">
-    {filteredLinks.map((link) => {
-    const pathParts = link.filePath?.split("/");
-    const folderName = pathParts?.slice(-2, -1)[0];
-    const allFilesCount = folderName ? folderFileCounts[folderName] || 0 : 0;
+  {
+    filteredLinks.map((link) => {
+      const pathParts = link.filePath?.split("/");
+      const folderName = pathParts?.slice(-2, -1)[0];
+      const allFilesCount = folderName ? folderFileCounts[folderName] || 0 : 0;
 
-    return (
-        <a href={link.id} class="link-card">
-        <p class="link-card-title">
-            {link.data.title}
-        </p>
-        <Achive folderName={folderName} allFilesCount={allFilesCount} client:load />
+      return (
+        <a class="link-card" href={link.id}>
+          <p class="link-card-title">{link.data.title}</p>
+          <Achive
+            allFilesCount={allFilesCount}
+            client:load
+            folderName={folderName}
+          />
         </a>
-    );
-    })}
+      );
+    })
+  }
 </div>

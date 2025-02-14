@@ -1,24 +1,20 @@
 ---
-
+import SendLocal from "@/components/react/SendLocal.jsx";
 import "@/styles/components.css";
-import SendLocal from "../react/SendLocal.jsx";
 
-const {quize, ans,kaisetu} = Astro.props;
-
+const { quize, ans, kaisetu } = Astro.props;
 ---
 
-
-
 <div class="quize-area">
-    <h3>問題</h3>
-    <p>{quize}</p>
+  <h3>問題</h3>
+  <p>{quize}</p>
 </div>
 
 <div class="ans-area">
-  <input type="checkbox" id="accordion1" class="accordion-checkbox">
-  <label for="accordion1" class="accordion-label">
-      <span class="accordion-title">答え</span>
-      <span class="accordion-icon"></span>
+  <input class="accordion-checkbox" id="accordion1" type="checkbox" />
+  <label class="accordion-label" for="accordion1">
+    <span class="accordion-title">答え</span>
+    <span class="accordion-icon"></span>
   </label>
 
   <div class="accordion-content">
@@ -27,7 +23,4 @@ const {quize, ans,kaisetu} = Astro.props;
   </div>
 </div>
 
-<SendLocal client:only />
-
-
-
+<SendLocal client:only="react" />
