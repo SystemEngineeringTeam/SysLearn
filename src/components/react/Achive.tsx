@@ -1,7 +1,12 @@
 // Achive.jsx
 import { useEffect, useState } from "react";
 
-function Achive({ folderName, allFilesCount }) {
+type AchiveProps = {
+  allFilesCount: number;
+  folderName: string|undefined;
+}
+
+function Achive({ folderName, allFilesCount }: AchiveProps) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -13,11 +18,7 @@ function Achive({ folderName, allFilesCount }) {
 
   return (
     <p>
-      達成度:
-      {" "}
-      {progress}
-      /
-      {allFilesCount}
+      {`達成度:${progress}/${allFilesCount}`}
     </p>
   );
 }

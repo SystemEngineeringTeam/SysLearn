@@ -4,7 +4,7 @@ export function SendLocal() {
   let filrName = "";
   let visitedKey = "";
 
-  if (parts.length >= 3 && parts[parts.length - 1] === "") {
+  if (parts.length >= 3 && parts.at(-1) === "") {
     folderName = parts[parts.length - 3];
     filrName = parts[parts.length - 2];
   } else if (parts.length >= 2) {
