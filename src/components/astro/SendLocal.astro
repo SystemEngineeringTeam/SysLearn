@@ -1,24 +1,31 @@
 ---
+
 ---
 
 <script>
-    const parts = window.location.pathname.split("/").filter(Boolean);
-    const folderName = parts.at(-2);
-    const filrName = parts.at(-1);
-    const visitedKey = `${folderName}/${filrName}`;
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  const folderName = parts.at(-2);
+  const filrName = parts.at(-1);
+  const visitedKey = `${folderName}/${filrName}`;
 
-    const achive = localStorage.getItem(folderName?? "");
-    let achiveNum = Number(achive);
-    if (Number.isNaN(achiveNum)) {
-        achiveNum = 0;
-    } else {
-        achiveNum += 1;
+  console.log("console", visitedKey);
+
+  const achive = localStorage.getItem(folderName ?? "");
+  let achiveNum = Number(achive);
+  if (Number.isNaN(achiveNum)) {
+    achiveNum = 0;
+  } else {
+    achiveNum += 1;
+  }
+
+  window.addEventListener("scroll", () => {
+    if (
+      window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight &&
+      localStorage.getItem(visitedKey) !== "visited"
+    ) {
+      localStorage.setItem(folderName ?? "", achiveNum.toString());
+      localStorage.setItem(visitedKey, "visited");
     }
-
-    window.addEventListener("scroll", () => {
-        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
-            localStorage.setItem(folderName??"", achiveNum.toString());
-            localStorage.setItem(visitedKey, "visited");
-        }
-    });
+  });
 </script>

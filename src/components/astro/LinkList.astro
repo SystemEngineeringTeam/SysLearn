@@ -2,7 +2,6 @@
 import path from "node:path";
 import Achive from "@/components/react/Achive.tsx";
 import { getCollection } from "astro:content";
-import "@/styles/components.css";
 
 // 非同期処理でデータを取得
 const links = await getCollection("docs");
@@ -47,3 +46,31 @@ const folderFileCounts = links.reduce(
     })
   }
 </div>
+
+<style>
+.link-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  text-decoration: none;
+  color: black;
+}
+
+.link-card:hover {
+  background-color: rgb(218, 245, 249);
+  color: white;
+}
+
+.link-card-title {
+  flex: 1;
+  font-size: 20px;
+}
+
+.link-card-achive {
+  white-space: nowrap;
+}
+</style>
