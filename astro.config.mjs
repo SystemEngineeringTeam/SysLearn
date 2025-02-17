@@ -1,15 +1,16 @@
+import partytown from "@astrojs/partytown";
 import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
 import remarkMermaid from "@southball/remark-mermaid";
-import partytown from "@astrojs/partytown";
-import { defineConfig } from "astro/config";
-import wikiLinkPlugin from "remark-wiki-link-plus";
 import compress from "astro-compress";
 import icon from "astro-icon";
 import metaTags from "astro-meta-tags";
+import { defineConfig } from "astro/config";
+import wikiLinkPlugin from "remark-wiki-link-plus";
 
 // https://astro.build/config
 export default defineConfig({
+
   integrations: [
     metaTags(),
     icon({
@@ -35,8 +36,8 @@ export default defineConfig({
       defaultLocale: "ja",
       locales: {
         root: {
-          label: '日本語',
-          lang: 'ja',
+          label: "日本語",
+          lang: "ja",
         },
       },
       logo: {
@@ -56,6 +57,7 @@ export default defineConfig({
         "src/styles/global.css",
         "src/styles/fonts.css",
       ],
+
       sidebar: [
         {
           label: "ホーム",
@@ -67,7 +69,7 @@ export default defineConfig({
             {
               label: "困ったときは",
               autogenerate: { directory: "help/" },
-            }
+            },
           ],
         },
         {
@@ -88,11 +90,12 @@ export default defineConfig({
             },
             {
               label: "ハッカソン出れるもんコース",
-              autogenerate: { directory: "textbook/web/web/for-hackathons" },
+              autogenerate: { directory: "textbook/web/for-hackathons" },
             },
           ],
         },
       ],
+
     }),
     react(),
   ],
