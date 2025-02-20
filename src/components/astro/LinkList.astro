@@ -32,6 +32,7 @@ const folderFileCounts = links.reduce(
     filteredLinks.map((link) => {
       const folderName = link.filePath ? path.basename(path.dirname(link.filePath)) : undefined;
       const allFilesCount = folderFileCounts[folderName ?? ""] ?? 0;
+      const courseKey = folderName;
 
       return (
         <a class="link-card" href={link.id}>
@@ -39,7 +40,7 @@ const folderFileCounts = links.reduce(
           <Achive
             allFilesCount={allFilesCount}
             client:load
-            folderName={folderName}
+            courseKey={courseKey}
           />
         </a>
       );

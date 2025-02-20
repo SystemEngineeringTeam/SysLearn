@@ -6,11 +6,11 @@
   const parts = window.location.pathname.split("/").filter(Boolean);
   const folderName = parts.at(-2);
   const filrName = parts.at(-1);
-  const visitedKey = `${folderName}/${filrName}`;
+  const ChapterVisitedKey = `${folderName}/${filrName}`;
+  const courseKey = folderName
 
-  console.log("console", visitedKey);
 
-  const achive = localStorage.getItem(folderName ?? "");
+  const achive = localStorage.getItem(courseKey ?? "");
   let achiveNum = Number(achive);
   if (Number.isNaN(achiveNum)) {
     achiveNum = 0;
@@ -22,10 +22,10 @@
     if (
       window.innerHeight + window.scrollY >=
         document.documentElement.scrollHeight &&
-      localStorage.getItem(visitedKey) !== "visited"
+      localStorage.getItem(ChapterVisitedKey) !== "visited"
     ) {
-      localStorage.setItem(folderName ?? "", achiveNum.toString());
-      localStorage.setItem(visitedKey, "visited");
+      localStorage.setItem(courseKey ?? "", achiveNum.toString());
+      localStorage.setItem(ChapterVisitedKey, "visited");
     }
   });
 </script>

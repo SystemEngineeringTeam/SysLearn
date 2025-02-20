@@ -2,18 +2,18 @@ import { useEffect, useState } from "react";
 
 type AchiveProps = {
   allFilesCount: number;
-  folderName: string | undefined;
+  courseKey: string | undefined;
 };
 
-const Achive: React.FC <AchiveProps> = ({ folderName, allFilesCount }) => {
+const Achive: React.FC <AchiveProps> = ({ courseKey, allFilesCount }) => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const savedProgress = localStorage.getItem(folderName ?? "");
+    const savedProgress = localStorage.getItem(courseKey ?? "");
     if (savedProgress !== null) {
       setProgress(Number(savedProgress));
     }
-  }, [folderName]);
+  }, [courseKey]);
 
   return (
     <p>
