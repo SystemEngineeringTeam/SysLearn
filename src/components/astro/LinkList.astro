@@ -7,7 +7,7 @@ import { getCollection } from "astro:content";
 const links = await getCollection("docs");
 
 const filteredLinks = links.filter(
-  (link) => link.filePath && path.basename(link.filePath).startsWith("00")
+  (link) => link.filePath && path.basename(link.filePath).startsWith("00"),
 );
 
 // フォルダごとのファイル数をカウント
@@ -25,7 +25,7 @@ const folderFileCounts = links.reduce(
     }
     return acc;
   },
-  {}
+  {},
 );
 ---
 
