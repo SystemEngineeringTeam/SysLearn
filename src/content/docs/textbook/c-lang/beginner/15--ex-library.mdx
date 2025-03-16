@@ -1,0 +1,156 @@
+---
+title: 標準ライブラリ
+description: 標準ライブラリについて学びます!
+slug: textbook/c-lang/beginner/library
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+## 1.標準ライブラリとは
+標準ライブラリとは、C言語の標準で提供されているCプログラムで利用できる関数やマクロの集合のことである。  
+標準ライブラリには、様々な関数が用意されており、それらを利用することで、プログラムの開発が容易になる。  
+標準ライブラリは、`#include`ディレクティブを用いてプログラムに取り込むことができる。  
+
+## 2.stdio.h
+`stdio.h`は、標準入出力を行うためのヘッダファイルである。  
+ヘッダファイルとは、関数やマクロ、型定義などを記述し、他のCファイルで再利用できるようにするファイルであり、拡張子に`.h`を用いるものである。  
+以下は、stdio.hで提供されている関数の一部である。
+
+- `printf()` / `scanf()`: 画面への出力・キーボードからの入力
+- `fopen()` / `fclose()`: ファイルのオープン・クローズ
+- `fgets()` / `fputs()`: ファイルからの読み込み・書き込み
+
+## 3.math.h
+`math.h`は、数学関数を提供するヘッダファイルである。  
+以下は、math.hで提供されている関数の一部である。
+
+- `sin()`, `cos()`, `tan()`: 三角関数
+- `sqrt()`: 平方根
+- `pow()`: べき乗
+- `abs()`: 絶対値
+```c
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    double angle = 45.0;  // 角度（度数法）
+    double radians = angle * M_PI / 180.0;  // ラジアン変換
+
+    // 三角関数
+    printf("sin(%.2f度) = %.5f\n", angle, sin(radians));
+    printf("cos(%.2f度) = %.5f\n", angle, cos(radians));
+    printf("tan(%.2f度) = %.5f\n", angle, tan(radians));
+
+    // 平方根
+    double num = 25.0;
+    printf("sqrt(%.2f) = %.2f\n", num, sqrt(num));
+
+    // 累乗
+    printf("2^3 = %.2f\n", pow(2.0, 3.0));
+
+    // 絶対値
+    int x = -10;
+    printf("abs(%d) = %d\n", x, abs(x));
+    return 0;
+}
+
+```
+
+## 4.string.h
+`string.h`は、文字列操作を行うためのヘッダファイルである。
+以下は、string.hで提供されている関数の一部である。
+
+- `strlen()`: 文字列の長さを取得
+- `strcpy()`: 文字列のコピー
+- `strcat()`: 文字列の連結
+- `strcmp()`: 文字列の比較
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    // 1. strlen() - 文字列の長さ
+    char str1[] = "Hello";
+    printf("文字列: \"%s\"\n", str1);
+    printf("長さ: %lu\n\n", strlen(str1));  // ヌル終端を除いた長さ
+
+    // 2. strcpy() - 文字列のコピー
+    char source[] = "C Programming";
+    char destination[50];  // 十分なサイズの配列を確保
+    strcpy(destination, source);
+    printf("コピー後の文字列: \"%s\"\n\n", destination);
+
+    // 3. strcat() - 文字列の連結
+    char str2[50] = "Hello, ";
+    char str3[] = "World!";
+    strcat(str2, str3);
+    printf("連結結果: \"%s\"\n\n", str2);
+
+    // 4. strcmp() - 文字列の比較
+    char cmp1[] = "apple";
+    char cmp2[] = "banana";
+    char cmp3[] = "apple";
+
+    printf("strcmp(cmp1, cmp2) = %d\n", strcmp(cmp1, cmp2));  // "apple" < "banana" → 負の値
+    printf("strcmp(cmp1, cmp3) = %d\n", strcmp(cmp1, cmp3));  // "apple" == "apple" → 0
+    printf("strcmp(cmp2, cmp1) = %d\n", strcmp(cmp2, cmp1));  // "banana" > "apple" → 正の値
+
+    return 0;
+}
+```
+出力例
+```
+文字列: "Hello"
+長さ: 5
+
+コピー後の文字列: "C Programming"
+
+連結結果: "Hello, World!"
+
+strcmp(cmp1, cmp2) = -1
+strcmp(cmp1, cmp3) = 0
+strcmp(cmp2, cmp1) = 1
+```
+
+## 5.stdlib.h
+`stdlib.h`は、標準ライブラリの中で、乱数生成やメモリの確保・解放などを行うためのヘッダファイルである。  
+以下は、stdlib.hで提供されている関数の一部である。
+
+- `rand()`: 乱数の生成
+- `malloc()`: メモリの確保
+- `free()`: メモリの解放
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main() {
+    // 1. 乱数の生成（rand()）
+    srand(time(NULL));  // 乱数の種を設定
+    int random_number = rand() % 100;  // 0〜99の乱数を生成
+    printf("生成された乱数: %d\n\n", random_number);
+
+    // 2. メモリの確保（malloc()）
+    int size = 5;
+    int *arr = (int *)malloc(size * sizeof(int));  // int型5個分のメモリを確保
+    if (arr == NULL) {
+        printf("メモリの確保に失敗しました。\n");
+        return 1;  // エラー終了
+    }
+
+    // 配列に乱数を格納
+    printf("確保したメモリに乱数を格納:\n");
+    for (int i = 0; i < size; i++) {
+        arr[i] = rand() % 100;  // 0〜99の乱数を代入
+        printf("arr[%d] = %d\n", i, arr[i]);
+    }
+
+    // 3. メモリの解放（free()）
+    free(arr);
+    printf("\n確保したメモリを解放しました。\n");
+
+    return 0;
+}
+```
