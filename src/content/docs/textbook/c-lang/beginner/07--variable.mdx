@@ -1,0 +1,372 @@
+---
+title : 変数と型
+description: C言語の基本的な型と変数・定数の使い方について解説する。
+slug: textbook/c-lang/beginner/variable
+---
+
+import { Aside, Card } from "@astrojs/starlight/components";
+
+## 変数
+
+C言語でプログラムを作るとき、一時的にデータを保存するために**変数**を使う。
+変数を使うと値を保存したり、後から変更したりできる。
+変数を使うにはまず「**型**」を指定して宣言し、その後値を代入する。
+
+### 変数の宣言
+
+変数を宣言する基本の形は次の通り。
+
+```
+型名 変数名;
+```
+
+例えば、整数を保存する `int` 型の変数 `number` を宣言する場合は、以下のように書く。
+
+```c
+int number;    // int型の変数numberを宣言
+```
+
+この時点では `number` に具体的な値は入っていない。
+
+### 変数への代入
+
+宣言した変数には `=` を使って値を代入できる。
+
+```c
+number = 10; // 変数numberに値(10)を代入
+```
+
+<Aside>
+変数の宣言と値の代入を1行でまとめることもできる。
+
+```c
+int number = 10; // int型の変数numberに値(10)を代入
+```
+</Aside>
+
+## 基本的な型
+
+C言語にはデータの種類に応じてさまざまな型が用意されている。
+ここでは代表的な型を紹介する。
+
+### 整数を扱う (`int`)
+
+整数を扱うには `int` 型を使う。
+
+```c
+int i = 100;
+```
+
+### 小数を扱う (`float`, `double`)
+
+C言語では、小数を扱うには `float` と `double` という2つの型を使う。
+
+```c
+float f = 3.14f;
+double d = 3.141592653589793;
+```
+
+#### float と double の違い
+
+- `float` は **単精度浮動小数点数**
+- `double` は **倍精度浮動小数点数**
+- `double` のほうが精度が高いが、その分メモリを多く消費する
+
+<Aside type="caution">
+`float` の値には `f` をつける（例: `3.14f`）。
+</Aside>
+
+### 文字を扱う (`char`)
+
+文字を扱うには `char` 型を使う。
+
+```c
+char c = 'A';
+```
+
+<Aside type="caution">
+1文字の場合は `' '`（シングルクォート）で囲む（例: `'A'`）。
+</Aside>
+
+### 変数の出力
+
+変数を出力する際には、**型ごとに適切なフォーマット指定子**を使う必要がある。
+C言語の `printf` 関数を用いた出力の基本形は以下の通り。
+
+```c
+printf("フォーマット指定子", 変数);
+```
+
+各型のフォーマット指定子は以下の表の通り。
+
+| 型              | フォーマット指定子  |
+|-----------------|------------------|
+| `int`           |  `%d`            |
+| `float`         |  `%f`            |
+| `double`        |  `%lf`           |
+| `char`(１文字)   |  `%c`            |
+| `char`(文字列)   |  `%s`            |
+
+```c
+int i = 100;
+float f = 3.14f;
+double d = 3.141592653589793;
+char c = 'A';
+
+printf("整数: %d\n", i);  // 整数を出力
+printf("小数 (float): %f\n", f);  // 小数を出力
+printf("小数 (double): %lf\n", d); // 倍精度小数を出力
+printf("文字: %c\n", c);  // 文字を出力
+```
+
+**実行結果**
+
+```sh
+整数: 100
+小数 (float): 3.140000
+小数 (double): 3.141593
+文字: A
+```
+
+#### 複数の変数の出力
+
+複数の変数を1つの`printf`関数で出力するには、フォーマット指定子を並べて、各変数を`,`で区切り順番を対応させる。
+
+```c {10}
+#include <stdio.h>
+
+int main(void) {
+    int i = 100;
+    float f = 3.14f;
+    double d = 3.141592653589793;
+    char c = 'A';
+
+    // 複数の変数を出力
+    printf("整数: %d, 小数 (float): %f, 小数 (double): %lf, 文字: %c\n", i, f, d, c);
+
+    return 0;
+}
+```
+
+**実行結果**
+
+```sh
+整数: 100, 小数 (float): 3.140000, 小数 (double): 3.141593, 文字: A
+```
+
+### 型の範囲
+
+各型には扱える値の範囲が決まっている。以下の表にまとめる。
+
+| 型                 | 最小値                       | 最大値                          |
+|--------------------|-----------------------------|--------------------------------|
+| `int`              | `-2,147,483,648`              | `2,147,483,647`                  |
+| `float`            | `1.175494e-38`                | `3.402823e+38`                   |
+| `double`           | `2.225074e-308`               | `1.797693e+308`                  |
+| `char`             | `-128`                        | `127`                            |
+
+### 型の変換（キャスト）
+
+C言語では、異なる型の変数を扱う際に型の変換（キャスト）が必要になる場合がある。
+型の変換には **暗黙的な型変換** と **明示的な型変換**の2種類がある。
+
+#### 暗黙的な型変換
+
+C言語では、演算を行う際に型の変換が自動的に行われる。
+
+```c
+int i = 10;
+double d = i; // int から double へ自動変換
+printf("b = %lf\n", d);
+```
+
+この場合、変数`a` は `double` 型に変換される。
+
+#### 明示的な型変換
+
+明示的に型を変換するには、**キャスト演算子** `(型名)` を使う。
+
+```c
+int i = 10;
+double d = (double)i; // int を double に変換
+printf("b = %lf\n", d);
+```
+
+また、小数を整数に変換すると小数部分が切り捨てられる。
+
+```c
+double d = 3.99;
+int i = (int)d; // 小数点以下が切り捨てられる
+printf("i = %d\n", i); // 出力: i = 3
+```
+
+<Card>
+### 練習問題1
+`int` 型の変数 `a` を宣言し、数値 `10` を代入して出力するプログラムを書いてください。
+
+**実行結果**
+```sh
+a = 10
+```
+ファイル名: `02_issue1.c`
+<details>
+<summary>ヒント</summary>
+<Aside type="tip">
+- `int` 型の変数を宣言し、`=` を使って値を代入しよう。 
+- `printf`関数で`int`型 は `%d`を使って出力する。
+</Aside>
+</details>
+
+<details>
+<summary>模範解答</summary>
+```c title="02_issue1.c"
+#include <stdio.h>
+
+int main(void) {
+    int a = 10;
+    printf("a = %d\n", a);
+    return 0;
+}
+```
+</details>
+</Card>
+
+<Card>
+
+### 練習問題2
+`char` 型の変数 `a`、`b` を宣言し、それぞれ `A`、`B` を代入して出力するプログラムを書いてください。
+
+**実行結果**
+```sh
+a = A, b = B
+```
+ファイル名: `02_issue2.c`
+<details>
+<summary>ヒント</summary>
+<Aside type="tip">
+- `char` 型の変数を2つ宣言し、それぞれに値を代入しよう。
+- `printf`関数で`char`型 は `%c`を使って出力する。
+</Aside>
+</details>
+
+<details>
+<summary>模範解答</summary>
+```c title="02_issue2.c"
+#include <stdio.h>
+
+int main(void) {
+    char a = 'A', b = 'B';
+    printf("a = %c, b = %c\n", a, b);
+    return 0;
+}
+```
+</details>
+</Card>
+
+<Card>
+
+### 練習問題3
+`int` 型の変数 `a` に `100` を代入し、`double` 型の変数 `b` に `a` を代入したあと、それぞれの値を出力してください。
+
+**実行結果**
+```sh
+a = 100
+b = 100.000000
+```
+ファイル名: `02_issue3.c`
+<details>
+<summary>ヒント</summary>
+<Aside type="tip">
+- 整数 `int` を `double` に代入すると、自動的に型変換が行われる（暗黙的な型変換）。 
+- `printf`関数 で `int`型 は `%d`、`double`型 は `%lf` を使って出力する。 
+</Aside>
+</details>
+
+<details>
+<summary>模範解答</summary>
+```c title="02_issue3.c"
+#include <stdio.h>
+
+int main(void) {
+    int a = 100;
+    double b = a; // int から double への暗黙的な型変換
+    printf("a = %d\n", a);
+    printf("b = %lf\n", b);
+    return 0;
+}
+```
+</details>
+</Card>
+
+## 定数 
+
+定数は「一度決めたら変更できない値」のことである。C言語では、`#define` と `const` の2つの方法で定数を定義できる。
+
+### `#define` 
+
+`#define` を使うと、プログラム全体で使える定数を定義できる。
+
+```c {3}
+#include <stdio.h>
+
+#define PI 3.141592
+
+int main(void) {
+    printf("円周率: %f\n", PI);
+    return 0;
+}
+```
+
+- `#define` で定義した定数は、コンパイル時に直接数値に置き換えられる。
+
+### `const` 
+
+`const` を使うと、特定の変数の値を変更できないようにする。
+
+```c
+const double PI = 3.141592;
+PI = 3.0; // エラー！定数の値は変更できない
+```
+
+- `const` を使うと、コンパイル時に値の変更を禁止できる。
+- `const` 変数はメモリに格納されるので、`#define` よりメモリを消費する場合がある。
+
+<Aside>
+定数名は**全て大文字**で書くのが慣例。
+例えば `PI` や `MAX_VALUE` のようにすることで、変数と区別しやすくなる。
+</Aside>
+
+<Card>
+### 練習問題4
+`#define` を使って最大値と最小値を定義し、その値を出力するプログラムを書いてください。
+
+**実行結果**
+```sh
+最大値: 100
+最小値: 0
+```
+ファイル名: `02_issue4.c`
+<details>
+<summary>ヒント</summary>
+<Aside type="tip">
+定数は`{...}`の外で`#define 定数名 値` のように定義する。
+</Aside>
+</details>
+
+<details>
+<summary>模範解答</summary>
+```c title="02_issue4.c"
+#include <stdio.h>
+
+#define MAX 100
+#define MIN 0
+
+int main(void) {
+    printf("最大値: %d\n", MAX);
+    printf("最小値: %d\n", MIN);
+    return 0;
+}
+
+```
+</details>
+</Card>
