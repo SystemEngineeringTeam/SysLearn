@@ -2,3 +2,188 @@
 title : 文字と文字列
 slug: http://localhost:4321/textbook/c-lang/beginner/character-string
 ---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+一連の文字の並びを表すものを文字列と呼びます。
+そんな文字列の基本を学んでいきましょう。
+
+## 文字列リテラル
+
+`"hoge"`のような、文字の並びを二重引用符`"`で囲んだものを**文字列リテラル**（string literal）と呼びます。
+
+文字列リテラルの末尾には、**ヌル文字**（null character）という値`0`（８進拡張表記では`\0`）の文字が付いています。
+そのため、`"hoge"`のような見かけ上４文字の文字列リテラルは、ヌル文字を含めた５文字分の記憶域を占有していることに注意しましょう。
+また、見かけ上０文字の文字列リテラル`""`も同様に、ヌル文字を含めた１文字分の記憶域を占有しています。
+
+## 文字列
+
+**文字列**（string）とは、複数の文字を並べたデータのようなものです。
+
+文字列をオブジェクトとして格納する場合、要素型が`char`である配列を利用します。
+
+```c
+// 配列の宣言
+char str[6];
+```
+```c
+// 初期化をともなう配列の宣言
+char str[] = "abcde";  // {'a', 'b', 'c', 'd', 'e', '\0'} と同じ
+```
+
+<Aside type="note" title="文字列">
+- 文字列は要素型が`char`である配列に格納
+- 文字列の末尾にはヌル文字が存在
+</Aside>
+
+## 文字列の入出力
+
+文字列の出力（印字）は次のようにして実現します。
+
+<Tabs>
+<TabItem label="ソースコード">
+```c
+#include <stdio.h>
+
+int main(int argc, const char * argv[]) {
+    // "hoge"
+    char str[] = {'h', 'o', 'g', 'e', '\0'};
+    
+    // 文字列の出力（%s）
+    printf("str: %s\n", str);
+    // 文字の出力（%c）
+    printf("str[0]: %c\n", str[0]);
+    // putchar を用いた文字の出力
+    putchar(str[1]);
+    
+    putchar('\n'); // 改行文字
+    
+    return 0;
+}
+```
+</TabItem>
+<TabItem label="実行例">
+```
+str: hoge
+str[0]: h
+o
+```
+</TabItem>
+</Tabs>
+
+また、文字列の入力は次のようにして実現します。
+
+```c
+char str[128];
+
+// 文字列の入力（%s）
+scanf("%s", str);
+```
+```c
+// 文字の入力（%c）
+scanf("%c", &str[0]);
+```
+
+## 文字列の代入
+
+代入演算子`=`による文字列の代入ができないことに注意しましょう。
+
+```c
+char str[6];
+str = "abcde";  // エラー
+```
+
+面倒ではありますが、１文字ごとに代入するようにしましょう。
+なお、１文字を扱う場合は、文字を一重引用符`'`で囲みます。
+
+```c
+char str[6];
+str[0] = 'a';
+str[1] = 'b';
+str[2] = 'c';
+str[3] = 'd';
+str[4] = 'e';
+str[5] = '\0';
+```
+
+<Tabs>
+<TabItem label="問題">
+文字列リテラル`"the quick brown fox jumps over the lazy dog"`について、全体の文字数`len`および空白（`" "`）を除いた文字数`cnt`をカウントして求めてください。
+また、`for`文を用いて、文字列リテラル内の文字を逆順に印字してください。
+
+```c
+char str[] = "the quick brown fox jumps over the lazy dog";
+
+int len = 0;
+int cnt = 0;
+```
+</TabItem>
+<TabItem label="実行例">
+```
+len: 43
+cnt: 35
+god yzal eht revo spmuj xof nworb kciuq eht
+```
+</TabItem>
+<TabItem label="ヒント１">
+
+文字列の長さがわからない場合は、`for`文を用いて`'\0'`が現れるまで繰返し処理してみましょう。
+```c
+for (int i = 0; str[i] != '\0'; i++) {
+    len++;
+
+    // TODO
+}
+```
+</TabItem>
+<TabItem label="ヒント２">
+配列を逆方向に走査することで、文字を逆順に出力することができます。
+`for`文のカウンタはいくつから始まるでしょうか。
+`len`を用いるやり方を考えてみましょう。
+
+```c
+for (int i = ******; ******; i--) {
+    putchar(str[i]);
+}
+```
+</TabItem>
+<TabItem label="解答例">
+```c
+#include <stdio.h>
+
+int main(int argc, const char * argv[]) {
+    char str[] = "the quick brown fox jumps over the lazy dog";
+    
+    // 文字数
+    int len = 0;
+    int cnt = 0;
+    
+    // ヌル文字になるまで文字列リテラルを走査
+    for (int i = 0; str[i] != '\0'; i++) {
+        len++;
+        if (str[i] != ' ') {
+            // 空白ではない場合
+            cnt++;
+        }
+    }
+    
+    printf("len: %d\n", len);
+    printf("cnt: %d\n", cnt);
+    
+    // 逆順に印字
+    for (int i = len - 1; i >= 0; i--) {
+        putchar(str[i]);
+    }
+    
+    putchar('\n');  // 改行
+    
+    return 0;
+}
+```
+</TabItem>
+</Tabs>
+
+## 確認クイズ
+
+

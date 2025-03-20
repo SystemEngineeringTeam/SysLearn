@@ -2,3 +2,535 @@
 title : 「まるばつゲーム」の作成
 slug: http://localhost:4321/textbook/c-lang/beginner/tic-tac-toe
 ---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+
+これまで学習してきたことを踏まえて、簡単な「まるばつゲーム」を作成していきましょう。
+
+## アルゴリズム
+
+まずは、「まるばつゲーム」の簡単なアルゴリズムを確認しましょう。
+
+<Steps>
+1. ゲーム開始
+
+2. 『まる』（または『ばつ』）の人が、自身のマークを９マスのグリッド内の空欄に刻む
+    ```
+    X . .
+    . O X
+    O . .
+    ```
+3. 刻んだマークが三目並んだ場合、『まる』（または『ばつ』）の人の勝利として、Step.6へ
+    ```
+    X . O
+    . O X
+    O O X
+    ```
+4. グリッド内に空欄が存在しない場合、勝負は引き分けとして、Step.6へ
+    ```
+    X O X
+    O O X
+    O X O
+    ```
+5. 『ばつ』（または『まる』）の人にターンを移して、Step.2へ
+
+6. ゲーム終了
+</Steps>
+
+## プログラムの設計
+
+上記のアルゴリズムから、必要になりそうな機能（関数）や変数などを考えていきましょう。
+
+- 盤面を標準出力する関数
+- 盤上のマークをカウントする関数
+- 勝利を判定する関数
+
+- 盤を表す２次元配列
+- 現在のターンを示す変数
+- 勝利フラグ
+
+アルゴリズムにのっとり、これらを組み合わせていくことで、「まるばつゲーム」を作成していきましょう。
+
+## プログラムの作成
+
+<Steps>
+1. `main`関数内に、必要になりそうな変数を宣言します。
+
+    なお、「まるばつゲーム」の盤を２次元配列で宣言するにあたって、`0`ならば空欄、`1`ならば『まる』が、`2`ならば『ばつ』が刻まれていることにします。
+    オブジェクト形式マクロを用いることで、これらの定数にあらかじめ名前をつけておきましょう。
+
+    ```c
+    #include <stdio.h>
+
+    #define BLANK  0  // から
+    #define CIRCLE 1  // まる（'O'）
+    #define CROSS  2  // ばつ（'X'）
+
+    #define BOARD_SIZE 3  // 盤の行列数
+    
+    // 盤面を表示する関数
+    /* Step.3 にて記述 */
+
+    // 盤面を表す２次元配列にアクセスする関数
+    /* Step.4 にて記述 */
+
+    // 任意のマークをカウントする関数
+    /* Step.5 にて記述 */
+
+    //
+    /* Step.6 にて記述 */
+
+    int main(int argc, const char * argv[]) {
+        // 盤を表す２次元配列
+        int board[BOARD_SIZE][BOARD_SIZE] = {
+            {BLANK, BLANK, BLANK},
+            {BLANK, BLANK, BLANK},
+            {BLANK, BLANK, BLANK}
+        };
+        // 現在のターンを示す変数（1: まる, 2: ばつ）
+        int currPlayer = CIRCLE;
+        // 勝利フラグ（0: 引き分け, 1: まるの勝利, 2: ばつの勝利）
+        int isWin = 0;
+
+        /* Step.2 にて記述 */
+
+        return 0;
+    }
+    ```
+
+    勝利フラグ`isWin`は、`0`で初期化しています。
+    ゲームの過程で勝者が決まったときに、勝者に対応する整数値で更新する予定です。
+
+2. 繰返し構文を用いて、ゲームの一連の流れを実現していきます。
+
+    ```c
+    while ( /* 繰返し処理の条件式（Step.5 にて記述） */ ) {
+        if (currPlayer == CIRCLE)
+            printf("【まるのターン】");
+        else
+            printf("【ばつのターン】");
+        
+        // 設置する座標の入力受付け
+        int pos;
+        printf("設置する座標を入力してください（1〜9）：");
+        scanf("%d", &pos);
+        
+        // 対応する座標にマークを設置
+        /* Step.4 にて記述 */
+        
+        // 勝利判定
+        /* Step.6 にて記述 */
+        
+        // 現在のターンの更新
+        currPlayer = currPlayer % 2 + 1;  // 1 -> 2, 2 -> 1
+    }
+
+    // 勝敗結果の表示
+    printf("【結果】");
+    if (isWin == CIRCLE) {
+        // isWin == 1
+        puts("まるの勝利！");
+    } else if (isWin == CROSS) {
+        // isWin == 2
+        puts("ばつの勝利！");
+    } else {
+        // isWin == 0
+        puts("引き分け……");
+    }
+    ```
+
+    マークを刻むときに標準入力されるグリッドの座標番号は、`1`から`9`の整数値で指定することにします。
+    
+    ```
+    【ばつのターン】設置する座標を入力してください（1〜9）：8
+    ======
+     1 2 3
+     4 5 6
+     7 X 9
+    ======
+    ```
+
+    おおまかなアルゴリズムの流れに沿ったプログラムを組むことができました。
+    あとは、自作関数を定義することで、必要な機能を補っていきましょう。
+
+3. 盤面を表示する関数を作成します。
+
+    ```c
+    // 盤面を表示する関数
+    void printBoard(int board[BOARD_SIZE][BOARD_SIZE]) {
+        puts("======");
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for(int j = 0; j < BOARD_SIZE; j++) {
+                switch (board[i][j]) {
+                    case CIRCLE:  // まる
+                        printf(" O");
+                        break;
+                    case CROSS:  // ばつ
+                        printf(" X");
+                        break;
+                    default:  // 空欄（座標番号を表示）
+                        printf("%2d", i * BOARD_SIZE + j + 1);
+                        break;
+                }
+            }
+            putchar('\n');
+        }
+        puts("======");
+    }
+    ```
+
+    盤面を表す２次元配列を仮引数として受け取り、その内容を標準出力しています。
+    マークが空欄の場合は、座標番号を表示するようにしています。
+
+4. 入力された座標番号に対応する配列の要素にアクセスして、値を書き換えられるようにします。
+
+    そのために、配列の要素にアクセスするための関数を作成します。
+
+    ```c
+    // 座標番号に対応する要素（マーク）を返す関数
+    int getMark(int board[BOARD_SIZE][BOARD_SIZE], int pos) {
+        return board[(pos - 1) / BOARD_SIZE][(pos - 1) % BOARD_SIZE];
+    }
+
+    // 座標番号に対応する要素にマークを代入する関数
+    void setMark(int board[BOARD_SIZE][BOARD_SIZE], int pos, int mark) {
+        board[(pos - 1) / BOARD_SIZE][(pos - 1) % BOARD_SIZE] = mark;
+    }
+    ```
+
+    `[(pos - 1) / BOARD_SIZE][(pos - 1) % BOARD_SIZE]`では、与えられた座標番号（`1`から`9`までの整数値）に対して、対応する２次元配列の添字を算出しています。
+    なお、対応関係は次のようになっています。
+
+    ```
+    [0][0],[0][1],[0][2]  // 1,2,3
+    [1][0],[1][1],[1][2]  // 4,5,6
+    [2][0],[2][1],[2][2]  // 7,8,9
+    ```
+
+    この関数を利用することで、実際にマークを設定していきましょう。
+    
+    ```c
+    if (pos >= 1 && pos <= 9 && getMark(board, pos) == BLANK) {
+        // 入力された座標番号が正常、かつ対応するマークが空欄である場合
+        setMark(board, pos, currPlayer);
+        
+        // 盤面の表示
+        printBoard(board);
+    } else {
+        puts("【エラー】プログラムを終了します．");
+
+        return 0;  // 強制終了
+    }
+    ```
+
+    なお、今回は簡略化のため、正しい入力が認められなかった場合には、プログラムを強制終了するようにしています。
+
+5. 盤上のマークをカウントする関数を作成します。
+
+    ```c
+    // 任意のマークをカウントする関数
+    int countMark(int board[BOARD_SIZE][BOARD_SIZE], int target) {
+        int cnt = 0;
+        
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for(int j = 0; j < BOARD_SIZE; j++) {
+                if (board[i][j] == target)
+                    cnt++;
+            }
+        }
+        
+        return cnt;
+    }
+    ```
+
+    盤面を表す２次元配列と任意のマークを表す整数値を仮引数として受け取り、そのマークが配列内にいくつ存在するのかをカウントして返す関数になります。
+
+    この関数を`while`文の条件式内で呼び出すことで、空欄（`BLANK`）の数をカウントして、その値が`0`であるときに繰返し処理を終了する仕組みにしましょう。
+
+    ```c
+    while(countMark(board, BLANK) != 0) {
+        /* 省略 */
+    }
+    ```
+
+6. 勝利を判定する関数を作成します。
+
+    ```c
+    // ３目の並びを判定する関数
+    int checkLine(int board[BOARD_SIZE][BOARD_SIZE], int mark, int pattern[]) {
+        // １パターン分の座標番号の走査
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            if (getMark(board, pattern[i]) != mark) {
+                // mark と合致しない場合
+                return 0;
+            }
+        }
+        
+        // １パターン分のすべて座標番号が mark と合致した場合
+        return 1;
+    }
+
+    // 勝利を判定する関数
+    int checkWin(int board[BOARD_SIZE][BOARD_SIZE], int mark) {
+        // ３目の並びのパターン
+        int patterns[8][BOARD_SIZE] = {
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9},
+            {1, 4, 7},
+            {2, 5, 8},
+            {3, 6, 9},
+            {1, 5, 9},
+            {3, 5, 7}
+        };
+        
+        // すべてのパターンの走査
+        for (int i = 0; i < 8; i++) {
+            if (checkLine(board, mark, patterns[i]) == 1) {
+                // ３目の並びに合致するパターンをみつけた場合
+                return 1;
+            }
+        }
+        
+        return 0;
+    }
+    ```
+
+    関数呼出しに関しては、`main`関数内から`checkWin`関数を呼出し、`checkWin`関数内から`checkLine`関数を呼び出すことになります。
+
+    仮引数の`mark`には、現在のターンとなるプレイヤーのマークが渡されます。
+
+    ２次元配列`patterns`には、３目の並びとなるすべてのパターンが格納されています。
+    `board`の要素の並びがいずれかのパターンに合致するかどうかを、`checkLine`関数を呼び出すことで判定します。
+
+    `checkLine`関数では、仮引数として渡された`pattern`（１パターン分）に合致しない場合は即座に`0`を、合致する場合は`1`を返します。
+    また、`checkWin`関数では、最大で８回呼び出される`checkLine`関数が`1`を返した場合は即座に`1`を、そうでない場合は`0`を返します。
+
+    この仕組みによって、勝利の判定を実現しています。
+
+    では、`checkWin`関数を`main`関数内から呼び出してみましょう。
+
+    ```c
+    if (checkWin(board, currPlayer) == 1) {
+        // 勝利フラグの更新
+        isWin = currPlayer;
+        break;
+    }
+    ```
+
+    `checkWin`関数が`1`を返した場合、勝利フラグ`isWin`を、現在ターンのプレイヤーのマークを代入することで塗り替えています。
+    また、`break`文によって`while`文を脱出して、勝敗結果を表示するフェーズまでプログラムを進行させます。
+</Steps>
+
+## 完成品
+
+<Tabs>
+<TabItem label="ソースコード">
+```c
+#include <stdio.h>
+
+#define BLANK  0  // から
+#define CIRCLE 1  // まる（'O'）
+#define CROSS  2  // ばつ（'X'）
+
+#define BOARD_SIZE 3  // 盤の行列数
+
+// 盤面を表示する関数
+void printBoard(int board[BOARD_SIZE][BOARD_SIZE]) {
+    puts("======");
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for(int j = 0; j < BOARD_SIZE; j++) {
+            switch (board[i][j]) {
+                case CIRCLE:  // まる
+                    printf(" O");
+                    break;
+                case CROSS:  // ばつ
+                    printf(" X");
+                    break;
+                default:  // 空欄
+                    printf("%2d", i * BOARD_SIZE + j + 1);
+                    break;
+            }
+        }
+        putchar('\n');
+    }
+    puts("======");
+}
+
+// 座標番号に対応する要素（マーク）を返す関数
+int getMark(int board[BOARD_SIZE][BOARD_SIZE], int pos) {
+    return board[(pos - 1) / BOARD_SIZE][(pos - 1) % BOARD_SIZE];
+}
+
+// 座標番号に対応する要素にマークを代入する関数
+void setMark(int board[BOARD_SIZE][BOARD_SIZE], int pos, int mark) {
+    board[(pos - 1) / BOARD_SIZE][(pos - 1) % BOARD_SIZE] = mark;
+}
+
+// 任意のマークをカウントする関数
+int countMark(int board[BOARD_SIZE][BOARD_SIZE], int target) {
+    int cnt = 0;
+    
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for(int j = 0; j < BOARD_SIZE; j++) {
+            if (board[i][j] == target)
+                cnt++;
+        }
+    }
+    
+    return cnt;
+}
+
+// ３目の並びを判定する関数
+int checkLine(int board[BOARD_SIZE][BOARD_SIZE], int mark, int pattern[]) {
+    // １パターン分の座標番号の走査
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        if (getMark(board, pattern[i]) != mark) {
+            // mark と合致しない場合
+            return 0;
+        }
+    }
+    
+    // １パターン分のすべて座標番号が mark と合致した場合
+    return 1;
+}
+
+// 勝利を判定する関数
+int checkWin(int board[BOARD_SIZE][BOARD_SIZE], int mark) {
+    // ３目の並びのパターン
+    int patterns[8][BOARD_SIZE] = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9},
+        {1, 4, 7},
+        {2, 5, 8},
+        {3, 6, 9},
+        {1, 5, 9},
+        {3, 5, 7}
+    };
+    
+    // すべてのパターンの走査
+    for (int i = 0; i < 8; i++) {
+        if (checkLine(board, mark, patterns[i]) == 1) {
+            // ３目の並びに合致するパターンをみつけた場合
+            return 1;
+        }
+    }
+    
+    return 0;
+}
+
+int main(int argc, const char * argv[]) {
+    // 盤を表す２次元配列
+    int board[BOARD_SIZE][BOARD_SIZE] = {
+        {BLANK, BLANK, BLANK},
+        {BLANK, BLANK, BLANK},
+        {BLANK, BLANK, BLANK}
+    };
+    // 現在のターンを示す変数（1: まる, 2: ばつ）
+    int currPlayer = CIRCLE;
+    // 勝利フラグ（0: 引き分け, 1: まるの勝利, 2: ばつの勝利）
+    int isWin = 0;
+    
+    while (countMark(board, BLANK) != 0) {
+        if (currPlayer == CIRCLE)
+            printf("【まるのターン】");
+        else
+            printf("【ばつのターン】");
+        
+        // 設置する座標の入力受付け
+        int pos;
+        printf("設置する座標を入力してください（1〜9）：");
+        scanf("%d", &pos);
+        
+        if (pos >= 1 && pos <= 9 && getMark(board, pos) == BLANK) {
+            // 入力された座標番号が正常、かつ対応するマークが空欄である場合
+            setMark(board, pos, currPlayer);
+            
+            // 盤面の表示
+            printBoard(board);
+        } else {
+            puts("【エラー】プログラムを終了します．");
+            
+            return 0;  // 強制終了
+        }
+        
+        if (checkWin(board, currPlayer) == 1) {
+            // 勝利フラグの更新
+            isWin = currPlayer;
+            break;
+        }
+        
+        // 現在のターンの更新
+        currPlayer = currPlayer % 2 + 1;  // 1 -> 2, 2 -> 1
+    }
+    
+    // 勝敗結果の表示
+    printf("【結果】");
+    if (isWin == CIRCLE) {
+        // isWin == 1
+        puts("まるの勝利！");
+    } else if (isWin == CROSS) {
+        // isWin == 2
+        puts("ばつの勝利！");
+    } else {
+        // isWin == 0
+        puts("引き分け……");
+    }
+    
+    return 0;
+}
+```
+</TabItem>
+<TabItem label="実行例">
+```
+【まるのターン】設置する座標を入力してください（1〜9）：1
+======
+ O 2 3
+ 4 5 6
+ 7 8 9
+======
+【ばつのターン】設置する座標を入力してください（1〜9）：2
+======
+ O X 3
+ 4 5 6
+ 7 8 9
+======
+【まるのターン】設置する座標を入力してください（1〜9）：3
+======
+ O X O
+ 4 5 6
+ 7 8 9
+======
+【ばつのターン】設置する座標を入力してください（1〜9）：4
+======
+ O X O
+ X 5 6
+ 7 8 9
+======
+【まるのターン】設置する座標を入力してください（1〜9）：5
+======
+ O X O
+ X O 6
+ 7 8 9
+======
+【ばつのターン】設置する座標を入力してください（1〜9）：6
+======
+ O X O
+ X O X
+ 7 8 9
+======
+【まるのターン】設置する座標を入力してください（1〜9）：7
+======
+ O X O
+ X O X
+ O 8 9
+======
+【結果】まるの勝利！
+```
+</TabItem>
+</Tabs>
+
+これにて、「まるばつゲーム」のプログラム作成は終了になります。

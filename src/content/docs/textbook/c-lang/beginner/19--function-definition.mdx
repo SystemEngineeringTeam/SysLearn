@@ -1,0 +1,303 @@
+---
+title : 自作関数の設計
+slug: http://localhost:4321/textbook/c-lang/beginner/function-definition
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+プログラムは、多くの機能の組合わせによって構成されます。
+ひとつひとつの機能を提供する基本単位が関数になります。
+自作関数の設計について学んでいきましょう。
+
+## 関数定義と関数呼出し
+
+**関数**（function）とは、値を引数として受け取り、何らかの処理を行う命令のことを指します。
+特に、今まで扱ってきた`printf`関数や`puts`関数、`scanf`関数などは、C言語によって標準で提供されており、これを**ライブラリ関数**（library function）と呼びます。
+
+実は、関数は自作することができます。
+まずは、関数定義について確認していきましょう。
+
+関数定義は次のようにして実現することができます。
+
+```c
+返却値型 関数名(仮引数型並び) {
+    処理の内容
+}
+```
+
+例として、２つの整数値を受け取り、最大値を返す関数を作成してみましょう。
+
+<Tabs>
+<TabItem label="ソースコード">
+```c
+#include <stdio.h>
+
+int max2(int n1, int n2) {
+    if (n1 > n2)
+        return n1;
+    else
+        return n2;
+}
+
+int main(int argc, const char * argv[]) {
+    int a = 3;
+    int b = 7;
+    
+    printf("max: %d\n", max2(a, b));
+    
+    return 0;
+}
+```
+</TabItem>
+<TabItem label="実行例">
+```
+max: 7
+```
+</TabItem>
+</Tabs>
+
+`main`関数上に、`max2`関数を定義しました。
+
+`main`関数内にて、実引数`a, b`を与えて`max2`関数を呼び出しています。
+次に、仮引数`n1, n2`には実引数の値が代入され、自作関数内の処理へと進みます。
+最後に、関数呼出しの式`max2(a, b)`は、２値の比較によって返却された値に置換され、翻訳・実行されます。
+
+また、`return`文は関数の実行を終了して、プログラムの流れを呼出し元に戻すとともに値を返却する仕組みであることを覚えておきましょう。
+
+<Aside type="note" title="関数定義">
+```c
+返却値型 関数名(仮引数型並び) {
+    処理の内容
+}
+```
+</Aside>
+
+## 自作関数内での関数呼出し
+
+関数を組み合わせることで、プログラムを少ない記述量で実現することができます。
+
+例として、次の４つの整数値の最大値を求めるプログラムをみてみましょう。
+
+<Tabs>
+<TabItem label="ソースコード">
+```c
+#include <stdio.h>
+
+int max2(int n1, int n2) {
+    if (n1 > n2)
+        return n1;
+    else
+        return n2;
+}
+
+int max4(int n1, int n2, int n3, int n4) {
+    return max2(max2(n1, n2), max2(n3, n4));
+}
+
+int main(int argc, const char * argv[]) {
+    int a = 3;
+    int b = 7;
+    int c = 2;
+    int d = 5;
+    
+    printf("max: %d\n", max4(a, b, c, d));
+    
+    return 0;
+}
+```
+</TabItem>
+<TabItem label="実行例">
+```
+max: 7
+```
+</TabItem>
+</Tabs>
+
+プログラムの処理の流れは、次のとおりです。
+
+1. `main`関数から処理が始まり、変数`a, b, c, d`を定義
+2. `max4(a, b, c, d)`を呼び出す
+3. `max2(n1, n2)`と`max2(n3, n4)`を呼び出す
+4. `max2(n1, n2)`と`max2(n3, n4)`の戻り値を実引数として、`max2(max2(n1, n2), max2(n3, n4))`が呼び出される
+5. ４値の最大値を戻り値として、`max4(a, b, c, d)`に置換され、結果を出力する
+
+プログラムの処理の流れと戻り値に注意して、関数を活用していきましょう。
+
+## 値を返さない関数・引数を受け取らない関数
+
+値を返さない関数を定義する場合、関数型を`void`（『空の』を意味します）とします。
+
+また、受け取る仮引数がない関数を定義する場合も、仮引数型並びを`void`とします。
+
+実際に、次のプログラムを確認して、`void`の使い方を確認しましょう。
+
+<Tabs>
+<TabItem label="ソースコード">
+```c
+#include <stdio.h>
+
+// 自然数を標準入力によって受け取り返却する関数
+int scanN(void) {
+    int n;
+    
+    do {
+        printf("natural number? ");
+        scanf("%d", &n);
+        
+        if (n <= 0)
+            puts("error!");
+    } while (n <= 0);
+    
+    return n;
+}
+
+// 与えた整数値だけ * を出力する関数
+void putStars(int n) {
+    for (int i = 0; i < n; i++)
+        putchar('*');
+    putchar('\n');  // 改行
+}
+
+int main(int argc, const char * argv[]) {
+    putStars(scanN());
+    
+    return 0;
+}
+```
+</TabItem>
+<TabItem label="実行例">
+```
+natural number? 0（注：標準入力）
+error!
+natural number? -3（注：標準入力）
+error!
+natural number? 5（注：標準入力）
+*****
+```
+</TabItem>
+</Tabs>
+
+`printStars`関数は、与えた整数値だけ`*`を出力する関数になります。
+そのため、戻り値は存在しません。
+
+`scanN`関数は、主に自然数を標準入力によって受け取り返却する関数になります。
+そのため、仮引数を必要としません。
+
+上記のような関数を設計する場合、`void`を記述することを忘れないようにしましょう。
+
+## 練習問題
+
+<Tabs>
+<TabItem label="問題">
+自然数`n`を受け取り、その階乗`n!`を算出する関数`factorial`を作成してください。
+また、自然数の受け取りは、前述の`scanN`関数を利用してください。
+
+なお、階乗`n!`とは、`1`から`n`までの自然数の積のことを指します。
+
+```c
+#include <stdio.h>
+
+int scanN(void) {
+    int n;
+    
+    do {
+        printf("natural number? ");
+        scanf("%d", &n);
+        
+        if (n <= 0)
+            puts("error!");
+    } while (n <= 0);
+    
+    return n;
+}
+
+*** factorial(*** ***) {
+    // TODO
+    
+    return ***;
+}
+
+int main(int argc, const char * argv[]) {
+    int n = scanN();
+    
+    printf("%d! = %d\n", n, factorial(n));
+    
+    return 0;
+}
+```
+</TabItem>
+<TabItem label="実行例">
+```
+natural number? 4（注：標準入力）
+4! = 24
+```
+</TabItem>
+<TabItem label="ヒント１">
+返却値型を`int`、仮引数を`int n`として、関数`factorial`を設計しましょう。
+
+```c
+int factorial(int n) {
+    int ans = ***;
+    
+    // TODO
+    
+    return ans;
+}
+```
+</TabItem>
+<TabItem label="ヒント２">
+`n!`を、繰返し処理によって実現しましょう。
+返却値`ans`の初期値として、`1`を与えることに注意しましょう。
+
+```c
+int ans = 1;  // 初期値を 1 とする
+
+// すべての自然数の積を算出する
+for (int i = 1; i <= n; i++)
+    ans *= i;
+```
+</TabItem>
+<TabItem label="解答例">
+```c
+#include <stdio.h>
+
+// 自然数を標準入力によって受け取り返却する関数
+int scanN(void) {
+    int n;
+    
+    do {
+        printf("natural number? ");
+        scanf("%d", &n);
+        
+        if (n <= 0)
+            puts("error!");
+    } while (n <= 0);
+    
+    return n;
+}
+
+// 与えられた整数値の階乗を求める関数
+int factorial(int n) {
+    int ans = 1;  // 初期値を 1 とする
+    
+    for (int i = 1; i <= n; i++)
+        ans *= i;
+    
+    return ans;
+}
+
+int main(int argc, const char * argv[]) {
+    int n = scanN();
+    
+    printf("%d! = %d\n", n, factorial(n));
+    
+    return 0;
+}
+```
+</TabItem>
+</Tabs>
+
+## 確認クイズ
+
+
