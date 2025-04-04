@@ -18,11 +18,7 @@ export default defineConfig({
       iconDir: "src/assets/icons",
     }),
     compress({
-      HTML: {
-        "html-minifier-terser": {
-          removeAttributeQuotes: false,
-        },
-      },
+      HTML: false,
       CSS: false,
     }),
     partytown({
