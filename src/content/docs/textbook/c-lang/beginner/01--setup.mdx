@@ -11,6 +11,25 @@ export const CLI_OR_GUI_SYNC_KEY = 'c-lang/beginner::cli-or-gui';
 
 ## 私はどの環境で開発すれば？
 
+過去の講義資料を基にしたゆる～い案内です。 確実に授業に即しているかは分からないけど、自分の PC などで試すときは参考にしてください。
+
+- EE （電気学科/電気工学専攻）  
+   <LinkCard
+      title="“VSBT 経由の MSVC” の節へ"
+      href="#vsbt-経由の-msvcclexe"
+   />
+
+- EV （電気学科/電子情報工学専攻）  
+   <LinkCard
+      title="“w64devkit 経由の MinGW” の節へ"
+      href="#w64devkit-経由の-mingw"
+   />
+- KK （情報科学科/コンピュータシステム専攻）  
+  macOS - XCode
+- KX （情報科学科/メディア情報専攻）  
+  macOS - XCode
+
+
 ## 構築: コンパイラー環境
 
 ### Windows 
@@ -66,7 +85,7 @@ export const CLI_OR_GUI_SYNC_KEY = 'c-lang/beginner::cli-or-gui';
    インストールが完了するまで待機します。
    ![](./_images/202504050211.png)
 
-   <SyscatComment>PC やネットワークの速度によっては時間を要するから、お茶でも飲んでゆっくり待ってね。</SyscatComment>
+   <SyscatComment type="SLEEPING">PC やネットワークの速度によっては時間を要するから、お茶でも飲んでゆっくり待ってね。</SyscatComment>
 
 3. MSVC のバージョンを特定する
 
@@ -79,13 +98,13 @@ export const CLI_OR_GUI_SYNC_KEY = 'c-lang/beginner::cli-or-gui';
       ls -name "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC"
       ```
 
-      すると、次のような出力が得られます (例):
+      すると、次のような出力が得られます（例）:
 
       ```powershell
       14.43.34808
       ```
 
-      これが、MSVC のバージョン番号の一例です。これをメモしておきます。
+      これが、MSVC のバージョン番号の一例です。 これをメモしておきます。
 
       <Aside>
          Visual Studio Installer でインストールする際、“インストールの場所” を変更した際は、`ls` の引数のパスを変更する必要があります。
@@ -98,11 +117,11 @@ export const CLI_OR_GUI_SYNC_KEY = 'c-lang/beginner::cli-or-gui';
       ```text
       C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC
       ```
-      に移動します。  (ショートカット: パスをコピー後、<kbd>Win</kbd> + <kbd>R</kbd> → <kbd>Ctrl</kbd> + <kbd>V</kbd> → <kbd>Enter</kbd>)
+      に移動します。 (ショートカット: パスをコピー後、<kbd>Win</kbd> + <kbd>R</kbd> → <kbd>Ctrl</kbd> + <kbd>V</kbd> → <kbd>Enter</kbd>)
       
       ![](./_images/202504050344.drawio.png)
 
-      作業フォルダー内にあるフォルダーの名前が MSVC のバージョン番号の一例です。これをメモしておきます。
+      作業フォルダー内にあるフォルダーの名前が MSVC のバージョン番号の一例です。 これをメモしておきます。
 
       <Aside>
          Visual Studio Installer でインストールする際、“インストールの場所” を変更した際は、“ファイル名を指定して実行” のパスを変更する必要があります。
@@ -132,16 +151,31 @@ export const CLI_OR_GUI_SYNC_KEY = 'c-lang/beginner::cli-or-gui';
    ![](./_images/202504050402.drawio.png)
    ここで、“新規” ボタンをクリックし、先ほどコピーしたパスを貼り付け、“OK” → “OK” で 2 つのウィンドウを閉じます。
 
+   <SyscatComment>今回は必ずしも PATH を通す必要はないんだけど、 IDE やツールチェインによっては必要になるから、やっておいて損は無いはず！</SyscatComment>
+
 5. `cl.exe` を実行してみる
 
-   PowerShell で次のコマンドを実行し、`cl.exe` が実行できるか確認します:
+   <kbd>Win</kbd> → `developer powershell` → <kbd>Enter</kbd> で、Developer PowerShell for VS 2022 を起動します（Developer Command Prompt for VS 2022 でも問題ありません）。
+   その後、`cl` コマンドを実行してみます。
 
    ```powershell
+   **********************************************************************
+   ** Visual Studio 2022 Developer PowerShell v17.13.5
+   ** Copyright (c) 2022 Microsoft Corporation
+   **********************************************************************
+
+   PS C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools> cl
+   
+   Microsoft(R) C/C++ Optimizing Compiler Version 19.43.34809 for x86
+   Copyright (C) Microsoft Corporation.  All rights reserved.
+
+   使い方: cl [ オプション... ] ファイル名... [ /link リンク オプション... ]
    ```
 
+   上のようなメッセージが表示されれば、インストールは成功です。
 </Steps>
 
-<SyscatComment>これでコンパイラー環境の構築は終わりだよ。  お疲れ様！</SyscatComment>
+<SyscatComment type="TADA">これでコンパイラー環境の構築は終わりだよ。 お疲れ様！</SyscatComment>
 <LinkCard
   title="“構築: エディター環境” の節へ"
   href="#構築-エディター環境"
@@ -183,14 +217,14 @@ export const CLI_OR_GUI_SYNC_KEY = 'c-lang/beginner::cli-or-gui';
    - “Windows 用 C++ Clang ツール (19.1.1 - x64/x86)”  
       （バージョンは変動する可能性アリ）
 
-   の 3 つにチェックを入れます。  その後、“変更” をクリックします。
+   の 3 つにチェックを入れます [^vsbt-llvm]。 その後、“変更” をクリックします。
 
    ![](./_images/202504050205.drawio.png)
 
    インストールが完了するまで待機します。
    ![](./_images/202504050211.png)
 
-   <SyscatComment>PC やネットワークの速度によっては時間を要するから、お茶でも飲んでゆっくり待ってね。</SyscatComment>
+   <SyscatComment type="SLEEPING">PC やネットワークの速度によっては時間を要するから、お茶でも飲んでゆっくり待ってね。</SyscatComment>
 
 3. 環境変数を設定する  
 
@@ -207,9 +241,28 @@ export const CLI_OR_GUI_SYNC_KEY = 'c-lang/beginner::cli-or-gui';
    ![](./_images/202504050402.drawio.png)
    ここで、“新規” ボタンをクリックし、先ほどコピーしたパスを貼り付け、“OK” → “OK” で 2 つのウィンドウを閉じます。
 
+   <SyscatComment>今回は必ずしも PATH を通す必要はないんだけど、 IDE やツールチェインによっては必要になるから、やっておいて損は無いはず！</SyscatComment>
+
+4. `clang.exe` を実行してみる
+
+   <kbd>Win</kbd> → `developer powershell` → <kbd>Enter</kbd> で、Developer PowerShell for VS 2022 を起動します（Developer Command Prompt for VS 2022 でも問題ありません）。
+   その後、`clang` コマンドを実行してみます。
+
+   ```powershell
+   **********************************************************************
+   ** Visual Studio 2022 Developer PowerShell v17.13.5
+   ** Copyright (c) 2022 Microsoft Corporation
+   **********************************************************************
+
+   PS C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools> clang
+   
+   clang: error: no input files
+   ```
+
+   上のようなメッセージが表示されれば、インストールは成功です。
 </Steps>
 
-<SyscatComment>これでコンパイラー環境の構築は終わりだよ。  お疲れ様！</SyscatComment>
+<SyscatComment type="TADA">これでコンパイラー環境の構築は終わりだよ。 お疲れ様！</SyscatComment>
 <LinkCard
   title="“構築: エディター環境” の節へ"
   href="#構築-エディター環境"
@@ -218,25 +271,159 @@ export const CLI_OR_GUI_SYNC_KEY = 'c-lang/beginner::cli-or-gui';
 
 #### w64devkit 経由の MinGW
 
-- VSBT
-  `winget install Microsoft.VisualStudio.2022.BuildTools`  
-  - MSVC （`cl.exe`）
-  - Clang/LLVM （`clang.exe`）
-- MinGW
-  - w64devkit
-  - refs:
-    - https://www.mingw-w64.org/downloads/#mingw-w64-builds
-    - https://github.com/skeeto/w64devkit/releases
-    - https://hmi.aitech.ac.jp/1ev-c/?%E8%87%AA%E5%AE%85PC%E3%81%AB%E9%96%8B%E7%99%BA%E7%92%B0%E5%A2%83
-    - https://qiita.com/yomei_o/items/2e706a5fa3ac5ffc3a50
+<Steps>
+
+1. w64devkit のダウンロード  
+
+   [w64devkit - @skeeto - GitHub](https://github.com/skeeto/w64devkit/releases) にアクセスし、
+   最新のリリースの Assets から `w64devkit-x64-2.1.0.exe` をダウンロードします （バージョンは変動する可能性アリ） [^mingw-install]。
+
+   該当の EXE ファイルを**管理者として**起動します。
+   ![](./_images/202504050540.drawio.png)
+
+   その後、展開先を示すフィールドを
+   ```text
+   C:\Program Files
+   ```
+   に変更し、 “Extract” ボタンをクリックします。
+   ![](./_images/202504050549.drawio.png)
+
+   <Aside>
+      展開先に強い制約や意図はありません。  
+      もし、展開先がユーザープロファイル内の場合、展開に管理者権限は不要です。 したがって、管理者として実行することすら不要です。
+   </Aside>
+
+2. 環境変数を設定する  
+
+   次のパスをクリップボードやメモ帳などにコピーしておきます [^vsbt-llvm]:
+   ```
+   C:\Program Files\w64devkit\bin
+   ```
+
+   パスの準備ができたら、 <kbd>Win</kbd> → `env` で “環境変数を編集” を起動します。  
+   その後、ユーザー環境変数セクションの `Path` (下図の赤枠) をダブルクリックします。
+   ![](./_images/202504050355.drawio.png)
+
+   すると、次のようなウィンドウが開きます。
+   ![](./_images/202504050402.drawio.png)
+   ここで、“新規” ボタンをクリックし、先ほどコピーしたパスを貼り付け、“OK” → “OK” で 2 つのウィンドウを閉じます。
+
+3. `gcc.exe` を実行してみる
+
+   <kbd>Win</kbd> → `powershell` → <kbd>Enter</kbd> で PowerShell を起動します（ショートカット: <kbd>Win</kbd> + <kbd>X</kbd> → <kbd>I</kbd>）。  
+   その後、`gcc` コマンドを実行してみます。
+
+   ```powershell
+   PowerShell 7.5.0
+   PS C:\Program Files\PowerShell\7> gcc
+   gcc.exe: fatal error: no input files
+   compilation terminated.
+   ```
+
+   上のようなメッセージが表示されれば、インストールは成功です。
+</Steps>
+
+<SyscatComment type="TADA">これでコンパイラー環境の構築は終わりだよ。 お疲れ様！</SyscatComment>
+<LinkCard
+  title="“構築: エディター環境” の節へ"
+  href="#構築-エディター環境"
+  description="ここより下は別のコンパイラー環境用だよ！"
+/>
+
 
 ### macOS
 
-#### Clang
+後述する XCode をインストールすると、 GCC を含んだ XCode Command Line Tools がインストールされるので、この節はスキップして構いません。  
+XCode を使わずにコーディングする場合や、 Clang へのリダイレクトなしの GCC を使う場合は、次の手順に従ってください。
+
+HomeBrew がインストールされていない場合は, [こちらの記事](https://zenn.dev/ackylarkham/articles/c93d5ed1689459) を参考にインストールしてください。
 
 #### GCC
 
+次のコマンドを実行して、 HomeBrew 経由で GCC をインストールします [^gcc-install-on-macos]。
+
+<Steps>
+
+1. gcc のインストール  
+   ```bash
+   brew install gcc
+   ```
+2. gcc のバージョン確認  
+   ```bash
+   ls /usr/local/bin | grep gcc
+   ```
+   ```text
+   gcc-11
+   gcc-ar-11
+   gcc-nm-11
+   gcc-ranlib-11
+   x86_64-apple-darwin21-gcc-11
+   x86_64-apple-darwin21-gcc-ar-11
+   x86_64-apple-darwin21-gcc-nm-11
+   x86_64-apple-darwin21-gcc-ranlib-11
+   ```
+</Steps>
+
+#### Clang
+
 ### Linux
+
+#### GCC
+
+スーパーユーザーとして次のコマンドを実行します [^build-essential-install]。 WSL を使う場合も有効です。
+
+<Steps>
+
+1. リポジトリのアップデート  
+   ```bash
+   sudo apt-get update
+   sudo apt-get upgrade
+   ```
+2. build-essential のインストール  
+   ```bash
+   sudo apt-get install build-essential
+   ```
+3. GCC のバージョン確認  
+   ```bash
+   gcc --version
+   ```
+
+</Steps>
+<SyscatComment type="TADA">これでコンパイラー環境の構築は終わりだよ。 お疲れ様！</SyscatComment>
+<LinkCard
+  title="“構築: エディター環境” の節へ"
+  href="#構築-エディター環境"
+  description="ここより下は別のコンパイラー環境用だよ！"
+/>
+
+
+#### Clang
+
+スーパーユーザーとして次のコマンドを実行します [^clang-install]。 WSL を使う場合も有効です。
+
+<Steps>
+
+1. リポジトリのアップデート
+   ```bash
+   sudo apt-get update
+   sudo apt-get upgrade
+   ```
+2. Clang のインストール
+   ```bash
+   sudo apt-get install clang
+   ```
+3. Clang のバージョン確認
+   ```bash
+   clang --version
+   ```
+
+</Steps>
+<SyscatComment type="TADA">これでコンパイラー環境の構築は終わりだよ。 お疲れ様！</SyscatComment>
+<LinkCard
+  title="“構築: エディター環境” の節へ"
+  href="#構築-エディター環境"
+/>
+
 
 ## 構築: エディター環境
 
@@ -251,3 +438,7 @@ export const CLI_OR_GUI_SYNC_KEY = 'c-lang/beginner::cli-or-gui';
 [^vsbt-winget]: [開発環境: WindowsにRust(MSVC)の開発環境を構築する (2023年版) - @atsushifx - Zenn](https://zenn.dev/atsushifx/articles/develop-lang-rust-install#1.-visual-studio-build-tools%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB)
 [^vsbt-path]: [開発環境: Visual Studio Build Toolsのインストール手順ガイド - @atsushifx - Zenn](https://zenn.dev/atsushifx/articles/winhack-develop-buildtools-install#3.1.-%E3%83%91%E3%82%B9%E3%81%AE%E8%A8%AD%E5%AE%9A)
 [^vsbt-llvm]: [llvm-mingw(clang) + ninja + cmake で Windows で self-contained な C/C++ 開発環境を整える - @syoyo - Qiita](https://qiita.com/syoyo/items/48c4b7af14fdd8d2c741)
+[^mingw-install]: [WindowsにMinGW-w64をインストールする 2025年版 - @yomei_o - Qiita](https://qiita.com/yomei_o/items/2e706a5fa3ac5ffc3a50)
+[^gcc-install-on-macos]: [MacでGCCを使用し、C/C++のコードをコンパイルする - @minguu42 - Zenn](https://zenn.dev/minguu42/articles/20220722-how-to-use-gcc-on-mac)
+[^build-essential-install]: [スタンドアロンのUbuntuにbuild-essentialをインストール - @ryo2_9393 - Qiita](https://qiita.com/ryo2_9393/items/78fd73718b391b564083)
+[^clang-install]: [UbuntuにClangをインストール - tah](https://tah5.com/guides/ubuntu/llvm/clang/ubuntu24/)

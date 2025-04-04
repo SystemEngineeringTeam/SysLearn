@@ -40,6 +40,7 @@ export default defineConfig({
           lang: "ja",
         },
       },
+      tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 4 },
       logo: {
         src: "./src/assets/icons/logo/sym.svg",
       },
