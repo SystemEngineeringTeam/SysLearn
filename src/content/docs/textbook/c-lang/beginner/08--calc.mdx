@@ -8,6 +8,8 @@ import { Aside, Card } from "@astrojs/starlight/components";
 
 ## 四則演算
 
+---
+
 C言語の四則演算は、基本的な数学の計算を行うための演算子（オペレーター）を使う。
 
 |  演算子     | 説明                |
@@ -186,6 +188,8 @@ int main(void) {
 
 ## 演算子の優先順位
 
+---
+
 C言語では、演算子の優先順位が決まっており、基本的に数学と同じルールに従う。
 
 ### 優先順位（高い順）
@@ -213,7 +217,9 @@ int main(void) {
 
 <Card>
 ### 練習問題2
-`(10 + 5) * 2 / 4 - 3` の計算結果を`double`型で出力してください。
+次の数式の計算結果を`double`型で出力してください。
+
+![2 * (10 + 5) / 4 - 3](/calc_pra2.drawio.svg)
 
 **実行結果**
 ```sh
@@ -234,7 +240,7 @@ C言語では、`*`（掛け算）と `/`（割り算）は `+`（足し算）�
 #include <stdio.h>
 
 int main(void) {
-    double result = (10 + 5) * 2 / 4 - 3;
+    double result = 2 * (10 + 5) / 4 - 3;
     printf("計算結果: %lf\n", result);
     return 0;
 }
