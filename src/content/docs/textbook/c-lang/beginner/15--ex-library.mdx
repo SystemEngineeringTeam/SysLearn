@@ -1,17 +1,21 @@
 ---
-title: 標準ライブラリ
+title: ex-標準ライブラリ
 description: 標準ライブラリについて学びます!
 slug: textbook/c-lang/beginner/library
 ---
 
 import { Aside } from "@astrojs/starlight/components";
 
-## 1.標準ライブラリとは
+## 標準ライブラリとは
+---
+
 標準ライブラリとは、C言語の標準で提供されているCプログラムで利用できる関数やマクロの集合のことである。  
 標準ライブラリには、様々な関数が用意されており、それらを利用することで、プログラムの開発が容易になる。  
 標準ライブラリは、`#include`ディレクティブを用いてプログラムに取り込むことができる。  
 
-## 2.stdio.h
+## stdio.h
+---
+
 `stdio.h`は、標準入出力を行うためのヘッダファイルである。  
 ヘッダファイルとは、関数やマクロ、型定義などを記述し、他のCファイルで再利用できるようにするファイルであり、拡張子に`.h`を用いるものである。  
 以下は、stdio.hで提供されている関数の一部である。
@@ -20,7 +24,8 @@ import { Aside } from "@astrojs/starlight/components";
 - `fopen()` / `fclose()`: ファイルのオープン・クローズ
 - `fgets()` / `fputs()`: ファイルからの読み込み・書き込み
 
-## 3.math.h
+## math.h
+---
 `math.h`は、数学関数を提供するヘッダファイルである。  
 以下は、math.hで提供されている関数の一部である。
 
@@ -32,7 +37,7 @@ import { Aside } from "@astrojs/starlight/components";
 #include <stdio.h>
 #include <math.h>
 
-int main() {
+int main(void) {
     double angle = 45.0;  // 角度（度数法）
     double radians = angle * M_PI / 180.0;  // ラジアン変換
 
@@ -56,7 +61,8 @@ int main() {
 
 ```
 
-## 4.string.h
+## string.h
+---
 `string.h`は、文字列操作を行うためのヘッダファイルである。
 以下は、string.hで提供されている関数の一部である。
 
@@ -69,7 +75,7 @@ int main() {
 #include <stdio.h>
 #include <string.h>
 
-int main() {
+int main(void) {
     // 1. strlen() - 文字列の長さ
     char str1[] = "Hello";
     printf("文字列: \"%s\"\n", str1);
@@ -113,7 +119,9 @@ strcmp(cmp1, cmp3) = 0
 strcmp(cmp2, cmp1) = 1
 ```
 
-## 5.stdlib.h
+## stdlib.h
+---
+
 `stdlib.h`は、標準ライブラリの中で、乱数生成やメモリの確保・解放などを行うためのヘッダファイルである。  
 以下は、stdlib.hで提供されている関数の一部である。
 
@@ -126,7 +134,7 @@ strcmp(cmp2, cmp1) = 1
 #include <stdlib.h>
 #include <time.h>
 
-int main() {
+int main(void) {
     // 1. 乱数の生成（rand()）
     srand(time(NULL));  // 乱数の種を設定
     int random_number = rand() % 100;  // 0〜99の乱数を生成

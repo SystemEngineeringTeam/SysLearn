@@ -6,7 +6,8 @@ slug: textbook/c-lang/beginner/while
 
 import { Aside } from "@astrojs/starlight/components";
 
-## 1.while
+## while
+---
 
 while文は、条件式が真の間、繰り返し処理を行う構文である。  
 
@@ -19,7 +20,7 @@ while (条件式) {
 以下は、1から10までの数字を表示するプログラムである。
 ```c
 #include <stdio.h>
-int main() {
+int main(void) {
     int i = 1;
     while (i <= 10) {
         printf("%d\n", i);
@@ -35,6 +36,8 @@ int main() {
 
 <Aside type="tip">
 ### while文とfor文の違い
+---
+
 while文とfor文は、どちらも繰り返し処理を行うための構文である。 
 
 while文の構造には、初期化,更新式が無いため、ループ回数が決まっていない場合に使用するとよい。  
@@ -42,7 +45,7 @@ while文の構造には、初期化,更新式が無いため、ループ回数�
 ```c
 #include <stdio.h>
 
-int main() {
+int main(void) {
     int num = 1; //　0以外の数値で初期化
     printf("0 を入力すると終了します。\n");
     
@@ -62,7 +65,9 @@ int main() {
 
 </Aside>
 
-## 2.do-while文
+## do-while文
+---
+
 do-while文は、while文と同様に、条件式が真の間繰り返し処理を行う構文である。  
 while文との違いは、条件式の判定を処理の後に行うため、条件式が偽であっても1回は処理を実行する。  
 特に理由がなければ、while文を使用することが推奨される。
@@ -77,7 +82,7 @@ do {
 ```c
 #include <stdio.h>
 
-int main() {
+int main(void) {
     int num = 1; //　0以外の数値で初期化
     printf("0 を入力すると終了します。\n");
     
@@ -96,6 +101,7 @@ int main() {
 ![フローチャート](/fc_inf_loop.drawio.svg)
 
 ## 理解度チェック
+---
 
 {/* <Quize>
 {
@@ -107,7 +113,7 @@ while文を使用して、ユーザーが 0 を入力するまで数値を合計
 ```c
 #include <stdio.h>
 
-int main() {
+int main(void) {
     int num;
     int sum = 0;
 

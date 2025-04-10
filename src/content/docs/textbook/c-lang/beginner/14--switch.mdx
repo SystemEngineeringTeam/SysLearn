@@ -6,7 +6,9 @@ slug: textbook/c-lang/beginner/switch
 
 import { Aside } from "@astrojs/starlight/components";
 
-## 1.switch
+## switch
+---
+
 switch文は、条件によって処理を分岐させる構文である。  
 if文と違い、条件式ではなく、式とその値によって処理を分岐させる。  
 
@@ -29,7 +31,7 @@ switch (式) {
 ```c
 #include <stdio.h> 
 
-int main() {
+int main(void) {
     int menu_num;
     
     printf("メニューを選んでください:\n");
@@ -66,7 +68,7 @@ break文を省略すると、次のcase文が実行される。
 以下は、1から5までの数字が入力されたときに、メッセージを返すコードである。  
 ```c
 #include <stdio.h>
-int main() {
+int main(void) {
     int num;
     printf("数字を入力してください: ");
     scanf("%d", &num);
@@ -101,13 +103,15 @@ int main() {
 フローチャートで表すと以下のようになる。
 ![フローチャート](/fc_sample_break.drawio.svg)
 
-## 2.continue
+## continue
+---
+
 continue文は、ループ処理を抜けずに次の処理へ移る構文である。  
 以下は、1から100までの数字が入力されるとその数字を出力し、入力された数字が1から100まででないときは再入力させるコードである。
 ```c
 #include <stdio.h>
 
-int main() {
+int main(void) {
     int num = 1; // 0以外の数値で初期化
 
     printf("0 を入力するとループを終了します。");
@@ -130,6 +134,8 @@ int main() {
 ```
 <Aside type="caution">
 ### continue文の落とし穴
+---
+
 continue文の使用を避けたほうが可読性が向上することもある。
 
 2の倍数でも3の倍数でもない値を表示するコードを、continue文を使用した場合と使用しない場合で示す。  
@@ -141,7 +147,7 @@ continue文の使用を避けたほうが可読性が向上することもある
 ```c
 #include <stdio.h>
 
-int main() {
+int main(void) {
     for (int i = 1; i <= 10; i++) {
         if (i % 2 != 0 && i % 3 != 0) {  // 2の倍数でも3の倍数でもない
             printf("%d ", i);
@@ -156,7 +162,7 @@ int main() {
 ```c
 #include <stdio.h>
 
-int main() {
+int main(void) {
     for (int i = 1; i <= 10; i++) {
         // 2の倍数でも3の倍数でもないなら次の処理へ
         if (i % 2 != 0 && i % 3 != 0){ 
@@ -171,6 +177,7 @@ int main() {
 </Aside>
 
 ## 理解度チェック
+---
 
 {/* <Quize>
 {
@@ -184,7 +191,7 @@ swtich文を用いて月を入力すると対応する季節を表示しなさ�
 
 #include <stdio.h>
 
-int main() {
+int main(void) {
     int month;
 
     // ユーザーに入力を求める

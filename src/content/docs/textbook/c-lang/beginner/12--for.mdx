@@ -8,8 +8,8 @@ import { Aside } from "@astrojs/starlight/components";
 // import Quize from "@/components/astro/Quize.astro";
 // import Anser from "@/components/astro/Anser.astro";
 
-## 1.for
-
+## for
+---
 for文は、繰り返し処理を行うための構文である。  
 繰り返し処理は、書き間違えが無限ループの原因になるので注意が必要である。  
 
@@ -30,7 +30,7 @@ for (初期化; 条件式; 更新式) {
 
 ```c
 #include <stdio.h>
-int main() {
+int main(void) {
     int i;
     for (i = 1; i <= 10; i++) {
         printf("%d\n", i);
@@ -48,7 +48,7 @@ int main() {
 
 ```c
 #include <stdio.h>
-int main(){
+int main(void){
     for(int i = 0;;){
         printf("%d",i);
         break;
@@ -75,7 +75,8 @@ a = i++ と a = ++i では、aの値が異なる。
 
 </Aside>
 
-## 2.複合代入演算子
+## 複合代入演算子
+---
 
 複合代入演算子は、代入演算子と算術演算子を組み合わせた演算子である。  
 代入と演算のコードを省略して記述できる。
@@ -88,14 +89,15 @@ a = i++ と a = ++i では、aの値が異なる。
 | `a /= b` | `a = a / b` |
 | `a %= b` | `a = a % b` |
 
-## 3.for文のネスト
- 
+## for文のネスト
+---
+
 ループの中にループを記述する構造のことをネスト(入れ子)構造と呼ぶ。
 以下は、九九の表を表示するプログラムである。
 
 ```c
 #include <stdio.h>
-int main() {
+int main(void) {
     int i, j;
     for (i = 1; i <= 9; i++) {
         for (j = 1; j <= 9; j++) {
@@ -110,6 +112,7 @@ int main() {
 ![フローチャート](/fc_99_for.drawio.svg)
 
 ## 理解度チェック
+---
 
 {/* <Quize>
 {
@@ -121,7 +124,7 @@ for文を使用して、1から10までの合計を求め、その値を出力�
 ```c
 #include <stdio.h>
 
-int main() {
+int main(void) {
     int sum = 0;
 
     // 1 から 10 までの合計を求める
@@ -159,7 +162,7 @@ for文を2つ使用して、ユーザーが指定した行数 N で 右上がり
 ```c
 #include <stdio.h>
 
-int main() {
+int main(void) {
     int N;
 
     // ユーザーに行数を入力してもらう

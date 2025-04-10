@@ -9,7 +9,8 @@ import { Aside } from "@astrojs/starlight/components";
 // import Quize from "@/components/astro/Quize.astro";
 // import Anser from "@/components/astro/Anser.astro";
 
-## 1.if
+## if
+---
 
 実行したい処理に条件を付けたい時は、if文を用いる。条件式が真の場合に処理を実行する。
 
@@ -23,7 +24,7 @@ if (条件式) {
 
 ```c
 #include <stdio.h>
-int main() {
+int main(void) {
     int score;
 
     printf("点数を入力してください: ");
@@ -45,6 +46,7 @@ int main() {
 </Aside>
 
 #### 比較演算子
+---
 
 | 演算子  | 数学の記号 |
 |:-------:|:--------:|
@@ -59,7 +61,8 @@ int main() {
  `==`と`=`は異なる演算子である。`==`は等価、`=`は代入を意味する。
 </Aside>
 
-## 2.else
+## else
+---
 
 else文を使うことで、条件式が偽の場合に実行する処理を指定できる。
 
@@ -75,7 +78,7 @@ if (条件式) {
 
 ```c
 #include <stdio.h>
-int main() {
+int main(void) {
     int score;
 
     printf("点数を入力してください: ");
@@ -95,7 +98,8 @@ int main() {
 
 ![フローチャート](/fc_exam_else.drawio.svg)
 
-## 3.else if
+## else if
+---
 
 else ifを使うことで、複数の条件を指定することができる。
 
@@ -113,7 +117,7 @@ if (条件式1) {
 
 ```c
 #include <stdio.h>
-int main() {
+int main(void) {
     int score;
 
     printf("点数を入力してください: ");
@@ -132,7 +136,8 @@ int main() {
 ```
 ![フローチャート](/fc_exam_else_if.drawio.svg)
 
-## 4.or and not
+## and, or, not
+---
 
 複数の条件を指定する場合には、if文を複数個用いたり、以下の論理演算子を活用すると良い。
 
@@ -164,6 +169,7 @@ if (!(y >= 10)) {
 ```
 
 ## 変数のスコープ
+---
 
 変数は使用できる範囲に制限がある。これを変数のスコープという。  
 変数のスコープは、`{}`で囲まれたブロック内でのみ使用できる。
@@ -200,6 +206,7 @@ printf("x = %d\n", x);
 </Aside>
 
 ## 理解度チェック
+---
 
 {/* <Quize>
 {入力された値が10以上ならば「Yes」、それ以外なら「No」と出力するプログラムを書け。}
@@ -208,7 +215,7 @@ printf("x = %d\n", x);
 <Anser ans={
 ```c
 #include <stdio.h>
-int main() {
+int main(void) {
     int num;
 
     printf("数値を入力してください: ");
@@ -240,7 +247,7 @@ int main() {
 ```c
 #include <stdio.h>
 
-int main() {
+int main(void) {
     int score;
 
     printf("点数を入力してください: ");
