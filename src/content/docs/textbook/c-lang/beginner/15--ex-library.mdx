@@ -32,14 +32,15 @@ import { Aside } from "@astrojs/starlight/components";
 - `sin()`, `cos()`, `tan()`: 三角関数
 - `sqrt()`: 平方根
 - `pow()`: べき乗
-- `abs()`: 絶対値
 ```c
 #include <stdio.h>
+#define _USE_MATH_DEFINES // VSCodeでM_PIを使うための定義
 #include <math.h>
+#include <stdlib.h> 
 
 int main(void) {
     double angle = 45.0;  // 角度（度数法）
-    double radians = angle * M_PI / 180.0;  // ラジアン変換
+    double radians = angle * M_PI / 180.0;  // ラジアン変換 M_PIは非推奨
 
     // 三角関数
     printf("sin(%.2f度) = %.5f\n", angle, sin(radians));
@@ -53,13 +54,25 @@ int main(void) {
     // 累乗
     printf("2^3 = %.2f\n", pow(2.0, 3.0));
 
-    // 絶対値
-    int x = -10;
-    printf("abs(%d) = %d\n", x, abs(x));
     return 0;
 }
 
 ```
+実行結果
+```
+sin(45.00度) = 0.70711
+cos(45.00度) = 0.70711
+tan(45.00度) = 1.00000
+sqrt(25.00) = 5.00
+2^3 = 8.00
+```
+<Aside type="caution">
+`M_PI`は、標準のc言語において、`<math.h>`に定義されてない。
+VSCodeでは、`#define _USE_MATH_DEFINES`を記述することで、`M_PI`を使用できるようになる。
+コンパイラや実装環境に定義されている場合に使用できるので、M_PIは非推奨である。
+`M_PI`は、C++11以降の標準ライブラリでは非推奨となっているため、c言語でも使用しないことが推奨される。
+</Aside>
+
 
 ## string.h
 ---
@@ -125,6 +138,7 @@ strcmp(cmp2, cmp1) = 1
 `stdlib.h`は、標準ライブラリの中で、乱数生成やメモリの確保・解放などを行うためのヘッダファイルである。  
 以下は、stdlib.hで提供されている関数の一部である。
 
+- `abs()`: 整数の絶対値を取得
 - `rand()`: 乱数の生成
 - `malloc()`: メモリの確保
 - `free()`: メモリの解放
@@ -135,12 +149,17 @@ strcmp(cmp2, cmp1) = 1
 #include <time.h>
 
 int main(void) {
-    // 1. 乱数の生成（rand()）
+
+    // 絶対値
+    int x = -10;
+    printf("abs(%d) = %d\n", x, abs(x));
+
+    // 乱数の生成（rand()）
     srand(time(NULL));  // 乱数の種を設定
     int random_number = rand() % 100;  // 0〜99の乱数を生成
     printf("生成された乱数: %d\n\n", random_number);
 
-    // 2. メモリの確保（malloc()）
+    // メモリの確保（malloc()）
     int size = 5;
     int *arr = (int *)malloc(size * sizeof(int));  // int型5個分のメモリを確保
     if (arr == NULL) {
@@ -155,10 +174,24 @@ int main(void) {
         printf("arr[%d] = %d\n", i, arr[i]);
     }
 
-    // 3. メモリの解放（free()）
+    // メモリの解放（free()）
     free(arr);
     printf("\n確保したメモリを解放しました。\n");
 
     return 0;
 }
+```
+実行結果
+```
+abs(-10) = 10
+生成された乱数: 7
+
+確保したメモリに乱数を格納:
+arr[0] = 4
+arr[1] = 98
+arr[2] = 37
+arr[3] = 57
+arr[4] = 23
+
+確保したメモリを解放しました。
 ```
