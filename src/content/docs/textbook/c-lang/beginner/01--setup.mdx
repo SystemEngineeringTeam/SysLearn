@@ -8,6 +8,7 @@ slug: textbook/c-lang/beginner/setup
 import { Aside, Steps, Tabs, TabItem, LinkCard } from '@astrojs/starlight/components'
 import SyscatComment from "@/components/SyscatComment.astro"
 export const CLI_OR_GUI_SYNC_KEY = 'c-lang/beginner::cli-or-gui';
+export const COMPILER_SYNC_KEY = 'c-lang/beginner::compiler';
 
 ## 私はどの環境で開発すれば？
 
@@ -25,9 +26,15 @@ export const CLI_OR_GUI_SYNC_KEY = 'c-lang/beginner::cli-or-gui';
       href="#w64devkit-経由の-mingw"
    />
 - KK （情報科学科/コンピュータシステム専攻）  
-  macOS - XCode
+   <LinkCard
+   title="“構築: エディター環境 - XCode” の節へ"
+   href="#xcode"
+   />
 - KX （情報科学科/メディア情報専攻）  
-  macOS - XCode
+   <LinkCard
+   title="“構築: エディター環境 - XCode” の節へ"
+   href="#xcode"
+   />
 
 
 ## 構築: コンパイラー環境
@@ -289,8 +296,7 @@ export const CLI_OR_GUI_SYNC_KEY = 'c-lang/beginner::cli-or-gui';
    ![](./_images/202504050549.drawio.png)
 
    <Aside>
-      展開先に強い制約や意図はありません。  
-      もし、展開先がユーザープロファイル内の場合、展開に管理者権限は不要です。 したがって、管理者として実行することすら不要です。
+      展開先に強い制約や意図はありません。もし、展開先がユーザープロファイル内の場合、展開に管理者権限は不要です。したがってその場合、管理者として実行することすら不要です。
    </Aside>
 
 2. 環境変数を設定する  
@@ -334,11 +340,34 @@ export const CLI_OR_GUI_SYNC_KEY = 'c-lang/beginner::cli-or-gui';
 ### macOS
 
 後述する XCode をインストールすると、 GCC を含んだ XCode Command Line Tools がインストールされるので、この節はスキップして構いません。  
-XCode を使わずにコーディングする場合や、 Clang へのリダイレクトなしの GCC を使う場合は、次の手順に従ってください。
 
-HomeBrew がインストールされていない場合は, [こちらの記事](https://zenn.dev/ackylarkham/articles/c93d5ed1689459) を参考にインストールしてください。
+<LinkCard
+  title="“構築: エディター環境 - XCode” の節へ"
+  href="#構築-エディター環境"
+/>
+
+XCode を使わずにコーディングする場合や、 Clang へのリダイレクトなしの GCC を使う場合は、次の手順に従ってください。
+また、HomeBrew がインストールされていない場合は, [こちらの記事](https://zenn.dev/ackylarkham/articles/c93d5ed1689459) を参考にインストールしてください。
 
 #### GCC
+
+次のコマンドで GCC の実体を確認します。
+
+```bash
+gcc --version
+```
+
+次に出力例を示します:
+
+```text "clang"
+Apple clang version 16.0.0 (clang-1600.0.26.6)
+Target: arm64-apple-darwin23.5.0
+Thread model: posix
+InstalledDir: /Applications/Xcode-16.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+```
+
+このように、デフォルトでは、 GCC と言いつつ実体は Clang であることが分かります。
+なので、このセクションでは HomeBrew を用いてピュアな GCC をインストールします。
 
 次のコマンドを実行して、 HomeBrew 経由で GCC をインストールします [^gcc-install-on-macos]。
 
@@ -348,11 +377,13 @@ HomeBrew がインストールされていない場合は, [こちらの記事](
    ```bash
    brew install gcc
    ```
+
 2. gcc のバージョン確認  
    ```bash
    ls /usr/local/bin | grep gcc
    ```
-   ```text
+   次に出力例を示します:
+   ```text "11"
    gcc-11
    gcc-ar-11
    gcc-nm-11
@@ -362,6 +393,25 @@ HomeBrew がインストールされていない場合は, [こちらの記事](
    x86_64-apple-darwin21-gcc-nm-11
    x86_64-apple-darwin21-gcc-ranlib-11
    ```
+   PATH の通っている gcc のバージョンが 11 であると確認できました。
+
+3. `/usr/local/bin/` にシンボリックリンクを作成
+   ```bash "11"
+   ln -s /usr/local/bin/gcc-11 /usr/local/bin/gcc
+   ```
+4. GCC の実体を確認
+   ```bash
+   gcc --version
+   ```
+   次に出力例を示します:
+   
+   ```text "GCC"
+   gcc-14 (Homebrew GCC 14.2.0_1) 14.2.0
+   Copyright (C) 2024 Free Software Foundation, Inc.
+   This is free software; see the source for copying conditions.  There is NO
+   warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+   ```
+
 </Steps>
 
 #### Clang
@@ -429,9 +479,106 @@ HomeBrew がインストールされていない場合は, [こちらの記事](
 
 ### VSCode
 
+<Tabs>
+   <TabItem label="Windows">
+   <Tabs syncKey={CLI_OR_GUI_SYNC_KEY}>
+      <TabItem label="CLI">
+
+      <kbd>Win</kbd> → `powershell` → <kbd>Enter</kbd> で PowerShell を起動します（ショートカット: <kbd>Win</kbd> + <kbd>X</kbd> → <kbd>I</kbd>）。  
+      その後、次のコマンドを実行して Visual Studio Code をインストールします [^vscode-install]:
+
+      ```powershell
+      winget install Microsoft.VisualStudioCode
+      ```
+
+      インストールの完了後、自動的に Visual Studio Code が起動します。
+      もし起動しない場合は、スタートメニューから “Visual Studio Code” を検索して起動してください。
+
+      </TabItem>
+      <TabItem label="GUI">
+
+      [Download - Visual Studio Code](https://code.visualstudio.com/download) にアクセスし、 “Windows” ボタンをクリックします。
+
+      ![](./_images/202504170340.drawio.png)
+
+      インストーラー `VSCodeUserSetup-x64-x.xx.x.exe` を起動し、セットアップの指示に従ってインストールを進めます。
+      
+      </TabItem>
+   </Tabs>
+   </TabItem>
+
+   <TabItem label="macOS">
+   <Tabs syncKey={CLI_OR_GUI_SYNC_KEY}>
+      <TabItem label="CLI">
+
+      VSCode は、HomeBrew Cask を使ってインストールすることができます。  
+      もし HomeBrew がインストールされていない場合は, [こちらの記事](https://zenn.dev/ackylarkham/articles/c93d5ed1689459) を参考にインストールしてください。
+
+      ```bash
+      brew install --cask visual-studio-code
+      ```
+
+      </TabItem>
+      <TabItem label="GUI">
+
+      [Download - Visual Studio Code](https://code.visualstudio.com/download) にアクセスし、 “Windows” ボタンをクリックします。
+
+      ![](./_images/202504170348.drawio.png)
+      
+      インストーラー `VSCodeUserSetup-x64-x.xx.x.exe` を起動し、セットアップの指示に従ってインストールを進めます。
+
+      </TabItem>
+   </Tabs>
+   </TabItem>
+   
+   <TabItem label="Linux">
+
+   次に示すページを参考に、Linux 用の Visual Studio Code をインストールしてください:
+
+   <LinkCard
+      title="Linux 用 Visual Studio Code のインストール"
+      description="【Windows, Mac, Linux】OS別のVSCodeインストール方法まとめ - @c60evaporator - Qiita"
+      href="https://qiita.com/c60evaporator/items/90c071465eb82a12f6be#linux%E3%81%AE%E5%A0%B4%E5%90%88"
+      target="_blank"
+      rel="noopener noreferrer"
+   />
+
+   </TabItem>
+
+</Tabs>
+
 ### XCode
 
-## ためしにコンパイル
+<Aside type="caution">
+   XCode は、非常に容量の大きなソフトウェアです！  インストール前の時点で、ストレージを 10 GB 以上確保する必要があります。 また、インストールには Apple Account が必要です。
+</Aside>
+<SyscatComment type="HUMAN">
+   情報科学部の学部生に対して配布される MacBook のストレージ容量は、基本的に 256 GB。
+   XCode を使う講義も多いから、容量が足りない子は今後のためにも、クラウド/外部 ストレージを使うなどして、頑張って空けておこう！
+</SyscatComment>
+
+<Tabs syncKey={CLI_OR_GUI_SYNC_KEY}>
+   <TabItem label="CLI">
+
+   VSCode は、HomeBrew Cask を使ってインストールすることができます。  
+   もし HomeBrew がインストールされていない場合は, [こちらの記事](https://zenn.dev/ackylarkham/articles/c93d5ed1689459) を参考にインストールしてください。
+
+
+   </TabItem>
+   <TabItem label="GUI">
+
+   次に示すページを参考に、AppStore から XCode をインストールしてください:
+   
+   <LinkCard
+      title="AppStore から XCode をインストールする"
+      description="Xcodeをインストールする - @joho0724 - Zenn"
+      href="https://zenn.dev/joho0724/articles/sankaku0724-newcreate32"
+      target="_blank"
+      rel="noopener noreferrer"
+   />
+
+   </TabItem>
+</Tabs>
 
 ---
 
@@ -442,3 +589,4 @@ HomeBrew がインストールされていない場合は, [こちらの記事](
 [^gcc-install-on-macos]: [MacでGCCを使用し、C/C++のコードをコンパイルする - @minguu42 - Zenn](https://zenn.dev/minguu42/articles/20220722-how-to-use-gcc-on-mac)
 [^build-essential-install]: [スタンドアロンのUbuntuにbuild-essentialをインストール - @ryo2_9393 - Qiita](https://qiita.com/ryo2_9393/items/78fd73718b391b564083)
 [^clang-install]: [UbuntuにClangをインストール - tah](https://tah5.com/guides/ubuntu/llvm/clang/ubuntu24/)
+[^vscode-install]: [Getting Started with VS Code - VSCode Essentials](https://microsoft.github.io/vscode-essentials/en/01-getting-started.html)
