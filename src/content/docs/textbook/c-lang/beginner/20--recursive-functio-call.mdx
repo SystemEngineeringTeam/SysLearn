@@ -49,7 +49,7 @@ int factorial(int n) {
         return 1;
 }
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     int n = 3;
     
     printf("%d! = %d\n", n, factorial(n));
@@ -103,7 +103,7 @@ int combination(int n, int r) {
     // TODO
 }
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     int n = ***, r = ***;
     
     printf("C(%d, %d) = %d\n", n, r, combination(n, r));
@@ -161,7 +161,7 @@ int combination(int n, int r) {
         return combination(n - 1, r - 1) + combination(n - 1, r);
 }
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     int n = 6, r = 3;
     
     printf("C(%d, %d) = %d\n", n, r, combination(n, r));

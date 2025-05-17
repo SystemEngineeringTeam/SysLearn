@@ -85,7 +85,7 @@ import { Steps } from '@astrojs/starlight/components';
     //
     /* Step.6 にて記述 */
 
-    int main(int argc, const char * argv[]) {
+    int main(void) {
         // 盤を表す２次元配列
         int board[BOARD_SIZE][BOARD_SIZE] = {
             {BLANK, BLANK, BLANK},
@@ -426,7 +426,7 @@ int checkWin(int board[BOARD_SIZE][BOARD_SIZE], int mark) {
     return 0;
 }
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     // 盤を表す２次元配列
     int board[BOARD_SIZE][BOARD_SIZE] = {
         {BLANK, BLANK, BLANK},

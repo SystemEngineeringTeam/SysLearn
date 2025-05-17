@@ -77,7 +77,7 @@ int a[3][4];  // 上記の配列を４個まとめて配列化
 #define ROWS 9  // 行数
 #define COLS 9  // 列数
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     int table[9][9];
     
     // 二次元配列の初期化
@@ -168,7 +168,7 @@ for (int i = 0; i < 3; i++) {
 ```c
 #include <stdio.h>
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     int scores[3][5] = {
         {58,  46, 100,  89,  64},  // 学籍番号 0001
         {98,  96,  32,  38,  72},  // 学籍番号 0002

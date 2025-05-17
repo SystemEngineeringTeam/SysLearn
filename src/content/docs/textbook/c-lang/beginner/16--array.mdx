@@ -21,7 +21,7 @@ import { Card } from '@astrojs/starlight/components';
 ```c title="list16_01.c"
 #include <stdio.h>
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     int score1 =  70;  // 1 人目の点数
     int score2 = 100;  // 2 人目の点数
     int score3 =  85;  // 3 人目の点数
@@ -111,7 +111,7 @@ int a[5];
 ```c title="list16_02.c"
 #include <stdio.h>
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     // 配列の宣言
     int scores[3];  // int型の 3 つの値を格納する配列
     
@@ -161,7 +161,7 @@ int main(int argc, const char * argv[]) {
 ```c title="list16_03.c"
 #include <stdio.h>
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     int scores[3] = {70, 100, 85};  // 配列の初期化
     
     printf("1人目の点数: %3d\n", scores[0]);
@@ -262,7 +262,7 @@ int d[3] = {0};  // 全要素を 0 で初期化
 ```c title="list16_04.c"
 #include <stdio.h>
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     int scores[3] = {70, 100, 85};  // 配列の初期化
     
     int sum = 0;  // 合計点（初期値：0）
@@ -339,7 +339,7 @@ scanf("%lf", &a[1]);
 ```c title="16_issue1.c"
 #include <stdio.h>
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     double heights[5];
     
     // 身長の入力
@@ -402,7 +402,7 @@ if (min > arr[i]) {
 ```c title="16_issue2.c"
 #include <stdio.h>
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     int arr[] = {170, 168, 186, 152, 171};
     
     // 最小値と最大値（初期値として適当な要素を格納しておく）

@@ -41,7 +41,7 @@ int max2(int n1, int n2) {
         return n2;
 }
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     int a = 3;
     int b = 7;
     
@@ -97,7 +97,7 @@ int max4(int n1, int n2, int n3, int n4) {
     return max2(max2(n1, n2), max2(n3, n4));
 }
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     int a = 3;
     int b = 7;
     int c = 2;
@@ -162,7 +162,7 @@ void putStars(int n) {
     putchar('\n');  // 改行
 }
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     putStars(scanN());
     
     return 0;
@@ -222,7 +222,7 @@ int scanN(void) {
     return ***;
 }
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     int n = scanN();
     
     printf("%d! = %d\n", n, factorial(n));
@@ -291,7 +291,7 @@ int factorial(int n) {
     return ans;
 }
 
-int main(int argc, const char * argv[]) {
+int main(void) {
     int n = scanN();
     
     printf("%d! = %d\n", n, factorial(n));
