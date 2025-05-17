@@ -5,17 +5,20 @@ slug: http://localhost:4321/textbook/c-lang/beginner/array
 
 import { Aside } from '@astrojs/starlight/components';
 import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Card } from '@astrojs/starlight/components';
+
 
 同じ型の変数の集まりは、ひとまとめにして表現することができます。
 そのために利用する**配列**の基礎について学んでいきましょう。
 
+
 ## 配列とは
+---
 
-まずは、３人の学生の点数について、その合計値と平均値を算出するプログラムを作成してみましょう。
 
-<Tabs>
-<TabItem label="ソースコード">
-```c
+まずは、３人の学生の点数について、その合計値と平均値を算出するプログラム（`list16_01.c`）を作成してみましょう。
+
+```c title="list16_01.c"
 #include <stdio.h>
 
 int main(int argc, const char * argv[]) {
@@ -23,11 +26,14 @@ int main(int argc, const char * argv[]) {
     int score2 = 100;  // 2 人目の点数
     int score3 =  85;  // 3 人目の点数
 
+    printf("1人目の点数: %3d\n", score1);  
+    printf("2人目の点数: %3d\n", score2);  
+    printf("3人目の点数: %3d\n", score3);  
+
     int sum = 0;  // 合計点（初期値：0）
-    
-    printf("1人目の点数: %3d\n", score1);  sum += score1;
-    printf("2人目の点数: %3d\n", score2);  sum += score2;
-    printf("3人目の点数: %3d\n", score3);  sum += score3;
+    sum += score1;
+    sum += score2;
+    sum += score3;
     
     printf("合計点: %d\n", sum);
     printf("平均点: %.1f\n", (double)sum / 3);
@@ -35,8 +41,8 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 ```
-</TabItem>
-<TabItem label="実行例">
+
+**実行結果**
 ```
 1人目の点数:  70
 2人目の点数: 100
@@ -44,10 +50,8 @@ int main(int argc, const char * argv[]) {
 合計点: 255
 平均点: 85.0
 ```
-</TabItem>
-</Tabs>
 
-このプログラムでは、３人の点数がそれぞれ`int`型の３つの変数（`score1`・`score2`・`score3`）として表されています。
+このプログラム`list16_01.c`では、３人の点数がそれぞれ`int`型の３つの変数（`score1`・`score2`・`score3`）として表されています。
 
 さて、今後プログラムを組んでいくうえで、学生の人数が100人に増えた場合を考えましょう。
 このプログラムのようなやり方では、点数を格納するための変数を100つも用意することになるでしょう。
@@ -61,7 +65,9 @@ int main(int argc, const char * argv[]) {
 **配列**とは、同一型の変数（**要素**）が線型かつ連続的に並んだものである。
 </Aside>
 
+
 ## 配列の宣言
+---
 
 まずは配列を宣言していきましょう。
 配列の宣言では、次のように、**要素型（element type）**、**配列名**（変数名）、**要素数**を与えることで実現します。
@@ -78,13 +84,17 @@ int a[5];
 
 これによって、`int`型の５つの値を格納することができる１つの変数を、配列名`a`として宣言することができました。
 
+![](/public/chap16_array.drawio.svg)
+
 <Aside type="note" title="配列の宣言">
 ```c
 要素型 配列名[要素数];
 ```
 </Aside>
 
+
 ## 要素と添字
+---
 
 配列が持つ個々の要素への**アクセス**は、**添字演算子**（subscript operator）を用いることで実現します。
 扱う配列の配列名が`a`である場合、添字演算子は`a[b]`として表されます。
@@ -94,11 +104,11 @@ int a[5];
 これは、“先頭要素から何個後ろの要素なのか”を表す整数値になります。
 そのため、要素数が`n`である配列の添字の範囲が、`0`から`n - 1`までの整数値となることに注意しましょう。
 
-実際に、冒頭のプログラムを、配列を用いて表現してみましょう。
+![](/public/chap16_array_with_subscript.drawio.svg)
 
-<Tabs>
-<TabItem label="ソースコード">
-```c
+実際に、冒頭のプログラム`list16_01.c`を、配列を用いて表現してみましょう。
+
+```c title="list16_02.c"
 #include <stdio.h>
 
 int main(int argc, const char * argv[]) {
@@ -110,20 +120,23 @@ int main(int argc, const char * argv[]) {
     scores[1] = 100;  // 2 人目の点数
     scores[2] =  85;  // 3 人目の点数
     
+    printf("1人目の点数: %3d\n", scores[0]);
+    printf("2人目の点数: %3d\n", scores[1]);
+    printf("3人目の点数: %3d\n", scores[2]);
+
     int sum = 0;  // 合計点（初期値：0）
-    
-    printf("1人目の点数: %3d\n", scores[0]);  sum += scores[0];
-    printf("2人目の点数: %3d\n", scores[1]);  sum += scores[1];
-    printf("3人目の点数: %3d\n", scores[2]);  sum += scores[2];
-    
+    sum += scores[0];
+    sum += scores[1];
+    sum += scores[2];
+
     printf("合計点: %d\n", sum);
     printf("平均点: %.1f\n", (double)sum / 3);
     
     return 0;
 }
 ```
-</TabItem>
-<TabItem label="実行例">
+
+**実行結果**
 ```
 1人目の点数:  70
 2人目の点数: 100
@@ -131,33 +144,34 @@ int main(int argc, const char * argv[]) {
 合計点: 255
 平均点: 85.0
 ```
-</TabItem>
-</Tabs>
 
 <Aside type="note" title="配列の要素へのアクセス">
 要素数`n`の配列`a`の要素は、`a[0]`、`a[1]`、`a[2]`、……、`a[n - 1]`としてアクセスできる。
 </Aside>
 
+
 ## 配列の初期化
+---
 
 配列の各要素の値の設定を、代入ではなく初期化によって実現してみましょう。
 配列の初期化子は、各要素に対する初期化子をコンマ（`,`）で区切って順に並べたものを`{}`で囲んだ形式で与えます。
 
-まずは、冒頭のプログラムを、配列の初期化を用いて表現してみましょう。
+まずは、プログラム`list16_02.c`を、配列の初期化を用いて表現してみましょう。
 
-<Tabs>
-<TabItem label="ソースコード">
-```c
+```c title="list16_03.c"
 #include <stdio.h>
 
 int main(int argc, const char * argv[]) {
     int scores[3] = {70, 100, 85};  // 配列の初期化
     
+    printf("1人目の点数: %3d\n", scores[0]);
+    printf("2人目の点数: %3d\n", scores[1]);
+    printf("3人目の点数: %3d\n", scores[2]);
+
     int sum = 0;  // 合計点（初期値：0）
-    
-    printf("1人目の点数: %3d\n", scores[0]);  sum += scores[0];
-    printf("2人目の点数: %3d\n", scores[1]);  sum += scores[1];
-    printf("3人目の点数: %3d\n", scores[2]);  sum += scores[2];
+    sum += scores[0];
+    sum += scores[1];
+    sum += scores[2];
     
     printf("合計点: %d\n", sum);
     printf("平均点: %.1f\n", (double)sum / 3);
@@ -165,8 +179,8 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 ```
-</TabItem>
-<TabItem label="実行例">
+
+**実行結果**
 ```
 1人目の点数:  70
 2人目の点数: 100
@@ -174,8 +188,6 @@ int main(int argc, const char * argv[]) {
 合計点: 255
 平均点: 85.0
 ```
-</TabItem>
-</Tabs>
 
 配列の宣言と各要素への代入を1行で表現することができました。
 
@@ -237,17 +249,17 @@ int d[3] = {0};  // 全要素を 0 で初期化
 ```
 </Aside>
 
+
 ## 配列の走査
+---
 
 **走査**（traverse）とは、配列の要素をひとつずつ順番になぞっていくことを意味します。
 `for`文を用いた配列の走査について確認しましょう。
 
 配列を先頭から順に走査するには、`for`文のカウンタ用変数を、配列の添字として利用することで実現できます。
-冒頭のプログラムを、配列と`for`文を用いて表現してみましょう。
+プログラム`list16_03.c`を、配列と`for`文を用いて表現してみましょう。
 
-<Tabs>
-<TabItem label="ソースコード">
-```c
+```c title="list16_04.c"
 #include <stdio.h>
 
 int main(int argc, const char * argv[]) {
@@ -267,8 +279,8 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 ```
-</TabItem>
-<TabItem label="実行例">
+
+**実行結果**
 ```
 1人目の点数:  70
 2人目の点数: 100
@@ -276,109 +288,143 @@ int main(int argc, const char * argv[]) {
 合計点: 255
 平均点: 85.0
 ```
-</TabItem>
-</Tabs>
 
 `for`文を用いることで、添字のみが異なるような命令を、一括で記述することができました。
 命令や繰返し処理を工夫することで、さまざまなプログラムに応用することができます。
 
 さて、実際に練習問題を解きながら、配列を学んでいきましょう。
 
-## 練習問題
 
-<Tabs>
-<TabItem label="問題">
+<Card>
+### 練習問題1
+
 キーボードからの入力により、５人の身長（`double`型）を配列`heights`に格納してください。
-また、閾値`th = 170.0`を超える値の一覧を出力してください。
-また、最大値と最小値を求めて出力してください。
-</TabItem>
-<TabItem label="実行例">
-```
-heights[0]? 170.0（注：標準入力）
-heights[1]? 168.2（注：標準入力）
-heights[2]? 186.9（注：標準入力）
-heights[3]? 152.0（注：標準入力）
-heights[4]? 170.5（注：標準入力）
----------------
-# heights>170.0
-heights[2]: 186.9
-heights[4]: 170.5
----------------
-max: 186.9
-min: 152.0
-```
-</TabItem>
-<TabItem label="ヒント１">
-配列の要素への標準入力は、変数の標準入力と同様のやり方で実現できます。
-繰返し処理を活用することで、すべての要素へアクセスしてみましょう。
+また、入力された身長の平均値を算出して出力してください．
 
+**実行結果**
+```
+heights[0]? 170.0
+heights[1]? 168.2
+heights[2]? 186.9
+heights[3]? 152.0
+heights[4]? 170.5
+average: 169.520000
+```
+ファイル名: `16_issue1.c`
+<details>
+<summary>ヒント（キーボードによる入力受付けについて）</summary>
+<Aside type="tip">
+`double`型の値のキーボード入力受付けは、関数`scanf`を用いることで、次のようにして実現されました。
 ```c
-scanf("%lf", &heights[i]);
+double tmp;
+scanf("%lf", &tmp);
 ```
-</TabItem>
-<TabItem label="ヒント２">
-繰返し処理のなかで、条件に合致する要素のみを標準出力してみましょう。
-標準入力用の繰返し構文とは別の繰返し構文を用意する必要があります。
-
+任意の配列の要素に対しても同様にして行うことができます。
+次のコードは、配列`a`の２番目の要素に対してキーボード入力を受け付けるプログラムになります。
 ```c
-// 配列の要素が閾値を超える場合
-if (heights[i] > th) printf("heights[%d]: %.1f\n", i, heights[i]);
+scanf("%lf", &a[1]);
 ```
-</TabItem>
-<TabItem label="ヒント３">
-最大値を求めるには、次のようなやり方があります。
-
-- 配列内の適当な要素を持つ変数`max`を用意する
-- 配列を走査するなかで、`max`を超える値がみつかった場合、その値を`max`に代入することで更新する
-
-```c
-// 適当な要素の値を設定しておく
-double max = heights[0];
-
-for (int i = 0; i < 5; i++) {
-    // 最大値の更新
-    if (max < heights[i]) max = heights[i];
-}
-```
-</TabItem>
-<TabItem label="解答例">
-```c
+`for`文のカウンタ用変数を、配列の添字に割り当てることで、すべての配列の要素に対してキーボード入力を受け付けてみましょう。
+</Aside>
+</details>
+<details>
+<summary>ヒント（配列の要素の平均値について）</summary>
+<Aside type="tip">
+配列の要素の平均値を求めるには、要素の合計値と要素数（今回は`5`）が必要になります。
+要素の合計値の算出については、プログラム`list16_04.c`を参考にしてみましょう。
+</Aside>
+</details>
+<details>
+<summary>模範解答</summary>
+```c title="16_issue1.c"
 #include <stdio.h>
 
 int main(int argc, const char * argv[]) {
     double heights[5];
-    double th = 170.0;
     
-    // 整数値の入力
+    // 身長の入力
     for (int i = 0; i < 5; i++) {
         printf("heights[%d]? ", i);
         scanf("%lf", &heights[i]);
     }
     
-    // 最大値および最小値の宣言（適当な要素の値で初期化しておく）
-    double max, min;
-    max = min = heights[0];
+    double sum = 0;  // 身長の合計値（初期値：0）
     
-    puts("---------------");
-    
-    printf("# heights>%.1f\n", th);
-    
+    // 配列の走査による合計値の算出
     for (int i = 0; i < 5; i++) {
-        // 閾値を超える身長の出力
-        if (heights[i] > th) printf("heights[%d]: %.1f\n", i, heights[i]);
-        
-        // 最大値および最小値の更新
-        if (max < heights[i]) max = heights[i];
-        if (min > heights[i]) min = heights[i];
+        sum += heights[i];
     }
     
-    puts("---------------");
-    
-    printf("max: %.1f\n", max);
-    printf("min: %.1f\n", min);
+    // 平均値の出力
+    printf("average: %f\n", sum / 5);
     
     return 0;
 }
 ```
-</TabItem>
-</Tabs>
+</details>
+</Card>
+
+
+<Card>
+### 練習問題2
+
+以下の配列`arr`が与えられているとき、この配列の要素の最小値と最大値をそれぞれ求めなさい。
+```c
+int arr[] = {170, 168, 186, 152, 171};
+```
+
+**実行結果**
+```
+min: 152
+max: 186
+```
+ファイル名: `16_issue2.c`
+<details>
+<summary>ヒント</summary>
+<Aside type="tip">
+最小値を`min`として、最初に適当な要素の値を格納しておきましょう。
+```c
+int min = arr[0];
+```
+続いて、配列の走査を行います。
+走査により`min`の値よりも小さな要素を見つけた場合、その要素を`min`に格納することで最小値を更新します。
+```c
+if (min > arr[i]) {
+    min = arr[i];
+}
+```
+
+同様の考え方で、最大値を見つけることができます。
+</Aside>
+</details>
+<details>
+<summary>模範解答</summary>
+```c title="16_issue2.c"
+#include <stdio.h>
+
+int main(int argc, const char * argv[]) {
+    int arr[] = {170, 168, 186, 152, 171};
+    
+    // 最小値と最大値（初期値として適当な要素を格納しておく）
+    int min = arr[0];
+    int max = arr[0];
+    
+    for (int i = 0; i < 5; i++) {
+        if (min > arr[i]) {
+            // min よりも小さな値を見つけた場合、min を更新
+            min = arr[i];
+        }
+        if (max < arr[i]) {
+            // max よりも大きな値を見つけた場合、max を更新
+            max = arr[i];
+        }
+    }
+    
+    printf("min: %d\n", min);
+    printf("max: %d\n", max);
+    
+    return 0;
+}
+```
+</details>
+</Card>
