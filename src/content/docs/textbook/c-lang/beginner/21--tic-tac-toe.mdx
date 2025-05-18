@@ -1,13 +1,16 @@
 ---
 title : 「まるばつゲーム」の作成
 slug: http://localhost:4321/textbook/c-lang/beginner/tic-tac-toe
+next: false
 ---
 
 import { Aside } from '@astrojs/starlight/components';
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 import { Steps } from '@astrojs/starlight/components';
 
+
 これまで学習してきたことを踏まえて、簡単な「まるばつゲーム」を作成していきましょう。
+
 
 ## アルゴリズム
 ---
@@ -40,6 +43,7 @@ import { Steps } from '@astrojs/starlight/components';
 6. ゲーム終了
 </Steps>
 
+
 ## プログラムの設計
 ---
 
@@ -54,6 +58,7 @@ import { Steps } from '@astrojs/starlight/components';
 - 勝利フラグ
 
 アルゴリズムにのっとり、これらを組み合わせていくことで、「まるばつゲーム」を作成していきましょう。
+
 
 ## プログラムの作成
 ---
@@ -82,7 +87,7 @@ import { Steps } from '@astrojs/starlight/components';
     // 任意のマークをカウントする関数
     /* Step.5 にて記述 */
 
-    //
+    // 勝利判定用の関数
     /* Step.6 にて記述 */
 
     int main(void) {
@@ -326,6 +331,7 @@ import { Steps } from '@astrojs/starlight/components';
     `checkWin`関数が`1`を返した場合、勝利フラグ`isWin`を、現在ターンのプレイヤーのマークを代入することで塗り替えています。
     また、`break`文によって`while`文を脱出して、勝敗結果を表示するフェーズまでプログラムを進行させます。
 </Steps>
+
 
 ## 完成品
 ---
