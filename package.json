@@ -11,7 +11,7 @@
     "preview": "astro preview",
     "clean": "npx -y rimraf ./node_modules ./.astro ./dist",
     "check": "astro check && npm run tsc -b && npm run typo && npm run lint",
-    "lint": "eslint --fix",
+    "lint": "eslint",
     "typo": "cspell \"./src/**\" \"./scripts/**\" --gitignore"
   },
   "dependencies": {
