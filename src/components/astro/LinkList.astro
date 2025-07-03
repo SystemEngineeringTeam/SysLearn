@@ -1,0 +1,80 @@
+---
+import path from "node:path";
+import Achive from "@/components/react/Achievement";
+import { getCollection } from "astro:content";
+
+// 非同期処理でデータを取得
+const links = await getCollection("docs");
+
+const filteredLinks = links.filter(
+  (link) => link.filePath && path.basename(link.filePath).startsWith("00"),
+);
+
+// フォルダごとのファイル数をカウント
+const folderFileCounts = links.reduce(
+  (acc: { [key: string]: number }, link) => {
+    const folderName = link.filePath
+      ? path.basename(path.dirname(link.filePath))
+      : undefined;
+
+    if (folderName) {
+      if (!acc[folderName]) {
+        acc[folderName] = 0;
+      }
+      acc[folderName]++;
+    }
+    return acc;
+  },
+  {},
+);
+---
+
+<div class="link-list">
+  {
+    filteredLinks.map((link) => {
+      const folderName = link.filePath
+        ? path.basename(path.dirname(link.filePath))
+        : undefined;
+      const allFilesCount = folderFileCounts[folderName ?? ""] ?? 0;
+      const courseKey = folderName;
+
+      return (
+        <a class="link-card" href={link.id}>
+          <p class="link-card-title">{link.data.title}</p>
+          <Achive
+            allFilesCount={allFilesCount}
+            client:load
+            courseKey={courseKey}
+          />
+        </a>
+      );
+    })
+  }
+</div>
+
+<style>
+  .link-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #919191;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    transition: 0.5s;
+  }
+  .link-card:hover {
+    background-color: rgba(210, 244, 255, 0.551);
+    transform: translateY(-0.2rem);
+  }
+
+  .link-card-title {
+    flex: 1;
+    font-size: 20px;
+  }
+
+  .link-card-achive {
+    white-space: nowrap;
+  }
+</style>
