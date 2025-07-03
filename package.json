@@ -1,5 +1,5 @@
 {
-  "name": "syslearn",
+  "name": "@SystemEngineeringTeam/SysLearn",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -25,6 +25,8 @@
     "@iconify-json/mdi": "^1.2.3",
     "@iconify/react": "^5.2.0",
     "@mermaid-js/mermaid-cli": "^11.4.2",
+    "@nanostores/persistent": "^1.0.0",
+    "@nanostores/react": "^1.0.0",
     "@southball/remark-mermaid": "^0.6.0",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
@@ -34,6 +36,7 @@
     "astro-icon": "^1.1.5",
     "astro-meta-tags": "^0.3.1",
     "astro-seo": "^0.8.4",
+    "nanostores": "^1.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "remark-wiki-link-plus": "^1.1.1",

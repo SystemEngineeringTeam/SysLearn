@@ -4,17 +4,23 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "baseUrl": ".",
+    "rootDirs": [".", "generated"],
     "paths": {
       "@/*": ["src/*"],
       "~/*": ["./public/*"],
       "package": ["./package.json"]
-    }
+    },
+    "types": [
+      "unplugin-icons/types/react"
+    ],
+    "skipLibCheck": true
   },
   "include": [
     ".astro/types.d.ts",
     "**/*"
   ],
   "exclude": [
+    "node_modules",
     "dist"
   ]
 }

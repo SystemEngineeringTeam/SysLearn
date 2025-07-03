@@ -3,20 +3,15 @@ import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
 import remarkMermaid from "@southball/remark-mermaid";
 import compress from "astro-compress";
-import icon from "astro-icon";
 import metaTags from "astro-meta-tags";
 import { defineConfig } from "astro/config";
 import wikiLinkPlugin from "remark-wiki-link-plus";
+import Icons from "unplugin-icons/vite";
 
 // https://astro.build/config
 export default defineConfig({
-
   integrations: [
     metaTags(),
-    icon({
-      include: { "mdi": ["launch"], "material-symbols": ["*"] },
-      iconDir: "src/assets/icons",
-    }),
     compress({
       HTML: {
         "html-minifier-terser": {
@@ -43,13 +38,14 @@ export default defineConfig({
       logo: {
         src: "./src/assets/icons/logo/sym.svg",
       },
-      social: {
-        "github": "https://github.com/SystemEngineeringTeam/SysLearn",
-        "x.com": "https://x.com/set_official",
-        "instagram": "https://www.instagram.com/ait.sysken",
-      },
+      social: [
+        { icon: "github", label: "GitHub", href: "https://github.com/SystemEngineeringTeam/SysLearn" },
+        { icon: "x.com", label: "X", href: "https://x.com/set_official" },
+        { icon: "instagram", label: "Instagram", href: "https://www.instagram.com/ait.sysken" },
+      ],
       components: {
         Sidebar: "src/components/starlight/Sidebar.astro",
+        Footer: "src/components/starlight/Footer.astro",
       },
       customCss: [
         "@fontsource-variable/inter",
@@ -107,6 +103,15 @@ export default defineConfig({
     remarkPlugins: [
       [remarkMermaid, { themes: ["dark", "neutral"] }],
       [wikiLinkPlugin, { markdownFolder: "src/content/docs" }],
+    ],
+  },
+  vite: {
+    plugins: [
+      Icons({
+        compiler: "jsx",
+        autoInstall: true,
+        jsx: "react",
+      }),
     ],
   },
 });
