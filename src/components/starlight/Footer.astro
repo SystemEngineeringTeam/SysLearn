@@ -1,0 +1,19 @@
+---
+import type { ComponentProps } from "react";
+import { ReadTextbookBadge } from "@/components/ReadTextbookBadge";
+import Default from "@astrojs/starlight/components/Footer.astro";
+
+const { id } = Astro.locals.starlightRoute.entry;
+const isInTextbook = id.startsWith("textbook/");
+const textbookId = isInTextbook ? id.replace("textbook/", "") : undefined;
+
+type Props = ComponentProps<typeof Default>;
+---
+
+<Default {...Astro.props} />
+{textbookId != null && 
+  <div style="margin-top: 2rem;">
+    <ReadTextbookBadge {textbookId} client:load />
+  </div>
+}
+

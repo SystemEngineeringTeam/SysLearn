@@ -1,4 +1,6 @@
 import antfu from "@antfu/eslint-config";
+import cssModulesKit from "@css-modules-kit/eslint-plugin";
+import css from "@eslint/css";
 
 export default antfu(
   {
@@ -58,5 +60,10 @@ export default antfu(
     markdown: true,
     formatters: true,
     isInEditor: true,
+  },
+  {
+    files: ["**/*.css"],
+    language: "css/css",
+    extends: [css.configs.recommended, cssModulesKit.configs.recommended],
   },
 );

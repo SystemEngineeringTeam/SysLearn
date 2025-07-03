@@ -40,7 +40,8 @@
     "less",
     "scss",
     "pcss",
-    "postcss"
+    "postcss",
+    "mdx"
   ],
   "cSpell.words": []
 }

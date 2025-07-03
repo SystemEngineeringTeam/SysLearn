@@ -1,3 +1,7 @@
+@view-transition {
+  navigation: auto;
+}
+
 ::view-transition-group(root) {
   animation-duration: 200ms;
 }

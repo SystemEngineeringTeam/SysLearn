@@ -1,0 +1,87 @@
+---
+const { ans } = Astro.props;
+---
+
+<div class="ans-area">
+  <input class="accordion-checkbox" id="accordion1" type="checkbox" />
+  <label class="accordion-label" for="accordion1">
+    <span class="accordion-title">答え</span>
+    <span class="accordion-icon"></span>
+  </label>
+
+  <div class="accordion-content">
+    <span class="ans-text">
+      回答:{ans}<br />
+    </span>
+    <span class="kaisetu">解説</span>
+    <span class="kaisetu-content"><slot /></span>
+  </div>
+</div>
+
+<style>
+  .ans-area {
+    border: 1.5px solid #3498db;
+    border-radius: 8px;
+    padding: 1rem;
+  }
+
+  .accordion-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    user-select: none;
+    width: 100%;
+  }
+
+  .accordion-checkbox {
+    display: none;
+  }
+
+  .accordion-title {
+    font-size: 1.5rem;
+  }
+
+  .accordion-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    font-size: 30px;
+  }
+
+  .accordion-icon::before {
+    content: "+";
+    transition: transform 0.3s;
+  }
+
+  .accordion-checkbox:checked + .accordion-label .accordion-icon::before {
+    content: "-";
+  }
+
+  .accordion-content {
+    display: none;
+  }
+
+  .accordion-checkbox:checked ~ .accordion-content {
+    display: block;
+  }
+
+  .ans-text {
+    font-weight: bold;
+  }
+
+  .kaisetu {
+    display: block;
+    margin-top: 1rem;
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  .kaisetu-content {
+    display: block;
+    margin-top: 0.5rem;
+  }
+</style>
