@@ -14,11 +14,7 @@ export default defineConfig({
   integrations: [
     metaTags(),
     compress({
-      HTML: {
-        "html-minifier-terser": {
-          removeAttributeQuotes: false,
-        },
-      },
+      HTML: false,
       CSS: false,
     }),
     partytown({
@@ -36,6 +32,7 @@ export default defineConfig({
           lang: "ja",
         },
       },
+      tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 4 },
       logo: {
         src: "./src/assets/icons/logo/sym.svg",
       },
@@ -109,6 +106,16 @@ export default defineConfig({
     remarkPlugins: [
       [remarkMermaid, { themes: ["dark", "neutral"] }],
       [wikiLinkPlugin, { markdownFolder: "src/content/docs" }],
+    ],
+    rehypePlugins: [
+      [
+        rehypeExternalLinks,
+        {
+          target: "_blank",
+          rel: ["noopener", "noreferrer"],
+          content: { type: "text", value: " ↗" },
+        },
+      ],
     ],
   },
   vite: {

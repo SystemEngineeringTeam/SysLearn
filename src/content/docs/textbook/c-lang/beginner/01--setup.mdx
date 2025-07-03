@@ -3,102 +3,154 @@ title: 環境構築
 description: このチャプターでは、快適に XCode/VSCode で快適な C 言語を書くための秘訣を教えます。
 ---
 
-import { Aside } from "@astrojs/starlight/components";
+import { Aside, Steps, Tabs, TabItem, LinkCard } from '@astrojs/starlight/components'
+import SyscatComment from "@/components/SyscatComment.astro"
+export const CLI_OR_GUI_SYNC_KEY = 'c-lang/beginner::cli-or-gui';
+export const COMPILER_SYNC_KEY = 'c-lang/beginner::compiler';
 
-<Aside type="caution">
+## 私はどの環境で開発すれば？
 
-前バージョンの Cook Zip をお使いの方へ  
-バージョンアップが必要です！ [下のセクション ↗](#前バージョンの%20Cook%20Zip%20をお使いの方へ) で確認してください。
+過去の講義資料を基にしたゆる～い案内です。 確実に授業に即しているかは分からないけど、自分の PC などで試すときは参考にしてください。
+
+- EE （電気学科/電気工学専攻）  
+   <LinkCard
+      title="“VSBT 経由の MSVC” の節へ"
+      href="#vsbt-経由の-msvcclexe"
+   />
+
+- EV （電気学科/電子情報工学専攻）  
+   <LinkCard
+      title="“w64devkit 経由の MinGW” の節へ"
+      href="#w64devkit-経由の-mingw"
+   />
+- KK （情報科学科/コンピュータシステム専攻）  
+   <LinkCard
+   title="“構築: エディター環境 - XCode” の節へ"
+   href="#xcode"
+   />
+- KX （情報科学科/メディア情報専攻）  
+   <LinkCard
+   title="“構築: エディター環境 - XCode” の節へ"
+   href="#xcode"
+   />
+
+
+## 構築: コンパイラー環境
+
+### Windows 
+
+<Aside type="tip" title="用語">
+
+- VSBT（Visual Studio Build Tools）  
+   Visual C++ のコンパイラーを含む、プログラムのコンパイルをコマンドラインから行なうツールセット
+- Visual Studio Installer  
+   VSBT を構成する各種コンポーネントの インストール/アンインストール を行うツール
+- PowerShell  
+   Windows に標準でインストールされているコマンドラインツール
 
 </Aside>
 
-皆さん XCode には慣れましたか？ C 言語とはお友達になれましたか？
+#### VSBT 経由の MSVC（`cl.exe`）
 
-VSCode で C 言語を快適に書くために..。
+<Steps>
 
-- F5 (Fn + F5) での自動コンパイル & 実行
-- 自動補完 (IntelliSense)
-- ブレークポイントでのデバッグ
-- エラーのインライン表示
-  などなど多数の機能を簡単に使えるようにした zip を配布します。
+1. Visual Studio Installer をインストールする  
 
-動作環境は macOS のみです. ご自由にお使いください。
-URL: https://assets.wappon28.dev/public/AIT/c-lang-base.zip
+   <Tabs syncKey={CLI_OR_GUI_SYNC_KEY}>
+      <TabItem label="CLI">
 
-<video controls width="480" alt="2024-05-23_0.03.33.mp4 (6.6 MB)" src="https://esa-storage-tokyo.s3-ap-northeast-1.amazonaws.com/uploads/production/attachments/19973/2024/06/12/163736/2e5af6a7-605d-4a78-b6d5-a369a813bdea.mp4"></video>
+      <kbd>Win</kbd> → `powershell` → <kbd>Enter</kbd> で PowerShell を起動します（ショートカット: <kbd>Win</kbd> + <kbd>X</kbd> → <kbd>I</kbd>）。  
+      その後、次のコマンドを実行して Visual Studio Installer をインストールします [^vsbt-winget]:
 
-あと、提出物 (ZIP) を作るちょっとしたプログラムを作りました！ コンピューターリテラシーで導入したであろう HomeBrew を使ってインストールとアップデートができます. ターミナルや、VSCode 内のターミナルで
+      ```powershell
+      winget install Microsoft.VisualStudio.2022.BuildTools
+      ```
 
-```sh
-brew install wappon28dev/tap/cook-zip
-```
+      インストールの完了後、自動的に Visual Studio Installer が起動します。
+      もし起動しない場合は、スタートメニューから “Visual Studio Installer” を検索して起動してください。
 
-をしたあと,
+      </TabItem>
+      <TabItem label="GUI">
+      [Build Tools for Visual Studio 2022 - Microsoft](https://visualstudio.microsoft.com/ja/downloads/#build-tools-for-visual-studio-2022) にアクセスし、“ダウンロード” ボタンをクリックします。  
+      その後、ダウンロードされた `vs_BuildTools.exe` をクリックし、Visual Studio Installer を起動します。
+      </TabItem>
+   </Tabs>
 
-```sh
-cook-zip
-```
+2. VSBT をインストールする  
 
-とすると、対話式のプログラムが起動するので、それに従うと提出物が作成されます！ 次のコマンドはどこの作業ディレクトリーでも実行できます。
+   “C++ によるデスクトップ開発” にチェックを入れ、
+   - “MSVC v143 - VS 2022 C++ x64/x86 ビルド ツール（最新）”  
+      （バージョンは変動する可能性アリ）
+   - “Windows 用 C++ CMake ツール”  
 
-<video controls width="480" alt="-5971937336374499908.mp4 (4.2 MB)" src="https://esa-storage-tokyo.s3-ap-northeast-1.amazonaws.com/uploads/production/attachments/19973/2024/06/16/163736/8a2f8169-9eaf-4061-a0d7-57a258d4905c.mp4"></video>
+   の 2 つにチェックを入れます。その後、“変更” をクリックします。
 
-あと、書き出された zip は一時ディレクトリに保存されているので、内容物を確認後、自身でバックアップしてくださいね。
+   ![](./_images/202504050150.drawio.png)
 
-また、提出物のフォーマットが変更される場合も考慮して、簡単にアップデートできるように,
+   インストールが完了するまで待機します。
+   ![](./_images/202504050211.png)
 
-```sh
-brew upgrade cook-zip
-```
+   <SyscatComment type="SLEEPING">PC やネットワークの速度によっては時間を要するから、お茶でも飲んでゆっくり待ってね。</SyscatComment>
 
-と打つとできるようにしました. 指示があった場合にすると良いと思います！
+3. MSVC のバージョンを特定する
 
-### 前バージョンの Cook Zip をお使いの方へ
+   <Tabs syncKey={CLI_OR_GUI_SYNC_KEY}>
+      <TabItem label="CLI">
 
-> [!NOTE]
-> tl;dr
->
-> 1. 数回前から提出物のフォーマットが変更された
-> 1. それに伴って、Cook Zip をアップデートする必要がある
-> 1. 既に存在する Cook Zip を削除し、新しいバージョンを `brew install wappon28dev/tap/cook-zip` でインストールする
+      PowerShell で次のコマンドを実行し、どのバージョンがインストールされているかを確認します:
 
-2 回前あたりから、課題、チャレンジ問題の提出物のフォーマットが変更されました.  
-具体的には、学籍番号の `k` が大文字から小文字に変更されました。
+      ```powershell
+      ls -name "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC"
+      ```
 
-[第 6 回](https://cms.aitech.ac.jp/pluginfile.php/527782/mod_resource/content/3/issues06.md.html#提出するファイル構成-1) ... [第 8 回](https://cms.aitech.ac.jp/pluginfile.php/527790/mod_resource/content/3/issues08.md.html#提出するファイル構成-1) - 演習問題と課題の詳細資料 - Moodle (7 回目は課題なし)
+      すると、次のような出力が得られます（例）:
 
-```diff
- - k2****_issues.zip
--  - 06_issue1_K20000.c
--  - 06_challenge1_K20000.c // 任意提出
- - k2****_issues.zip
-+  - 08_issue1_k20000.c
-+  - 08_challenge1_k20000.c // 任意提出
-```
+      ```powershell
+      14.43.34808
+      ```
 
-それに伴い、Cook Zip のバージョンアップが必要です。
+      これが、MSVC のバージョン番号の一例です。 これをメモしておきます。
 
-第 8 回でケースの変更に私が気づくことができず、Cook Zip ユーザーのほとんどが大文字のまま提出されているかと思います. 確認の術はありませんが、減点されていた場合は申し訳ないです。
+      <Aside>
+         Visual Studio Installer でインストールする際、“インストールの場所” を変更した際は、`ls` の引数のパスを変更する必要があります。
+      </Aside>
 
-(一応、追加情報を入れておくと、macOS で使われているディスクフォーマットである APFS は、ファイル名の大文字小文字を区別しない[^1] ので、もしかしたら問題になっていないかもしれません.)
+      </TabItem>
+      <TabItem label="GUI">
 
-第 9 回の提出にはまだ時間があるので、次の手順で Cook Zip のバージョンアップを行ってください。
+      エクスプローラーで、MSVC が含まれるフォルダー
+      ```text
+      C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC
+      ```
+      に移動します。 (ショートカット: パスをコピー後、<kbd>Win</kbd> + <kbd>R</kbd> → <kbd>Ctrl</kbd> + <kbd>V</kbd> → <kbd>Enter</kbd>)
+      
+      ![](./_images/202504050344.drawio.png)
 
-1. 旧バージョンの Cook Zip を削除 (Finder や VSCode 上から削除 または `rm ./cook-zip`)
-1. 新バージョンの Cook Zip をインストール
+      作業フォルダー内にあるフォルダーの名前が MSVC のバージョン番号の一例です。 これをメモしておきます。
 
-   ```sh
-   brew install wappon28dev/tap/cook-zip
+      <Aside>
+         Visual Studio Installer でインストールする際、“インストールの場所” を変更した際は、“ファイル名を指定して実行” のパスを変更する必要があります。
+      </Aside>
+
+      </TabItem>
+   </Tabs>
+
+
+4. 環境変数を設定する  
+
+   MSVC のバージョンが特定できたら、次に示すパス中の緑の箇所を特定したバージョンに置き換え、クリップボードやメモ帳などにコピーしておきます [^vsbt-path]:
+   ```text ins="{MSVC ver.}"
+   C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\{MSVC ver.}\bin\Hostx64\x64
    ```
 
-1. 新しいバージョンで再度、提出物を作成  
-   次のコマンドはどこの作業ディレクトリーでも実行できます。
-
-   ```sh
-   cook-zip
+   e.g. `14.43.34808`:
+   ```text ins="14.43.34808"
+   C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\bin\Hostx64\x64
    ```
 
-また今後のために、`brew upgrade cook-zip` でアップデートできるようにしてあります。
+   パスの準備ができたら、 <kbd>Win</kbd> → `env` で “環境変数を編集” を起動します。  
+   その後、ユーザー環境変数セクションの `Path` (下図の赤枠) をダブルクリックします。
+   ![](./_images/202504050355.drawio.png)
 
 [^1]: [Mac の大文字と小文字を区別するファイルシステムとの非互換性 - Steam サポート ↗](https://help.steampowered.com/ja/faqs/view/0395-A862-13F3-6E82#:~:text=%E3%80%8CJournaled%20HFS%E3%80%8D%E3%80%81%E3%80%8CAPFS,%E3%81%93%E3%81%A8%E3%82%92%E7%A4%BA%E3%81%97%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99%E3%80%82)
 
