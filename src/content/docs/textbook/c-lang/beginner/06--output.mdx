@@ -1,0 +1,328 @@
+---
+title : 出力
+description: C言語の出力について、printf関数 の使い方、コメントの書き方、インデントの重要性、改行の方法、実行手順を解説する。
+slug: textbook/c-lang/beginner/output
+---
+
+import { Aside, Steps, FileTree } from "@astrojs/starlight/components";
+import { Card } from '@astrojs/starlight/components';
+
+
+## 出力
+
+---
+
+C言語では、プログラムの実行結果（文字列や数値）をターミナル上に表示するために`printf`関数を使う。
+
+```c {4}
+#include <stdio.h>
+
+int main(void) {
+    printf("Hello World!\n");
+    return 0;
+}
+```
+
+**実行結果**
+
+```sh
+Hello World!
+```
+
+`printf` の`( )`に入れた文字列や数値がそのまま出力される。
+
+### `printf`関数
+
+`printf`関数は、文字列や数値を出力するための関数で`( )`の中に表示したい内容を記述する。
+
+```c
+printf("表示する文字列\n");
+```
+
+- `" "`で囲まれた部分が文字列として出力される。
+- `\n` を入れると改行される。
+
+
+## コメント
+
+---
+
+C言語では、プログラムに説明を書き込むためにコメントを使うことができる。
+
+<Aside>
+コメントはプログラムの実行時には無視され、処理には影響を与えない。
+</Aside>
+
+### 1 行コメント (`//`)
+
+1 行コメントは `//` から始まり、その行の終わりまでがコメントとして扱われる。
+
+```c
+// これは1行コメント
+printf("Hello World!\n");  // この行の後ろにも書ける
+```
+
+### 複数行コメント (`/* ... */`)
+
+複数行にわたるコメントは `/*` と `*/` で囲むことで記述できる。
+
+```c
+/* 
+   これは複数行コメント
+   何行でも書ける 
+*/
+printf("Hello World!\n");
+```
+
+
+
+## インデント
+
+---
+
+インデントとは、コードの行頭に空白を入れて字下げすることを指す。
+インデントを適切に使うことで、プログラムの構造が明確になり、可読性が向上する。
+
+### 使い方
+
+C言語では、通常 `tab` または `space` を使ってインデントを入れる。
+多くの開発環境では、`tab`を押すと自動で適切なインデントが設定される。
+
+#### 良い例
+
+`{...}`内の処理をインデントで一段下げて書くと、コードの構造がわかりやすくなる。
+
+```c
+#include <stdio.h>
+
+int main(void) {
+⎵⎵⎵⎵printf("Hello World!\n");
+⎵⎵⎵⎵return 0;
+}
+```
+
+#### 悪い例
+
+すべてのコードを詰めて書くと非常に読みにくくなる。
+実行は可能だが、コードの構造がわかりにくくなるため避けたほうがよい。
+
+```c
+#include <stdio.h>
+
+int main(void) {printf("Hello World!\n");return 0;}
+```
+
+## 改行
+
+---
+
+C言語で文字を出力する際、改行をするには `\n` を使う。
+`\n` を入れると、そこで表示位置が次の行に移動する。
+
+```c "\n"
+#include <stdio.h>
+
+int main(void) {
+    printf("Hello\nWorld\n");
+    return 0;
+}
+```
+
+**実行結果**
+
+```sh
+Hello
+World
+```
+
+<Aside>
+`\n`のような`\`で始まる特殊な文字列を**エスケープシーケンス**という。
+これにより、通常の文字では表現できない制御文字や特殊文字を表現できる。
+<details>
+<summary>エスケープシーケンス一覧</summary>
+| エスケープシーケンス | 説明            |
+|---------------------|-----------------|
+| `\b`                | バックスペース    |
+| `\n`                | 改行             |
+| `\t`                | タブ             |
+| `\'`                | `'`             |
+| `\"`                | `"`             |
+| `\?`                | `?`             |
+| `\\`                | `\`             |
+</details>
+</Aside>
+
+## 実行の手順
+
+---
+
+C言語のプログラムは以下の手順で実行する。
+
+<Steps>
+
+1. ### ファイルを作成する
+
+    <Steps>
+
+    1. VSCodeを起動する。
+
+    1. VSCodeの上部メニューバーから `ファイル` → `フォルダーを開く…` を選択する。
+
+    1. フォルダを選択する。
+
+    1. VSCodeの上部メニューバーから `ファイル` → `新しいファイル…` を選択する。
+
+    1. `hello.c`という名前でファイルを作成する。
+
+    </Steps>
+
+    <video width="640" controls>
+        <source src="/output_mkfile.mp4" type="video/mp4" />
+    </video>
+
+1. ### コードを記述する
+
+    `hello.c`に以下のコードを記述する。
+
+    ```c title="hello.c"
+    #include <stdio.h>
+
+    int main(void) {
+    	printf("Hello World!\n"); // Hello, World!を表示
+    	return 0;
+    }
+    ```
+
+    <Aside type="caution">
+    コードの各行の末尾には必ず `;` を付ける必要がある。`;`は命令が終わったことを伝えるためのもので忘れると、コンパイルエラーが発生する。
+    </Aside>
+
+    記述が終わったら、VSCodeの上部メニューバーから `ファイル` → `保存` でファイルを保存する（`command`+`S`）。
+
+1. ### ターミナルを開く
+
+    <Steps>
+
+    1. VSCodeの上部メニューバーから `表示` → `ターミナル` を選択する。
+
+    1. ターミナルで、作成した `hello.c` があるディレクトリに移動する。  
+        例えば、ファイルが `~/src/prg_c/` にある場合、以下のコマンドを実行する。
+
+        <FileTree>
+
+        - home
+            - src
+                - prg_c
+                    - **hello.c**
+                    - ...
+
+        </FileTree>
+
+        ```sh
+        cd ~/src/prg_c
+        ```
+    
+    1. `ls`コマンドを実行して、`hello.c`が表示されていることを確認する。
+
+        ```sh
+        ls
+        ```
+
+    </Steps>
+
+    <video width="640" controls>
+        <source src="/output_terminal.mp4" type="video/mp4" />
+    </video>
+
+1. ### コンパイルする
+
+    ターミナルで以下のコマンドを実行し、プログラムをコンパイルする。
+
+    ```sh
+    gcc hello.c
+    ``` 
+
+	成功すると、`a.out`という実行ファイルが作成される。
+
+1. ### プログラムを実行する
+
+    コンパイルが成功したら、以下のコマンドでプログラムを実行する。
+
+    ```sh
+    ./a.out
+    ```
+
+    **実行結果**
+
+    ```sh
+    Hello World!
+    ```
+
+</Steps>
+
+
+<Card>
+### 練習問題1
+次の出力をするプログラムを書いてください。  
+
+**実行結果**
+```sh
+SysLearn!
+```
+ファイル名: `01_issue1.c`
+<details>
+<summary>ヒント</summary>
+<Aside type="tip">
+- C言語では、文字を出力するには`printf`関数を使います。 
+- 改行するには`\n`を使いましょう。 
+- 文末には`return 0;`を書いて、プログラムが正常に終了するようにしましょう。
+</Aside>
+</details>
+
+<details>
+<summary>模範解答</summary>
+```c title="01_issue1.c"
+#include <stdio.h>
+
+int main(void) {
+	printf("SysLearn!\n");
+	return 0;
+}
+```
+</details>
+</Card>
+
+<Card>
+### 練習問題2
+次の出力をするプログラムを書いてください。
+
+**実行結果**
+```sh
+ふるいけや
+かわずとびこむ
+みずのおと
+```
+ファイル名: `01_issue2.c`
+<details>
+<summary>ヒント</summary>
+<Aside type="tip">
+`printf`関数を使って、3行の文章を出力しましょう。 
+1つの`printf`関数でまとめて出力してもいいですが、1行ずつ`printf`関数を使うとわかりやすくなります。 
+各行の終わりに`\n`をつけることで、改行を入れられます。 
+</Aside>
+</details>
+
+<details>
+<summary>模範解答</summary>
+```c title="01_issue2.c"
+#include <stdio.h>
+
+int main(void) {
+    printf("ふるいけや\n");
+    printf("かわずとびこむ\n");
+    printf("みずのおと\n");
+    return 0;
+}
+```
+</details>
+</Card>
