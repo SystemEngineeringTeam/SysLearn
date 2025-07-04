@@ -1,8 +1,8 @@
 import type { ReactElement } from "react";
-import { appendReadTextbookId, removeReadTextbookId } from "@/lib/stores/read-textbook-ids";
-import { waitMs } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import BookCheck from "~icons/mdi/book-check";
+import { appendReadTextbookId, removeReadTextbookId } from "@/lib/stores/read-textbook-ids";
+import { waitMs } from "@/lib/utils";
 import styles from "./ReadTextbookBadge.module.css";
 
 export function ReadTextbookBadge({ textbookId }: { textbookId: string }): ReactElement {

@@ -11,6 +11,7 @@ import { defineConfig } from "astro/config";
 import rehypeExternalLinks from "rehype-external-links";
 // @ts-ignore
 import wikiLinkPlugin from "remark-wiki-link-plus";
+import starlightScrollToTop from "starlight-scroll-to-top";
 import starlightSidebarTopics from "starlight-sidebar-topics";
 import Icons from "unplugin-icons/vite";
 
@@ -48,6 +49,7 @@ export default defineConfig({
       ],
       components: {
         Footer: "src/components/starlight/Footer.astro",
+        PageTitle: "src/components/starlight/PageTitle.astro",
       },
       customCss: [
         "@fontsource-variable/inter",
@@ -99,6 +101,11 @@ export default defineConfig({
             ],
           },
         ]),
+        starlightScrollToTop({
+          threshold: 500,
+          // ref: https://icones.js.org/collection/material-symbols?s=up&variant=Regular&icon=material-symbols:arrow-upward
+          svgPath: "M11 20V7.825l-5.6 5.6L4 12l8-8l8 8l-1.4 1.425l-5.6-5.6V20z",
+        }),
       ],
     }),
     react(),
