@@ -1,0 +1,34 @@
+---
+import type { ComponentProps } from "astro/types";
+import Default from "@astrojs/starlight/components/PageTitle.astro";
+import Book4Spark from "~icons/material-symbols/book-4-spark";
+
+const { data: { description } } = Astro.locals.starlightRoute.entry;
+
+type Props = ComponentProps<typeof Default>;
+---
+
+<Default {...Astro.props} />
+{description && (
+  <div class="page-title__description">
+    <Book4Spark height="100%" width="100%" />
+    <p>{description}</p>
+  </div>
+)}
+
+<style>
+
+.page-title__description {
+  width: 100%;
+  border-radius: 10px;
+  padding: 1rem;
+  font-size: 0.9rem;
+  background-color: var(--sl-color-blue-low);
+  display: grid;
+  grid-template-columns: 1.5rem 1fr;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+</style>

@@ -1,0 +1,41 @@
+diff --git a/node_modules/starlight-scroll-to-top/libs/scroll-to-top.js b/node_modules/starlight-scroll-to-top/libs/scroll-to-top.js
+index 64bc7b9..3ddbedc 100644
+--- a/node_modules/starlight-scroll-to-top/libs/scroll-to-top.js
++++ b/node_modules/starlight-scroll-to-top/libs/scroll-to-top.js
+@@ -4,7 +4,7 @@
+  * @param {string} config.position - Button position relative to the bottom corner of the page ('left' or 'right')
+  * @param {string} config.tooltipText - Text to show in the tooltip
+  * @param {boolean} config.smoothScroll - Whether to use smooth scrolling
+- * @param {number} config.threshold - Height after page scroll to be visible (percentage)
++ * @param {number} config.threshold - Height after page scroll to be visible (pixels)
+  * @param {string} config.svgPath - The SVG icon path d attribute
+  * @param {number} config.borderRadius - The radius of the button corners, 50 for circle.
+  * @param {boolean} config.showTooltip - Whether to show the tooltip on hover
+@@ -15,7 +15,7 @@ function initScrollToTop(config = {}) {
+     position = "right",
+     tooltipText = "Scroll to top",
+     smoothScroll = true,
+-    threshold = 30, // Default: show when scrolled 30% down
++    threshold = 300, // Default: show when scrolled 300px down
+     svgPath = "M18 15l-6-6-6 6",
+     svgStrokeWidth = "2",
+     borderRadius = "15",
+@@ -241,17 +241,8 @@ function initScrollToTop(config = {}) {
+     // Show/hide the button based on scroll position
+     const toggleScrollToTopButton = () => {
+       const scrollPosition = window.scrollY;
+-      const viewportHeight = window.innerHeight;
+-      const pageHeight = document.documentElement.scrollHeight;
+ 
+-      // Calculate how far down the page the user has scrolled
+-      const scrollPercentage = scrollPosition / (pageHeight - viewportHeight);
+-
+-      // Ensure threshold is between 0 and 99
+-      const thresholdValue =
+-        threshold > 0 && threshold >= 10 && threshold <= 99 ? threshold : 30;
+-
+-      if (scrollPercentage > thresholdValue / 100) {
++      if (scrollPosition > threshold) {
+         // Show when scrolled past configured threshold
+         scrollToTopButton.classList.add("visible");
+       } else {
