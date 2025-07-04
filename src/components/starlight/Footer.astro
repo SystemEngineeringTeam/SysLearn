@@ -2,10 +2,15 @@
 import type { ComponentProps } from "react";
 import { ReadTextbookBadge } from "@/components/ReadTextbookBadge";
 import Default from "@astrojs/starlight/components/Footer.astro";
+import { getCollection } from 'astro:content';
+import { checkFrontmatterOrThrow } from "@/lib/utils/frontmatter";
 
 const { id } = Astro.locals.starlightRoute.entry;
 const isInTextbook = id.startsWith("textbook/");
 const textbookId = isInTextbook ? id.replace("textbook/", "") : undefined;
+
+const collections = await getCollection("docs");
+checkFrontmatterOrThrow(collections);
 
 type Props = ComponentProps<typeof Default>;
 ---

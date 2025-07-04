@@ -1,10 +1,15 @@
+// @ts-check
+
 import partytown from "@astrojs/partytown";
 import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
+// @ts-ignore
 import remarkMermaid from "@southball/remark-mermaid";
 import compress from "astro-compress";
 import metaTags from "astro-meta-tags";
 import { defineConfig } from "astro/config";
+import rehypeExternalLinks from "rehype-external-links";
+// @ts-ignore
 import wikiLinkPlugin from "remark-wiki-link-plus";
 import starlightSidebarTopics from "starlight-sidebar-topics";
 import Icons from "unplugin-icons/vite";
@@ -69,7 +74,7 @@ export default defineConfig({
           },
           {
             label: "C言語",
-            link: "/textbook/c-lang/beginner/01--setup",
+            link: "/textbook/c-lang/beginner/setup",
             icon: "document",
             items: [
               {
@@ -80,7 +85,7 @@ export default defineConfig({
           },
           {
             label: "Web",
-            link: "/textbook/web",
+            link: "/textbook/web/for-classes",
             icon: "document",
             items: [
               {

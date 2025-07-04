@@ -14,6 +14,8 @@
     "Elems",
     "figcaption",
     "fontsource",
+    "frontmatter",
+    "Frontmatter",
     "github",
     "gtag",
     "hackathon",
@@ -27,6 +29,8 @@
     "pandacss",
     "partytown",
     "rgba",
+    "syscat",
+    "Syscat",
     "sysken",
     "syslearn"
   ]
