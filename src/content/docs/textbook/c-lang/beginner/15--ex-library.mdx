@@ -58,7 +58,8 @@ int main(void) {
 }
 
 ```
-実行結果
+<details>
+  <summary>実行結果</summary>
 ```
 sin(45.00度) = 0.70711
 cos(45.00度) = 0.70711
@@ -66,6 +67,7 @@ tan(45.00度) = 1.00000
 sqrt(25.00) = 5.00
 2^3 = 8.00
 ```
+</details>
 <Aside type="caution">
 `M_PI`は、標準のc言語において、`<math.h>`に定義されてない。
 VSCodeでは、`#define _USE_MATH_DEFINES`を記述することで、`M_PI`を使用できるようになる。
@@ -118,7 +120,8 @@ int main(void) {
     return 0;
 }
 ```
-出力例
+<details>
+  <summary>実行結果</summary>
 ```
 文字列: "Hello"
 長さ: 5
@@ -131,7 +134,7 @@ strcmp(cmp1, cmp2) = -1
 strcmp(cmp1, cmp3) = 0
 strcmp(cmp2, cmp1) = 1
 ```
-
+</details>
 ## stdlib.h
 ---
 
@@ -181,7 +184,8 @@ int main(void) {
     return 0;
 }
 ```
-実行結果
+<details>
+  <summary>実行結果</summary>
 ```
 abs(-10) = 10
 生成された乱数: 7
@@ -195,3 +199,4 @@ arr[4] = 23
 
 確保したメモリを解放しました。
 ```
+</details>
