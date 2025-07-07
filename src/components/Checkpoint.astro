@@ -1,0 +1,115 @@
+---
+import Checklist from "~icons/material-symbols/checklist";
+---
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const checkpointElems = document.querySelectorAll<HTMLElement>(".comp-checkpoint");
+
+  checkpointElems.forEach((elem, elemIdx) => {
+    const listItems = elem.querySelectorAll<HTMLLIElement>("ul > li");
+
+    listItems.forEach((item, itemIdx) => {
+      const checkbox = item.querySelector<HTMLInputElement>("input[type=\"checkbox\"]");
+      if (checkbox == null) {
+        return;
+      }
+
+      checkbox.disabled = false;
+      const uniqueId = `checkpoint-${elemIdx}-${itemIdx}`;
+      checkbox.id = uniqueId;
+
+      const label = document.createElement("label");
+      label.htmlFor = uniqueId;
+
+      const nodesToWrap: ChildNode[] = [checkbox];
+      let next = checkbox.nextSibling;
+
+      // 後続のノードがテキストか、インライン要素である限り収集を続ける
+      while (next != null && next.nodeName !== 'UL' && next.nodeName !== 'P' && next.nodeName !== 'DIV') {
+        nodesToWrap.push(next);
+        next = next.nextSibling;
+      }
+
+      nodesToWrap.forEach(node => label.appendChild(node));
+      item.prepend(label);
+    });
+  });
+});
+</script>
+
+<div class="container comp-checkpoint">
+  <div class="title">
+    <Checklist height="100%" width="100%" />
+    <p>チェックポイント！</p>
+  </div>
+  <slot />
+</div>
+
+<style>
+.container {
+  padding: 1rem;
+  border-radius: 10px;
+  background-color: var(--sl-color-green-low);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  & .title {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    align-items: center;
+    gap: 0.5rem;
+
+    & > p {
+      font-size: var(--sl-text-3xl);
+      font-weight: bold;
+      margin: 0;
+    }
+  }
+}
+
+:global(.comp-checkpoint ul) {
+  margin-top: 0 !important; /* comes from star-light */
+}
+
+:global(.comp-checkpoint > ul) {
+  list-style: none;
+  padding-inline: 1rem;
+  padding-block-end: 1rem;
+
+  & :global(> li > label) {
+    margin-bottom: 0 !important; /* comes from star-light */
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    align-items: start;
+    gap: 1rem;
+
+    & :global(> input[type="checkbox"]) {
+      accent-color: var(--sl-color-green);
+      height: 1.5rem;
+      width: 1.5rem;
+      border: 1px solid #8b98a5;
+      border-radius: 4px;
+
+      & :checked {
+        border: 1px solid #8b98a5;
+        background-color: var(--sl-color-green);
+      }
+    }
+
+    @media (width <= 30rem) {
+      grid-template-columns: 1rem 1fr;
+      gap: 0.5rem;
+
+      & :global(> input[type="checkbox"]) {
+        height: 1rem;
+        width: 1rem;
+        margin-top: 0.25rem;
+      }
+    }
+  }
+}
+
+</style>

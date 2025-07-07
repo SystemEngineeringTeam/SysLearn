@@ -10,7 +10,7 @@ type Props = ComponentProps<typeof Default>;
 
 <Default {...Astro.props} />
 {description && (
-  <div class="page-title__description">
+  <div class="container">
     <Book4Spark height="100%" width="100%" />
     <p>{description}</p>
   </div>
@@ -18,7 +18,7 @@ type Props = ComponentProps<typeof Default>;
 
 <style>
 
-.page-title__description {
+.container {
   width: 100%;
   border-radius: 10px;
   padding: 1rem;
@@ -28,7 +28,6 @@ type Props = ComponentProps<typeof Default>;
   grid-template-columns: 1.5rem 1fr;
   gap: 0.5rem;
   align-items: center;
-  justify-content: space-between;
   margin-top: 1rem;
 }
 </style>

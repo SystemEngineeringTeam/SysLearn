@@ -69,8 +69,8 @@ export default defineConfig({
                 link: "/",
               },
               {
-                label: "困ったときは",
-                autogenerate: { directory: "help/" },
+                label: "執筆者向け",
+                autogenerate: { directory: "for-writers/" },
               },
             ],
           },
