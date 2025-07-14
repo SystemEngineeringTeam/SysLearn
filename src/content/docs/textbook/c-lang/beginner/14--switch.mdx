@@ -169,6 +169,101 @@ int main(void) {
 フローチャートで表すと以下のようになる。
 ![フローチャート](/fc_sample_break.drawio.svg)
 
+### 練習問題
+
+変数`num`の値に応じて曜日を表示する`switch`文を作成してください。
+
+```c
+#include <stdio.h>
+
+int main() {
+    int num;
+
+    printf("1から7の数字を入力してください: ");
+    scanf("%d", &num);
+
+    // ここにswitch文を書いてください
+
+    return 0;
+}
+```
+#### 実行結果
+<details>
+```
+1から7の数字を入力してください: 1
+月曜日
+```
+```
+1から7の数字を入力してください: 2
+火曜日
+```
+```
+1から7の数字を入力してください: 3
+水曜日
+```
+```
+1から7の数字を入力してください: 4
+木曜日
+```
+```
+1から7の数字を入力してください: 5
+金曜日
+```
+```
+1から7の数字を入力してください: 6
+土曜日
+```
+```
+1から7の数字を入力してください: 7
+日曜日
+```
+</details>
+<Aside type="tip">
+ <details> switch文では、`case`に値を指定して該当する処理を実行します。 入力した`num`の値によって、対応する曜日を`printf`で表示し、`break`でswitch文を抜けましょう。 </details> 
+ </Aside> 
+<details> 
+ <summary>模範解答</summary>
+```c
+#include <stdio.h>
+
+int main() {
+    int num;
+
+    printf("1から7の数字を入力してください: ");
+    scanf("%d", &num);
+
+    switch (num) {
+        case 1:
+            printf("月曜日\n");
+            break;
+        case 2:
+            printf("火曜日\n");
+            break;
+        case 3:
+            printf("水曜日\n");
+            break;
+        case 4:
+            printf("木曜日\n");
+            break;
+        case 5:
+            printf("金曜日\n");
+            break;
+        case 6:
+            printf("土曜日\n");
+            break;
+        case 7:
+            printf("日曜日\n");
+            break;
+        default:
+            printf("1から7の数字を入力してください\n");
+            break;
+    }
+
+    return 0;
+}
+```
+</details>
+
 ## continue
 ---
 
@@ -264,6 +359,51 @@ int main(void) {
 ```
 ---
 </Aside>
+
+### 練習問題
+
+1から10までの数のうち、偶数だけを表示するように`continue`文を使ってください。
+
+```c
+#include <stdio.h>
+
+int main() {
+    for (int i = 1; i <= 10; i++) {
+        // ここにcontinue文を使って偶数だけ表示してください
+    }
+
+    return 0;
+}
+```
+#### 実行結果
+```
+2
+4
+6
+8
+10
+```
+
+<Aside type="tip"> 
+ <details>if文の条件式に`i % 2 != 0`とすると、偶数でない時に実行する</details> 
+</Aside> 
+<details> 
+ <summary>模範解答</summary>
+```c
+#include <stdio.h>
+
+int main() {
+    for (int i = 1; i <= 10; i++) {
+        if (i % 2 != 0) {
+            continue;
+        }
+        printf("%d\n", i);
+    }
+
+    return 0;
+}
+```
+</details>
 
 ## 理解度チェック
 ---

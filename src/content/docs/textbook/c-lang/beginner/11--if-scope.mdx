@@ -61,8 +61,8 @@ int main(void) {
 合格
 ```
 ---
-
 </details>
+
 <Aside type="tip">
 `{}`内の処理が1行の場合は`{}`を省略することができる。  
 しかし、バグの原因になるので、1文の場合でも`{}`で囲むことが推奨される。
@@ -84,6 +84,49 @@ int main(void) {
  `==`と`=`は異なる演算子である。`==`は等価、`=`は代入を意味する。
 </Aside>
 
+
+### 練習問題
+
+変数`num`が10より大きいかどうかを判定しできるよう、`if`文を使って判定部分を追加してください。
+
+```c
+#include <stdio.h>
+
+int main() {
+    int num = 15;
+
+    // ここにif文を使って判定を書いてください
+
+    return 0;
+}
+```
+#### 実行結果
+```
+numは10より大きいです
+```
+
+<Aside type="tip">
+ <details>
+    if文の条件式では、`num > 10`のように比較演算子を使います。
+ </details>
+</Aside>
+
+<details> 
+    <summary>模範解答</summary>
+```c
+#include <stdio.h>
+
+int main() {
+    int num = 15;
+
+    if (num > 10) {
+        printf("numは10より大きいです\n");
+    }
+
+    return 0;
+}
+```
+</details> 
 ## else
 ---
 
@@ -97,7 +140,7 @@ if (条件式) {
 }
 ```
 
-1.ifで示した例の、60点以上でないときの処理をelseを使って簡単に記述できる。
+ifで示した例の、60点以上でないときの処理をelseを使って簡単に記述できる。
 
 ```c
 #include <stdio.h>
@@ -115,6 +158,48 @@ int main(void) {
 
     return 0;
 }
+```
+
+### 練習問題
+
+変数`score`が60未満なら「不合格」と表示されるように、`if`と`else`文を使って処理を追加してください。
+
+```c
+#include <stdio.h>
+
+int main() {
+    int score = 45;
+
+    // ここにif-else文を使って条件分岐を記述してください
+
+    return 0;
+}
+```
+#### 実行結果
+```
+不合格
+```
+<Aside type="tip">
+ <details> `if (score >= 60)`のように条件を書き、`else`の中に「それ以外」の処理を書きましょう。 </details> 
+</Aside> 
+<details>
+<summary>模範解答</summary>
+```c
+#include <stdio.h>
+int main() {
+    int score = 45;
+
+    if (score >= 60) {
+        printf("合格\n");
+    } else {
+        printf("不合格\n");
+    }
+
+    return 0;
+}
+```
+</details>
+
 
 実行結果はif文と同じである。
 
@@ -186,7 +271,58 @@ int main(void) {
 ```
 ---
 </details>
+フローチャートで表すと以下のようになる。
 ![フローチャート](/fc_exam_else_if.drawio.svg)
+
+### 練習問題
+
+変数`score`の値がによって成績を表示するよう、`else-if`文を使って判定部分を追加してください。 
+
+`score`の値が  
+90以上ならば「成績はA」、  
+80以上ならば「成績はB」、  
+70以上ならば「成績はC」、  
+それ以外は「成績はD」などの文字を表示すること。 
+
+```c
+#include <stdio.h>
+
+int main() {
+    int score = 85;
+
+    // ここにif-else if-else文を使って判定を書いてください
+
+    return 0;
+}
+```
+#### 実行結果
+```
+成績はBです
+```
+<Aside type="tip">
+ <details> `if (score >= 90)` のように範囲を使って、次に `else if (score >= 80)` というように条件を並べます。最後に `else` を使ってその他の範囲を処理します。 </details> 
+ </Aside> 
+ <details> 
+ <summary>模範解答</summary>
+ ```c
+#include <stdio.h>
+int main() {
+    int score = 85;
+
+    if (score >= 90) {
+        printf("成績はAです\n");
+    } else if (score >= 80) {
+        printf("成績はBです\n");
+    } else if (score >= 70) {
+        printf("成績はCです\n");
+    } else {
+        printf("成績はDです\n");
+    }
+
+    return 0;
+}
+```
+</details>
 
 ## and, or, not
 ---
@@ -229,6 +365,47 @@ y は 10 より大きくない
 ```
 ---
 
+### 練習問題
+
+3つの変数`a`, `b`, `c`において、`a`は10以上、または`b`が5以下で、かつ`c`が0でない場合に「条件を満たしました」と表示されるよう、`if`文を完成させてください。
+
+```c
+#include <stdio.h>
+
+int main() {
+    int a = 12;
+    int b = 3;
+    int c = -1;
+
+    // ここにif文を使って判定を書いてください
+
+    return 0;
+}
+```
+#### 実行結果
+```
+条件を満たしました
+```
+<Aside type="tip">
+ <details> `a >= 10`,`b <= 5`,`c != 0`を&&と||を使って繋げ、一つの条件式を作ろう </details> 
+</Aside> 
+<details> 
+ <summary>模範解答</summary>
+```c
+#include <stdio.h>
+int main() {
+    int a = 12;
+    int b = 3;
+    int c = -1;
+
+    if ((a >= 10 || b <= 5) && c != 0) {
+        printf("条件を満たしました\n");
+    }
+
+    return 0;
+}
+```
+</details>
 
 ## 変数のスコープ
 ---

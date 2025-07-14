@@ -98,6 +98,45 @@ a = i++ と a = ++i では、aの値が異なる。
 
 </Aside>
 
+### 練習問題
+
+1から5までの数字を順番に表示するよう、`for`文を使って出力部分を完成させてください。
+
+```c
+#include <stdio.h>
+
+int main() {
+    // ここにfor文を使って1から5まで表示してください
+
+    return 0;
+}
+```
+#### 実行結果
+```
+1
+2
+3
+4
+5
+```
+<Aside type="tip">
+ <details> `for`文の基本構文は `for (初期化; 条件; 増分)` です。<br /> 例えば `for (int i = 1; i <= 5; i++)` のように書きます。 </details> 
+</Aside> 
+<details> 
+ <summary>模範解答</summary>
+```c
+#include <stdio.h>
+
+int main() {
+    for (int i = 1; i <= 5; i++) {
+        printf("%d\n", i);
+    }
+
+    return 0;
+}
+```
+</details>
+
 ## 複合代入演算子
 ---
 
@@ -143,6 +182,49 @@ int main(void) {
 ~~~
 9 * 8 = 72
 9 * 9 = 81
+```
+</details>
+
+### 練習問題
+
+二重の`for`文を使って、3×3の掛け算表を表示してください。
+
+```c
+#include <stdio.h>
+
+int main() {
+    // ここにfor文のネストを書いてください
+
+    return 0;
+}
+```
+#### 実行結果
+```
+1 2 3 
+2 4 6 
+3 6 9 
+```
+<Aside type="tip">
+ <details> ネストしたfor文の外側が行、内側が列を表します。カウント用の変数を使って連続した数字を表示しましょう。 </details> 
+ </Aside>
+<details> 
+ <summary>模範解答</summary>
+```c
+ #include <stdio.h>
+
+int main() {
+    int i, j, num = 1;
+
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            printf("%d ", num);
+            num++;
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
 ```
 </details>
 
