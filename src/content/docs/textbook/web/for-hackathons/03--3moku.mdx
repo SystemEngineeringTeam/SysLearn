@@ -1,0 +1,5077 @@
+---
+title: 実践 三目並べ
+description: このチャプターでは、快適に XCode/VSCode で快適な C 言語を書くための秘訣を教えます。
+slug: textbook/web/for-hackathons/3moku
+
+---
+
+import { Aside } from "@astrojs/starlight/components";
+import { LinkCard } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+### 1.完成形の確認
+
+本記事では、Reactを使ってシンプルな三目並べゲームを作成します。
+
+最終的に、以下のような機能を持つゲームを実装します。
+
+- マス目のクリックで"X"と"O"を交互に配置
+
+- 勝者が決まったら表示
+
+- ゲームの履歴を保存し、過去の状態に戻れる機能
+
+以下が完成形のコードです。
+
+https://codesandbox.io/p/sandbox/react-dev-y4wfpq
+
+
+{/* ファイル名がわかるといいな */}
+
+```jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+function Board({ xIsNext, squares, onPlay }) {
+  function handleClick(i) {
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = 'X';
+    } else {
+      nextSquares[i] = 'O';
+    }
+    onPlay(nextSquares);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) {
+    status = 'Winner: ' + winner;
+  } else {
+    status = 'Next player: ' + (xIsNext ? 'X' : 'O');
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+export default function Game() {
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const [currentMove, setCurrentMove] = useState(0);
+  const xIsNext = currentMove % 2 === 0;
+  const currentSquares = history[currentMove];
+
+  function handlePlay(nextSquares) {
+    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+    setHistory(nextHistory);
+    setCurrentMove(nextHistory.length - 1);
+  }
+
+  function jumpTo(nextMove) {
+    setCurrentMove(nextMove);
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = 'Go to move #' + move;
+    } else {
+      description = 'Go to game start';
+    }
+    return (
+      <li key={move}>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{moves}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+```
+
+```css title="styles.css"
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  margin: 20px;
+  padding: 0;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 22px;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 20px;
+}
+
+h3 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+h4 {
+  margin-top: 0;
+  font-size: 16px;
+}
+
+h5 {
+  margin-top: 0;
+  font-size: 14px;
+}
+
+h6 {
+  margin-top: 0;
+  font-size: 12px;
+}
+
+code {
+  font-size: 1.2em;
+}
+
+ul {
+  padding-inline-start: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  margin: 20px;
+  padding: 0;
+}
+
+.square {
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 34px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 34px;
+}
+
+.board-row:after {
+  clear: both;
+  content: '';
+  display: table;
+}
+
+.status {
+  margin-bottom: 10px;
+}
+.game {
+  display: flex;
+  flex-direction: row;
+}
+
+.game-info {
+  margin-left: 20px;
+}
+```
+
+### 2.Reactプロジェクトのセットアップ
+まずは、Reactプロジェクトをセットアップします。\
+以下のコマンドを実行して、`tic-tac-toe`という名前のReactプロジェクトを作成します。
+
+```bash
+npm create vite@latest tic-tac-toe
+cd tic-tac-toe
+npm run dev
+```
+これで、Reactの開発サーバーが起動し、ブラウザでアプリケーションを確認できるようになります。
+<img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/854fe47e-d7fb-4583-a114-3942f98da014.png"></img>
+<LinkCard
+  title="Reactプロジェクトのセットアップ"
+  href="/textbook/web/for-hackathons/setup/#reactプロジェクトのスタート"
+  description="Reactプロジェクトをセットアップする方法はこちらを参考にしてください。"
+/>
+
+次に今回使用するcssファイルを書き換えます。\
+`src/App.css`を以下の内容を全て書き換えます。
+<Tabs label="App.css">
+<TabItem label="変更後">
+```css title="App.css"
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  margin: 20px;
+  padding: 0;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 22px;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 20px;
+}
+
+h3 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+h4 {
+  margin-top: 0;
+  font-size: 16px;
+}
+
+h5 {
+  margin-top: 0;
+  font-size: 14px;
+}
+
+h6 {
+  margin-top: 0;
+  font-size: 12px;
+}
+
+code {
+  font-size: 1.2em;
+}
+
+ul {
+  padding-inline-start: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  margin: 20px;
+  padding: 0;
+}
+
+.square {
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 34px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 34px;
+}
+
+.board-row:after {
+  clear: both;
+  content: '';
+  display: table;
+}
+
+.status {
+  margin-bottom: 10px;
+}
+.game {
+  display: flex;
+  flex-direction: row;
+}
+
+.game-info {
+  margin-left: 20px;
+}
+```
+</TabItem>
+
+<TabItem label="変更前">
+```css title="App.css"
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+```
+</TabItem>
+</Tabs>
+
+### 3.Square コンポーネントの作成
+`Square`コンポーネントは、三目並べの盤面の1マスを表します。 \
+最初にシンプルなボタンとして作り、クリック時に動作するように設定しましょう。
+
+<Tabs label="App.jsx">
+<TabItem label="変更部分">
+```jsx title="App.jsx"
+export default function Square() {
+    return <button className="square">X</button><button className="square">X</button>;
+}
+```
+</TabItem>
+
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
++ export default function Square() {
++    return <button className="square">X</button><button className="square">X</button>;
++ }
+```
+
+</TabItem>
+<TabItem label="変更前">
+
+````diff lang="jsx" title="App.jsx"
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
+
+function App() {
+  const [count, setCount] = useState(0)
+
+  return (
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.jsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  )
+}
+export default App
+
+````
+
+</TabItem>
+</Tabs>
+
+次に複数個の盤面を表してみましょう。
+<Tabs label="App.jsx">
+<TabItem label="変更部分">
+```jsx title="App.jsx"
+// ...
+    <>
+      <button className="square">X</button>
+      <button className="square">X</button>
+    </>
+// ...
+```
+</TabItem>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
+export default function Square() {
+  return (
++    <>
++      <button className="square">X</button>
++      <button className="square">X</button>
++    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+ export default function Square() {
+    return <button className="square">X</button><button className="square">X</button>;
+ }
+````
+</TabItem>
+</Tabs>
+
+最後にマス目が9個になるまで何度かコピーアンドペーストしてみましょう。
+<Tabs>
+<TabItem label="変更部分">
+```jsx title="App.jsx"
+// ...
+      <button className="square">X</button>
+// ...
+```
+</TabItem>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
+export default function Square() {
+  return (
+    <>
++      <button className="square">X</button>
++      <button className="square">X</button>
++      <button className="square">X</button>
++      <button className="square">X</button>
++      <button className="square">X</button>
++      <button className="square">X</button>
++      <button className="square">X</button>
++      <button className="square">X</button>
++      <button className="square">X</button>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+export default function Square() {
+  return (
+    <>
+      <button className="square">X</button>
+      <button className="square">X</button>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+これでは横に並んでしまいます。
+<img width="480" src="https://ja.react.dev/images/tutorial/nine-x-filled-squares.png"></img>
+
+盤面のマス目はグリッド状に並べたいので以下のように変更しましょう。
+- `div` を使って複数のマス目を行単位でグループ化
+- CSS クラスを追加
+
+ついでに、各マス目に番号をつけて、どれがどこに表示されているのか確認できるようにしましょう。
+
+<Tabs>
+<TabItem label="変更部分">
+```jsx title="App.jsx"
+// ...
+      <div className="board-row">
+        <button className="square">1</button>
+        <button className="square">2</button>
+        <button className="square">3</button>
+      </div>
+// ...
+```
+</TabItem>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx" ins="1"　ins="2" ins="3" ins="4" ins="5" ins="6" ins="7" ins="8" ins="9"
+export default function Square() {
+  return (
+    <>
++      <div className="board-row">
+        <button className="square">1</button>
+        <button className="square">2</button>
+        <button className="square">3</button>
++      </div>
++      <div className="board-row">
+        <button className="square">4</button>
+        <button className="square">5</button>
+        <button className="square">6</button>
++      </div>
++      <div className="board-row">
+        <button className="square">7</button>
+        <button className="square">8</button>
+        <button className="square">9</button>
++      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+export default function Square() {
+  return (
+    <>
+      <button className="square">X</button>
+      <button className="square">X</button>
+      <button className="square">X</button>
+      <button className="square">X</button>
+      <button className="square">X</button>
+      <button className="square">X</button>
+      <button className="square">X</button>
+      <button className="square">X</button>
+      <button className="square">X</button>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+
+### 4.Board コンポーネントの作成
+
+別の問題が出てきました。\
+`Square` という名前のコンポーネントなのに、実際にはもう 1 個のマス目ではなくなっています。\
+これを直すため、名前を Board に変えます。
+
+<Tabs>
+<TabItem label="変更部分">
+```jsx title="App.jsx"
+export default function Board() {
+// ...
+```
+</TabItem>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx" ins="Board"
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <button className="square">1</button>
+        <button className="square">2</button>
+        <button className="square">3</button>
+      </div>
+      <div className="board-row">
+        <button className="square">4</button>
+        <button className="square">5</button>
+        <button className="square">6</button>
+      </div>
+      <div className="board-row">
+        <button className="square">7</button>
+        <button className="square">8</button>
+        <button className="square">9</button>
+      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+export default function Square() {
+  return (
+    <>
+      <div className="board-row">
+        <button className="square">1</button>
+        <button className="square">2</button>
+        <button className="square">3</button>
+      </div>
+      <div className="board-row">
+        <button className="square">4</button>
+        <button className="square">5</button>
+        <button className="square">6</button>
+      </div>
+      <div className="board-row">
+        <button className="square">7</button>
+        <button className="square">8</button>
+        <button className="square">9</button>
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+#### props を通してデータを渡す
+次にユーザがマス目をクリックしたら、空白だった中身が"X"に変更するようにしたいと思います。 \
+しかし、現在のように盤面を作成していたのでは、この先マス目の中身を更新するコードを9回コピーアンドペーストしなくてはならなくなってしまいます。\
+そのように重複だらけのごちゃごちゃしたコードを書かずに済むように、再利用可能なコンポーネントを作成しましょう。 
+
+<Tabs>
+<TabItem label="変更部分">
+```jsx title="App.jsx"
+function Square() {
+  return <button className="square">1</button>;
+}
+// ...
+```
+</TabItem>
+<TabItem label="変更後">
+```diff lang="jsx"  title="App.jsx"
++ function Square() {
++  return <button className="square">1</button>;
++ }
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <button className="square">1</button>
+        <button className="square">2</button>
+        <button className="square">3</button>
+      </div>
+      <div className="board-row">
+        <button className="square">4</button>
+        <button className="square">5</button>
+        <button className="square">6</button>
+      </div>
+      <div className="board-row">
+        <button className="square">7</button>
+        <button className="square">8</button>
+        <button className="square">9</button>
+      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <button className="square">1</button>
+        <button className="square">2</button>
+        <button className="square">3</button>
+      </div>
+      <div className="board-row">
+        <button className="square">4</button>
+        <button className="square">5</button>
+        <button className="square">6</button>
+      </div>
+      <div className="board-row">
+        <button className="square">7</button>
+        <button className="square">8</button>
+        <button className="square">9</button>
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+次に`Board`コンポーネント内で`Square`コンポーネントをレンダーするようにしましょう。
+
+<Tabs>
+<TabItem label="変更部分">
+```jsx title="App.jsx"
+// ...
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+    // ...
+    <>
+  )
+}
+```
+</TabItem>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
+function Square() {
+  return <button className="square">1</button>;
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
++        <Square />
++        <Square />
++        <Square />
+      </div>
+      <div className="board-row">
++        <Square />
++        <Square />
++        <Square />
+      </div>
+      <div className="board-row">
++        <Square />
++        <Square />
++        <Square />
+      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+function Square() {
+  return <button className="square">1</button>;
+}
+
+export default function Board() {
+  // ...
+}
+````
+</TabItem>
+</Tabs>
+
+<Aside type="caution">
+
+自作コンポーネントを作成する際は、`Board`や`Square`など、大文字で始める必要があります。
+
+</Aside>
+
+現在の状況を見てみましょう。
+<img width="480" src="https://ja.react.dev/images/tutorial/board-filled-with-ones.png"></img>
+
+マス目が全て1になってしまいました。\
+これを修正するためには各マス目が、持つべき値を親コンポーネント(`Board`)から子コンポーネント(`Square`)に伝えるために、propsというものを使用します。
+
+`Square`コンポーネントから、`Board`コンポーネントから`Value`プロパティを受け取れるようにします。
+
+<Tabs>
+<TabItem label="変更部分">
+```jsx title="App.jsx"
+function Square({ value }) {
+// ...
+```
+</TabItem>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx" ins="{ value }"
+function Square({ value }) {
+  return <button className="square">1</button>;
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+function Square() {
+  return <button className="square">1</button>;
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+`Value`プロパティを表示します。 \
+空白の盤面が表示されているはずです。
+
+<Aside type="caution">
+
+JSX記法でJavaScript変数の値を表示させる際は、波括弧が必要です。
+
+</Aside>
+
+<Tabs>
+<TabItem label="変更部分">
+```jsx title="App.jsx"
+function Square({ value }) {
+  return <button className="square">{value}</button>;
+}
+// ...
+```
+</TabItem>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx" ins="{value}"
+function Square({ value }) {
+  return <button className="square">{value}</button>;
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+function Square() {
+  return <button className="square">1</button>;
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+<img width="480" src="https://ja.react.dev/images/tutorial/empty-board.png"></img>
+
+これはまだ、`Board`コンポーネントからpropsとして`value`を渡していないためです。
+<Tabs>
+<TabItem label="変更部分">
+```jsx title="App.jsx"
+// ...
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square value="1" />
+        <Square value="2" />
+        <Square value="3" />
+      </div>
+      // ...
+    <>
+  )
+}
+```
+</TabItem>
+<TabItem label="変更後">
+```diff lang="jsx"  title="App.jsx" ins="value="1"" ins="value="2"" ins="value="3"" ins="value="4"" ins="value="5"" ins="value="6"" ins="value="7"" ins="value="8"" ins="value="9"
+function Square({ value }) {
+  return <button className="square">{value}</button>;
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square value="1" />
+        <Square value="2" />
+        <Square value="3" />
+      </div>
+      <div className="board-row">
+        <Square value="4" />
+        <Square value="5" />
+        <Square value="6" />
+      </div>
+      <div className="board-row">
+        <Square value="7" />
+        <Square value="8" />
+        <Square value="9" />
+      </div>
+    </>
+  );
+}
+
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+function Square({ value }) {
+  return <button className="square">{value}</button>;
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+もう一度、盤面を見てみましょう。 \
+以下のように表示されていれば完璧です。
+
+<img width="480" src="https://ja.react.dev/images/tutorial/number-filled-board.png"></img>
+
+### 5.インタラクティブなコンポーネントの作成
+`Square`コンポーネントをクリックすると`X`が表示されるようにしてみましょう。
+
+`Square`の中に`handleClick`関数を宣言します。
+
+以下のコードで`Square`コンポーネントをクリックすると、コンソールに`clicked!`が表示されているのがわかるはずです。
+
+<Aside type="caution">
+
+このチュートリアルをローカルの開発環境で実施している場合は、ブラウザのコンソールを開く必要があります。\
+例えば、Chrome ブラウザを使っている場合は、Shift + Ctrl + J (Windows/Linux) または Option + ⌘ + J (macOS) というキーボードショートカットで、コンソールを表示できます。
+
+</Aside>
+
+<Tabs>
+<TabItem label="変更部分">
+```jsx title="App.jsx"
+function Square({ value }) {
+  function handleClick() {
+    console.log('clicked!');
+  }
+
+  return (
+    <button
+      className="square"
+      onClick={handleClick}
+    >
+      {value}
+    </button>
+  );
+}
+// ...
+```
+</TabItem>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
+function Square({ value }) {
++  function handleClick() {
++    console.log('clicked!');
++  }
+
+  return (
+    <button
+      className="square"
++      onClick={handleClick}
+    >
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square value="1" />
+        <Square value="2" />
+        <Square value="3" />
+      </div>
+      <div className="board-row">
+        <Square value="4" />
+        <Square value="5" />
+        <Square value="6" />
+      </div>
+      <div className="board-row">
+        <Square value="7" />
+        <Square value="8" />
+        <Square value="9" />
+      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+function Square({ value }) {
+  return <button className="square">{value}</button>;
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square value="1" />
+        <Square value="2" />
+        <Square value="3" />
+      </div>
+      <div className="board-row">
+        <Square value="4" />
+        <Square value="5" />
+        <Square value="6" />
+      </div>
+      <div className="board-row">
+        <Square value="7" />
+        <Square value="8" />
+        <Square value="9" />
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+次に`Square` コンポーネントに、クリックされたことを「記憶」して `X` マークを表示してもらうことにします。\
+何かを「記憶」するためには、`state` というものを使用します。
+
+Reactでは、`useState`という特別な関数が用意されています。コンポーネントからこれを呼び出すことで「記憶」を行わせることができます。`Square` の現在の値を `state` に保存し、`Square` がクリックされたときにその値を変更しましょう。\
+App.jsxの先頭で`useState`をインポートします。
+次に`Square`コンポーネントの先頭に新しい行を追加してuseStateを宣言し、valueプロパティを削除します。
+
+<Tabs>
+<TabItem label="変更部分">
+```jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square() {
+  const [value, setValue] = useState(null);
+// ...
+```
+</TabItem>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
++ import { useState } from 'react';
+
+function Square() {
++  const [value, setValue] = useState(null);
+  function handleClick() {
+    console.log('clicked!');
+  }
+
+  return (
+    <button
+      className="square"
+      onClick={handleClick}
+    >
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square value="1" />
+        <Square value="2" />
+        <Square value="3" />
+      </div>
+      <div className="board-row">
+        <Square value="4" />
+        <Square value="5" />
+        <Square value="6" />
+      </div>
+      <div className="board-row">
+        <Square value="7" />
+        <Square value="8" />
+        <Square value="9" />
+      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value }) {
+  function handleClick() {
+    console.log('clicked!');
+  }
+
+  return (
+    <button
+      className="square"
+      onClick={handleClick}
+    >
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square value="1" />
+        <Square value="2" />
+        <Square value="3" />
+      </div>
+      <div className="board-row">
+        <Square value="4" />
+        <Square value="5" />
+        <Square value="6" />
+      </div>
+      <div className="board-row">
+        <Square value="7" />
+        <Square value="8" />
+        <Square value="9" />
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+`value`はstateの現在の値を格納し、`setValue`はその値を変更するために使う関数です。\
+` = useState(null)`ではstate変数の初期値としてnullを代入しています。
+
+<Aside type="caution">
+
+nullとは何のデータも含まれない状態のことを指します。
+
+</Aside>
+
+これで、`Square`コンポーネトでpropsを受け取らないようになったので、`Board`コンポーネント内の`Square`コンポーネントから`Value`プロパティを削除しましょう。
+
+
+<Tabs>
+<TabItem label="変更部分">
+```jsx title="App.jsx"
+// ...
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      // ...
+    <>
+  )
+}
+```
+</TabItem>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value }) {
+  function handleClick() {
+    console.log('clicked!');
+  }
+
+  return (
+    <button
+      className="square"
+      onClick={handleClick}
+    >
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
++        <Square />
++        <Square />
++        <Square />
+      </div>
+      <div className="board-row">
++        <Square />
++        <Square />
++        <Square />
+      </div>
+      <div className="board-row">
++        <Square />
++        <Square />
++        <Square />
+      </div>
+    </>
+  );
+}
+
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square() {
+  const [value, setValue] = useState(null);
+  function handleClick() {
+    console.log('clicked!');
+  }
+
+  return (
+    <button
+      className="square"
+      onClick={handleClick}
+    >
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square value="1" />
+        <Square value="2" />
+        <Square value="3" />
+      </div>
+      <div className="board-row">
+        <Square value="4" />
+        <Square value="5" />
+        <Square value="6" />
+      </div>
+      <div className="board-row">
+        <Square value="7" />
+        <Square value="8" />
+        <Square value="9" />
+      </div>
+    </>
+  );
+}
+
+````
+</TabItem>
+</Tabs>
+
+次にSquareをクリックすると"X"が表示されるようにします。\
+handleClick関数内の`console.log("clicked!");` を`setValue('X');`に置き換えます。\
+このsetValueが呼び出されることで、Reactに`Square`を再レンダーするように要求しています。
+
+<Tabs>
+<TabItem label="変更部分">
+```jsx title="App.jsx"
+// ...
+  function handleClick() {
+    setValue('X');
+  }
+// ...
+```
+</TabItem>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
+import { useState } from 'react';
+
+function Square() {
+  const [value, setValue] = useState(null);
+
+  function handleClick() {
++    setValue('X');
+  }
+
+  return (
+    <button
+      className="square"
+      onClick={handleClick}
+    >
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value }) {
+  function handleClick() {
+    console.log('clicked!');
+  }
+
+  return (
+    <button
+      className="square"
+      onClick={handleClick}
+    >
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+<img width="480" src="https://ja.react.dev/images/tutorial/tictac-adding-x-s.gif"></img>
+各 `Square` はそれぞれ独自の `state` を保持しています。\
+それぞれの `Square` に格納されている `value` は、他のものとは完全に独立しています。\
+コンポーネントの `set` 関数を呼び出すと、React は自動的に内部にある子コンポーネントも更新します。
+
+
+### 6.盤上の表示の実装
+
+現在の状態とそこから見えてくる課題を認識しましょう。\
+現在は各 `Square` コンポーネントが、ゲームの状態を少しずつ保持している状況です。\
+しかし今後、勝ち負けの判定などを行うことを考えると、`Board` が 9 つの `Square` コンポーネントそれぞれの現在の state を、何らかの形で知る必要があります。\
+このような複数の子コンポーネントからデータを収集したい場合は、親コンポーネントに共有のstateを宣言するようにしてください。\
+親コンポーネントはそのstateを子コンポーネントにprops経由で渡すことができます。\
+これにより子同士及び親子間で、コンポーネントが同期されるようになります。
+
+
+<Tabs>
+<TabItem label="変更部分">
+```jsx title="App.jsx"
+// ...
+export default function Board() {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+// ...
+```
+</TabItem>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
+import { useState } from 'react';
+
+function Square() {
+  const [value, setValue] = useState(null);
+
+  function handleClick() {
+    setValue('X');
+  }
+
+  return (
+    <button
+      className="square"
+      onClick={handleClick}
+    >
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
++  const [squares, setSquares] = useState(Array(9).fill(null));
+  return (
+    <>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square() {
+  const [value, setValue] = useState(null);
+
+  function handleClick() {
+    setValue('X');
+  }
+
+  return (
+    <button
+      className="square"
+      onClick={handleClick}
+    >
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  return (
+    <>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+      <div className="board-row">
+        <Square />
+        <Square />
+        <Square />
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+`Array(9).fill(null)` は、9個の要素を持つ配列を作成し、それぞれの要素を `null` で初期化します。\
+そしてその配列を `squares` として宣言します。
+
+今後 `squares` 配列は盤面が埋まってくると以下のような見た目になる予定です。
+```jsx
+['O', null, 'X', 'X', 'X', 'O', 'O', null, null]
+```
+
+そして作成した `Boar` コンポーネントは、レンダーする各 `Square` にpropsとして `value` を渡します。
+
+
+<Tabs>
+<TabItem label="変更部分">
+```jsx title="App.jsx"
+// ...
+export default function Board() {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} />
+        <Square value={squares[1]} />
+        <Square value={squares[2]} />
+      </div>
+      // ...
+    <>
+  )
+}
+```
+</TabItem>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx" ins="value={squares[0]}" ins="value={squares[1]}" ins="value={squares[2]}" ins="value={squares[3]}" ins="value={squares[4]}" ins="value={squares[5]}" ins="value={squares[6]}" ins="value={squares[7]}" ins="value={squares[8]}"
+import { useState } from 'react';
+
+function Square() {
+  const [value, setValue] = useState(null);
+
+  function handleClick() {
+    setValue('X');
+  }
+
+  return (
+    <button
+      className="square"
+      onClick={handleClick}
+    >
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} />
+        <Square value={squares[1]} />
+        <Square value={squares[2]} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} />
+        <Square value={squares[4]} />
+        <Square value={squares[5]} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} />
+        <Square value={squares[7]} />
+        <Square value={squares[8]} />
+      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square() {
+  const [value, setValue] = useState(null);
+
+  function handleClick() {
+    setValue('X');
+  }
+
+  return (
+    <button
+      className="square"
+      onClick={handleClick}
+    >
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+  return (
+    // ...
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+次に `Square` コンポーネントから、 `value` プロパティを受け取れるようにします。\
+この際に、 `value` は `Board` コンポーネントで管理しているため、 `handleClick` 関数と `value` をstateで管理していたコードを削除します。
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx" ins="{ value }" 
+import { useState } from 'react';
+
+function Square({value}) {
+  return <button className="square">{value}</button>;
+}
+
+export default function Board() {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} />
+        <Square value={squares[1]} />
+        <Square value={squares[2]} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} />
+        <Square value={squares[4]} />
+        <Square value={squares[5]} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} />
+        <Square value={squares[7]} />
+        <Square value={squares[8]} />
+      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square() {
+  const [value, setValue] = useState(null);
+
+  function handleClick() {
+    setValue('X');
+  }
+
+  return (
+    <button
+      className="square"
+      onClick={handleClick}
+    >
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} />
+        <Square value={squares[1]} />
+        <Square value={squares[2]} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} />
+        <Square value={squares[4]} />
+        <Square value={squares[5]} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} />
+        <Square value={squares[7]} />
+        <Square value={squares[8]} />
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+これで以下のように空白の盤面が表示されているはずです。
+<img width="480" src="https://ja.react.dev/images/tutorial/empty-board.png"></img>
+
+しかしこれでは、 Square をクリックしても何も起きません。\
+そのため、 Square から Board のstateを更新する手段が必要です。\
+Board コンポーネントから Square コンポーネントにset関数を渡して、マス目がクリックされたときに Square にその関数を呼び出す形にします。
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx" ins="onSquareClick" 
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} />
+        <Square value={squares[1]} />
+        <Square value={squares[2]} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} />
+        <Square value={squares[4]} />
+        <Square value={squares[5]} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} />
+        <Square value={squares[7]} />
+        <Square value={squares[8]} />
+      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({value}) {
+  return <button className="square">{value}</button>;
+}
+
+export default function Board() {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} />
+        <Square value={squares[1]} />
+        <Square value={squares[2]} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} />
+        <Square value={squares[4]} />
+        <Square value={squares[5]} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} />
+        <Square value={squares[7]} />
+        <Square value={squares[8]} />
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+次にこの　`onSquareClick` プロパティを、 `Board` コンポーネント内に `handleClick` という名前で作る関数に接続します。\
+`onSquareClick` を `handleClick` に接続するために、 `Square` コンポーネントの `onSquareClick` プロパティに関数を渡しましょう。\
+`onSquareClick={() => handleClick(0)}` の部分に関しては後で詳しく説明します。
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx" ins="onSquareClick={() => handleClick(0)}" ins="onSquareClick={() => handleClick(1)}" ins="onSquareClick={() => handleClick(2)}" ins="onSquareClick={() => handleClick(3)}" ins="onSquareClick={() => handleClick(4)}" ins="onSquareClick={() => handleClick(5)}" ins="onSquareClick={() => handleClick(6)}" ins="onSquareClick={() => handleClick(7)}" ins="onSquareClick={() => handleClick(8)}"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} />
+        <Square value={squares[1]} />
+        <Square value={squares[2]} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} />
+        <Square value={squares[4]} />
+        <Square value={squares[5]} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} />
+        <Square value={squares[7]} />
+        <Square value={squares[8]} />
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+最後に盤面の状態を保持するstateである `squares` 配列を更新するため、 `Board` コンポーネント内に `handleClick` 関数を定義します。
+handleClick では、引数を受け取りその番目のマス目を"X"に更新しています。
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx" 
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
++  function handleClick(i) {
++    const nextSquares = squares.slice();
++    nextSquares[i] = "X";
++    setSquares(nextSquares);
++  }
+
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+これで改めて、盤面上の任意のマス目をクリックして"X"が置けるようになりました。
+<img width="480" src="https://ja.react.dev/images/tutorial/tictac-adding-x-s.gif"></img>
+
+<Aside type="caution">
+
+`onSquareClick={handleClick(0)}`と`onSquareClick={() => handleClick(0)}`の違い
+`onSquareClick={handleClick(0)}` → 実行した結果を渡しているため(関数を渡していない) \
+`onSquareClick={() => handleClick(0)}` → 関数(無名関数)を渡しているため(関数を渡している)
+
+</Aside>
+
+### 7.手番の管理
+
+まず先手がデフォルトで"X"になるようにしましょう。 \
+現在の手番を追跡するために、 `Board` コンポーネントにもう1つstateを追加します。
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
++  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+  function handleClick(i) {
+    const nextSquares = squares.slice();
+    nextSquares[i] = "X";
+    setSquares(nextSquares);
+  }
+
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+  function handleClick(i) {
+    const nextSquares = squares.slice();
+    nextSquares[i] = "X";
+    setSquares(nextSquares);
+  }
+
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+プレイヤーが着手するたびに、どちらのプレイヤーの手番なのかを決める`xIsNext`が反転して、ゲームの state が保存されます。\
+`Board` の `handleClick` 関数を書き換えて、そこで `xIsNext` の値を反転させましょう。
+これで、異なるマス目をクリックすると `X` と `O` が正しく交互に表示されるようになりました！
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+  function handleClick(i) {
+    const nextSquares = squares.slice();
++    if (xIsNext) {
++      nextSquares[i] = "X";
++    } else {
++      nextSquares[i] = "O";
++    }
+    setSquares(nextSquares);
+    setXIsNext(!xIsNext);
+  }
+
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+  function handleClick(i) {
+    const nextSquares = squares.slice();
+    nextSquares[i] = "X";
+    setSquares(nextSquares);
+  }
+
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+<img width="480" src="https://ja.react.dev/images/tutorial/o-replaces-x.gif"></img>
+
+しかし、これでは `X` が `O` で上書きされてしまっています！ \
+そのため、選択したマス目に `X` や `O` の値があるかどうかチェックする必要があります。\
+
+<Aside type="caution">
+
+このように早期にreturnを行うことで、後続の処理を行わないようにすることを早期リターンと言います。
+
+</Aside>
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+   function handleClick(i) {
++    if (squares[i]) {
++      return;
++    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    setSquares(nextSquares);
+    setXIsNext(!xIsNext);
+  }
+
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+  function handleClick(i) {
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    setSquares(nextSquares);
+    setXIsNext(!xIsNext);
+  }
+
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+### 8.勝敗の宣言
+次に勝敗が決まった時やこれ以上ゲームを進められなくなった際に、勝者の宣言を行うようにします。 \
+これを実現するために、9つのマス目の配列を受け取って勝者を判定し "X"、"O" またはnullを返す、 `calculateWinner` 関数を作成します。
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+   function handleClick(i) {
+    if (squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    setSquares(nextSquares);
+    setXIsNext(!xIsNext);
+  }
+
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
++function calculateWinner(squares) {
++  const lines = [
++    [0, 1, 2],
++    [3, 4, 5],
++    [6, 7, 8],
++    [0, 3, 6],
++    [1, 4, 7],
++    [2, 5, 8],
++    [0, 4, 8],
++    [2, 4, 6]
++  ];
++  for (let i = 0; i < lines.length; i++) {
++    const [a, b, c] = lines[i];
++    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
++      return squares[a];
++    }
++  }
++  return null;
++}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+   function handleClick(i) {
+    if (squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    setSquares(nextSquares);
+    setXIsNext(!xIsNext);
+  }
+
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+````
+</TabItem>
+</Tabs>
+
+`Board` コンポーネントの `handleClick` 関数で `calculateWinner(squares)` を呼び出して、いずれかのプレーヤが勝利したかどうか判定します。
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx" ins="squares[i] || calculateWinner(squares)"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+    function handleClick(i) {
+    if (squares[i] || calculateWinner(squares)) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    setSquares(nextSquares);
+    setXIsNext(!xIsNext);
+  }
+
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+   function handleClick(i) {
+    if (squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    setSquares(nextSquares);
+    setXIsNext(!xIsNext);
+
+    
+  }
+
+  
+
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+````
+</TabItem>
+</Tabs>
+
+ゲームが終了したことを知らせるために、“Winner: X” または “Winner: O” というテキストを表示しましょう。\
+これを行うため、 `Board` コンポーネントに `status` 変数を追加します。この変数は、ゲームが終了した場合に勝者を表示し、ゲームが続行中の場合は、次がどちらの手番なのか表示します。
+
+<Tabs>
+<TabItem label="変更後">
+```jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+    function handleClick(i) {
+    if (squares[i] || calculateWinner(squares)) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    setSquares(nextSquares);
+    setXIsNext(!xIsNext);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+    function handleClick(i) {
+    if (squares[i] || calculateWinner(squares)) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    setSquares(nextSquares);
+    setXIsNext(!xIsNext);
+  }
+
+  return (
+    <>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+````
+</TabItem>
+</Tabs>
+
+ここまでで三目並べの基本的な処理を行えます。
+
+### 9.タイムトラベルの追加
+
+ゲームを過去の手番に「巻き戻す」ことができる機能を追加しましょう。\
+過去の `squares` 配列を、`history` という名前の別の配列に入れて、それを新たにstateとして保持することにします。
+
+```jsx
+[
+  // Before first move
+  [null, null, null, null, null, null, null, null, null],
+  // After first move
+  [null, null, null, null, 'X', null, null, null, null],
+  // After second move
+  [null, null, null, null, 'X', null, null, null, 'O'],
+  // ...
+]
+```
+
+新しいトップレベルのコンポーネント、 `Game` を作成して、過去の着手の一覧を表示するようにします。ゲームの履歴全体を保持するstateである `history` は、ここに置くことにします。\
+また、現在の手番(`xIsNext`)と着手の履歴(`history`)を管理するためのstateを追加します。
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx" ins="const [history, setHistory] = useState([Array(9).fill(null)]);"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+    function handleClick(i) {
+    if (squares[i] || calculateWinner(squares)) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    setSquares(nextSquares);
+    setXIsNext(!xIsNext);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+
++export default function Game() {
++  const [xIsNext, setXIsNext] = useState(true);
++  const [history, setHistory] = useState([Array(9).fill(null)]);
++
++  return (
++    <div className="game">
++      <div className="game-board">
++        <Board />
++      </div>
++      <div className="game-info">
++        <ol>{/*TODO*/}</ol>
++      </div>
++    </div>
++  );
++}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+    function handleClick(i) {
+    if (squares[i] || calculateWinner(squares)) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    setSquares(nextSquares);
+    setXIsNext(!xIsNext);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+````
+</TabItem>
+</Tabs>
+
+現在の盤面を表示するには、 `history` の最後にあるマス目の配列を読み取る必要があります。\
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+    function handleClick(i) {
+    if (squares[i] || calculateWinner(squares)) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    setSquares(nextSquares);
+    setXIsNext(!xIsNext);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
++  const currentSquares = history[history.length - 1];
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board />
+      </div>
+      <div className="game-info">
+        <ol>{/*TODO*/}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+    function handleClick(i) {
+    if (squares[i] || calculateWinner(squares)) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    setSquares(nextSquares);
+    setXIsNext(!xIsNext);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board />
+      </div>
+      <div className="game-info">
+        <ol>{/*TODO*/}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+````
+</TabItem>
+</Tabs>
+
+次に、 `Game` コンポーネント内に、ゲーム内容を更新するための `Board` コンポーネントから呼ばれる `handlePlay` 関数を作成します。\
+`xIsNext` 、 `currentSquares` 、そして `handlePlay` を `Board` コンポーネントに props として渡すようにします。
+
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx" ins="xIsNext={xIsNext}" ins="currentSquares={currentSquares}" ins="handlePlay={handlePlay}"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+    function handleClick(i) {
+    if (squares[i] || calculateWinner(squares)) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    setSquares(nextSquares);
+    setXIsNext(!xIsNext);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentSquares = history[history.length - 1];
+
++  function handlePlay(nextSquares) {
++    // TODO
++  }
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{/*TODO*/}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+    function handleClick(i) {
+    if (squares[i] || calculateWinner(squares)) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    setSquares(nextSquares);
+    setXIsNext(!xIsNext);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentSquares = history[history.length - 1];
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board />
+      </div>
+      <div className="game-info">
+        <ol>{/*TODO*/}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+````
+</TabItem>
+</Tabs>
+
+次に、`Board` コンポーネントを編集し、props を受け取れるようにしましょう。  
+また、ユーザーがマス目をクリックした際に `onPlay` 関数を発火させ、`Game` コンポーネントが `Board` を更新できるようにします。
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx" ins="{ xIsNext, squares, onPlay }"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+function Board({ xIsNext, squares, onPlay }) {
+  function handleClick(i) {
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
++    onPlay(nextSquares);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares) {
+    // TODO
+  }
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{/*TODO*/}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+  function handleClick(i) {
+    if (squares[i] || calculateWinner(squares)) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    setSquares(nextSquares);
+    setXIsNext(!xIsNext);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares) {
+    // TODO
+  }
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{/*TODO*/}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+````
+</TabItem>
+</Tabs>
+
+Board コンポーネントは `Game` から渡される props によって制御されており、ゲームを動作させるには `handlePlay` 関数を実装する必要があります。\
+以前は `setSquares` で更新していましたが、現在は新しい `squares` 配列を `onPlay` に渡します。`handlePlay` では `history` を更新し、新しい `squares` を履歴に追加するとともに、`xIsNext` も切り替えましょう。
+
+<Aside type="caution">
+
+` setHistory([...history, nextSquares]);`とは `history` のすべての要素の後に `nextSquares` が繋がった新しい配列を作成します。 \
+例) history = `[[null,null,null], ["X",null,null]]` nextSquares = `["X",null,"O"]` の場合、
+新しい `[...history, nextSquares]` 配列は `[[null,null,null], ["X",null,null], ["X",null,"O"]]` になります。
+
+</Aside>
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" lang="jsx" title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+function Board({ xIsNext, squares, onPlay }) {
+  function handleClick(i) {
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    onPlay(nextSquares);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares) {
++    setHistory([...history, nextSquares]);
++    setXIsNext(!xIsNext);
+  }
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{/*TODO*/}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+function Board({ xIsNext, squares, onPlay }) {
+  function handleClick(i) {
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    onPlay(nextSquares);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares) {
+    // TODO
+  }
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{/*TODO*/}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+````
+</TabItem>
+</Tabs>
+
+この時点で、state が `Game` コンポーネントに移動し終わり、前回と同様に完全に動作するようになっているはずです。
+
+### 10.過去の着手の表示
+
+三目並べのゲームの履歴が記録されるようになったので、プレーヤに過去の着手のリストを表示してみましょう。\
+`<button>` などの React 要素は普通の JavaScript オブジェクトでもあるので、アプリケーション内でそれらを受け渡しすることができます。\
+手履歴の配列である `history` を `map` で変換して、画面上のボタンを表す React 要素の配列にし、過去の着手に「ジャンプ」できるボタンを表示するようにしましょう。
+
+<Aside type="caution">
+
+JavaScript では、配列を別の配列に変換するために、配列の `map` メソッド を使うことができます。
+
+`[1, 2, 3].map((x) => x * 2) // [2, 4, 6]`
+
+</Aside>
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+function Board({ xIsNext, squares, onPlay }) {
+  function handleClick(i) {
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    onPlay(nextSquares);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares) {
+    setHistory([...history, nextSquares]);
+    setXIsNext(!xIsNext);
+  }
+
+  function jumpTo(nextMove) {
+    // TODO
+  }
+
++  const moves = history.map((squares, move) => {
++    let description;
++    if (move > 0) {
++      description = 'Go to move #' + move;
++    } else {
++      description = 'Go to game start';
++    }
++    return (
++      <li>
++        <button onClick={() => jumpTo(move)}>{description}</button>
++      </li>
++    );
++  });
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{moves}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+function Board({ xIsNext, squares, onPlay }) {
+  function handleClick(i) {
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    onPlay(nextSquares);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares) {
+    setHistory([...history, nextSquares]);
+    setXIsNext(!xIsNext);
+  }
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{/*TODO*/}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+````
+</TabItem>
+</Tabs>
+
+### 11.keyを選ぶ 
+
+リストをレンダーすると、React はレンダーされたリストの各アイテムに関するとある情報を保持します。そのリストが更新されると、React は何が変更されたのかを判断する必要があります。\
+`key` が指定されていない場合、React は警告を報告し、デフォルトでは配列のインデックスを `key` として使用します。\
+配列のインデックスを `key` として使用すると、リストの項目を並べ替えたり、挿入・削除したりする際に問題が生じます。\
+そのため、動的にリストを作成する際には、 `key` を割り当てることを強くお勧めします。\
+`key` はグローバルに一意である必要はなく、コンポーネントとその兄弟間で一意であれば十分です。
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx" ins="key={move}"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+function Board({ xIsNext, squares, onPlay }) {
+  function handleClick(i) {
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    onPlay(nextSquares);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares) {
+    setHistory([...history, nextSquares]);
+    setXIsNext(!xIsNext);
+  }
+
+  function jumpTo(nextMove) {
+    // TODO
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = 'Go to move #' + move;
+    } else {
+      description = 'Go to game start';
+    }
+    return (
+      <li key={move}>
+         <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{moves}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+function Board({ xIsNext, squares, onPlay }) {
+  function handleClick(i) {
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    onPlay(nextSquares);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares) {
+    setHistory([...history, nextSquares]);
+    setXIsNext(!xIsNext);
+  }
+
+  function jumpTo(nextMove) {
+    // TODO
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = 'Go to move #' + move;
+    } else {
+      description = 'Go to game start';
+    }
+    return (
+      <li>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{moves}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+````
+</TabItem>
+</Tabs>
+
+### 12.タイムトラベルの実装
+
+`jumpTo` を実装する前に、 `Game` コンポーネントに、現在ユーザが見ているのが何番目の着手であるのかを管理させる必要があります。\
+これを行うために、 `currentMove` という名前の新しい state 変数を定義し、デフォルト値を 0 に設定します。\
+また、 `Game` 内の `jumpTo` 関数を更新して、 `currentMove` を更新するようにします。 `currentMove` を変更する数値が偶数の場合は、 `xIsNext` を `true` に設定します。
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+function Board({ xIsNext, squares, onPlay }) {
+  function handleClick(i) {
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    onPlay(nextSquares);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
++  const [currentMove, setCurrentMove] = useState(0);
+  const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares) {
+    setHistory([...history, nextSquares]);
+    setXIsNext(!xIsNext);
+  }
+
++  function jumpTo(nextMove) {
++   setCurrentMove(nextMove);
++   setXIsNext(nextMove % 2 === 0); // 偶数の場合は、xIsNextをtrueに
++  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = 'Go to move #' + move;
+    } else {
+      description = 'Go to game start';
+    }
+    return (
+      <li key={move}>
+         <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{moves}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+function Board({ xIsNext, squares, onPlay }) {
+  function handleClick(i) {
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    onPlay(nextSquares);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares) {
+    setHistory([...history, nextSquares]);
+    setXIsNext(!xIsNext);
+  }
+
+  function jumpTo(nextMove) {
+    // TODO
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = 'Go to move #' + move;
+    } else {
+      description = 'Go to game start';
+    }
+    return (
+      <li key={move}>
+         <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{moves}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+````
+</TabItem>
+</Tabs>
+
+次に、　`Game` の `handlePlay` 関数を次の2点で修正しましょう。
+1. 過去に戻って新しい着手を行う場合、履歴の一部を保持し、それ以降を削除します。 `nextSquares` を `history` 全体ではなく、`history.slice(0, currentMove + 1)` の後に追加し、着手時点までの履歴のみを残すようにします。
+1. 着手のたびに `currentMove` を更新し、最新の履歴エントリを指すようにします。
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+function Board({ xIsNext, squares, onPlay }) {
+  function handleClick(i) {
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    onPlay(nextSquares);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const [currentMove, setCurrentMove] = useState(0);
+  const currentSquares = history[history.length - 1];
+
+   function handlePlay(nextSquares) {
+      // 1.の変更
++      const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
++      setHistory(nextHistory);
+      // 2.の変更
++      setCurrentMove(nextHistory.length - 1);
+      setXIsNext(!xIsNext);
+   }
+
+  function jumpTo(nextMove) {
+   setCurrentMove(nextMove);
+   setXIsNext(nextMove % 2 === 0); // 偶数の場合は、xIsNextをtrueに
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = 'Go to move #' + move;
+    } else {
+      description = 'Go to game start';
+    }
+    return (
+      <li key={move}>
+         <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{moves}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+function Board({ xIsNext, squares, onPlay }) {
+  function handleClick(i) {
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    onPlay(nextSquares);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const [currentMove, setCurrentMove] = useState(0);
+  const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares) {
+    setHistory([...history, nextSquares]);
+    setXIsNext(!xIsNext);
+  }
+
+  function jumpTo(nextMove) {
+   setCurrentMove(nextMove);
+   setXIsNext(nextMove % 2 === 0); // 偶数の場合は、xIsNextをtrueに
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = 'Go to move #' + move;
+    } else {
+      description = 'Go to game start';
+    }
+    return (
+      <li key={move}>
+         <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{moves}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+````
+</TabItem>
+</Tabs>
+
+最後に、 `Game` コンポーネントを変更し、常に最後の着手をレンダーする代わりに、現在選択されている着手をレンダーするようにします。
+
+<Tabs>
+<TabItem label="変更後">
+```diff lang="jsx" title="App.jsx" ins="history[currentMove]"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+function Board({ xIsNext, squares, onPlay }) {
+  function handleClick(i) {
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    onPlay(nextSquares);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const [currentMove, setCurrentMove] = useState(0);
+  const currentSquares = history[currentMove];
+
+   function handlePlay(nextSquares) {
+      // 1.の変更
+      const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+      setHistory(nextHistory);
+      // 2.の変更
+      setCurrentMove(nextHistory.length - 1);
+      setXIsNext(!xIsNext);
+   }
+
+  function jumpTo(nextMove) {
+   setCurrentMove(nextMove);
+   setXIsNext(nextMove % 2 === 0); // 偶数の場合は、xIsNextをtrueに
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = 'Go to move #' + move;
+    } else {
+      description = 'Go to game start';
+    }
+    return (
+      <li key={move}>
+         <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{moves}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+```
+</TabItem>
+<TabItem label="変更前">
+````jsx title="App.jsx"
+import { useState } from 'react';
+
+function Square({ value, onSquareClick }) {
+  return (
+    <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+
+function Board({ xIsNext, squares, onPlay }) {
+  function handleClick(i) {
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    const nextSquares = squares.slice();
+    if (xIsNext) {
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";
+    }
+    onPlay(nextSquares);
+  }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) { //ゲームが終了した場合
+    status = "Winner: " + winner;
+  } else { //ゲームが続行中の場合
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
+  return (
+    <>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+      </div>
+      <div className="board-row">
+        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+      </div>
+    </>
+  );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const [currentMove, setCurrentMove] = useState(0);
+  const currentSquares = history[history.length - 1];
+
+   function handlePlay(nextSquares) {
+      // 1.の変更
+      const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+      setHistory(nextHistory);
+      // 2.の変更
+      setCurrentMove(nextHistory.length - 1);
+      setXIsNext(!xIsNext);
+   }
+
+  function jumpTo(nextMove) {
+   setCurrentMove(nextMove);
+   setXIsNext(nextMove % 2 === 0); // 偶数の場合は、xIsNextをtrueに
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = 'Go to move #' + move;
+    } else {
+      description = 'Go to game start';
+    }
+    return (
+      <li key={move}>
+         <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{moves}</ol>
+      </div>
+    </div>
+  );
+}
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
+````
+</TabItem>
+</Tabs>
+
+ゲーム履歴内にある任意の着手をクリックすると、三目並べの盤面が即座に更新され、その着手の発生後に対応する盤面が表示されるようになります。
+
+<img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/20/148415/af9711bd-7c29-44ef-acea-37a283fb37aa.gif"></img>
