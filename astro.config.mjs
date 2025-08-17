@@ -9,6 +9,7 @@ import compress from "astro-compress";
 import metaTags from "astro-meta-tags";
 import { defineConfig } from "astro/config";
 import rehypeExternalLinks from "rehype-external-links";
+import { remarkSandpack } from "remark-sandpack";
 // @ts-ignore
 import wikiLinkPlugin from "remark-wiki-link-plus";
 import starlightScrollToTop from "starlight-scroll-to-top";
@@ -75,19 +76,23 @@ export default defineConfig({
                 label: "執筆者向け",
                 autogenerate: { directory: "for-writers/" },
               },
-            ],
-          },
-          {
-            label: "C言語",
-            link: "/textbook/c-lang/beginner/setup",
-            icon: "document",
-            items: [
               {
-                label: "基礎コース",
-                autogenerate: { directory: "textbook/c-lang/beginner" },
+                label: "環境構築ガイド集",
+                autogenerate: { directory: "setups/" },
               },
             ],
           },
+          // {
+          //   label: "C言語",
+          //   link: "/textbook/c-lang/beginner/setup",
+          //   icon: "document",
+          //   items: [
+          //     {
+          //       label: "基礎コース",
+          //       autogenerate: { directory: "textbook/c-lang/beginner" },
+          //     },
+          //   ],
+          // },
           {
             label: "Web",
             link: "/textbook/web/for-classes",
@@ -129,6 +134,7 @@ export default defineConfig({
     remarkPlugins: [
       [remarkMermaid, { themes: ["dark", "neutral"] }],
       [wikiLinkPlugin, { markdownFolder: "src/content/docs" }],
+      remarkSandpack,
     ],
     rehypePlugins: [
       [

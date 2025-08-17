@@ -1,4 +1,5 @@
 import type { CollectionEntry } from "astro:content";
+import { getValues } from ".";
 
 class FrontmatterError extends Error {
   public override name: string = "FrontmatterError";
@@ -107,18 +108,41 @@ function checkNextPropertyOnLastEntry(
     );
   }
 }
-export function checkFrontmatterOrThrow(
-  collections: Array<CollectionEntry<"docs">>,
-): void | never {
-  const collectionsInTextbook = collections.filter(
-    (entry) => entry.filePath?.includes("/textbook/") ?? false,
-  );
 
-  [
-    checkSlugOrThrow,
-    checkSidebarOrder,
-    checkNextPropertyOnLastEntry,
-  ].forEach((fn) => {
-    fn(collectionsInTextbook);
+type CollectionsDocs = Array<CollectionEntry<"docs">>;
+export function checkFrontmatterOrThrow(
+  collections: CollectionsDocs,
+): void | never {
+  const validationConfig = {
+    textbook: {
+      path: "/textbook/",
+      validations: [
+        checkSlugOrThrow,
+        checkSidebarOrder,
+        checkNextPropertyOnLastEntry,
+      ],
+    },
+    setups: {
+      path: "/setups/",
+      validations: [
+        checkSlugOrThrow,
+      ],
+    },
+  } as const satisfies Record<
+    string,
+    {
+      path: string;
+      validations: Array<(collections: CollectionsDocs) => void | never>;
+    }
+  >;
+
+  getValues(validationConfig).forEach(({ path, validations }) => {
+    const filteredCollections = collections.filter(
+      (entry) => entry.filePath?.includes(path) ?? false,
+    );
+
+    validations.forEach((validationFn) => {
+      validationFn(filteredCollections);
+    });
   });
 }
