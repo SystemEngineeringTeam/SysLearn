@@ -1,7 +1,3 @@
----
-import Checklist from "~icons/material-symbols/checklist";
----
-
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const checkpointElems = document.querySelectorAll<HTMLElement>(".comp-checkpoint");
@@ -40,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <div class="container comp-checkpoint">
   <div class="title">
-    <Checklist height="100%" width="100%" />
+    <IconMaterialSymbolsChecklist height="100%" width="100%" />
     <p>チェックポイント！</p>
   </div>
   <slot />

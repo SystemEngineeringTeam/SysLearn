@@ -1,6 +1,5 @@
 import type { ReactElement } from "react";
 import { useEffect, useRef, useState } from "react";
-import BookCheck from "~icons/mdi/book-check";
 import { appendReadTextbookId, removeReadTextbookId } from "@/lib/stores/read-textbook-ids";
 import { waitMs } from "@/lib/utils";
 import styles from "./ReadTextbookBadge.module.css";
@@ -33,7 +32,7 @@ export function ReadTextbookBadge({ textbookId }: { textbookId: string }): React
   return (
     <div className={styles.badgeContainer} ref={badgeContainerRef}>
       <div className={styles.badge}>
-        <BookCheck />
+        <IconMdiBookCheck />
         <span>最後まで読み終えました！  えらい！</span>
       </div>
       <button

@@ -13,6 +13,9 @@ import rehypeExternalLinks from "rehype-external-links";
 import wikiLinkPlugin from "remark-wiki-link-plus";
 import starlightScrollToTop from "starlight-scroll-to-top";
 import starlightSidebarTopics from "starlight-sidebar-topics";
+import AutoImportAstro from "unplugin-auto-import/astro";
+import AutoImport from "unplugin-auto-import/vite";
+import IconsResolver from "unplugin-icons/resolver";
 import Icons from "unplugin-icons/vite";
 
 // https://astro.build/config
@@ -109,6 +112,14 @@ export default defineConfig({
       ],
     }),
     react(),
+    AutoImportAstro({
+      resolvers: [
+        IconsResolver({
+          prefix: "Icon",
+          extension: "jsx",
+        }),
+      ],
+    }),
   ],
   site: "https://learn.sysken.net",
   image: {
@@ -132,9 +143,19 @@ export default defineConfig({
   },
   vite: {
     plugins: [
+    // NOTE: インポートなしにアイコンを使用できるようにするための設定
+    // ref: https://github.com/unplugin/unplugin-icons/blob/3831eb07d96e94d503df62f45512f3ca3e50cc26/README.md#auto-importing
+      AutoImport({
+        resolvers: [
+          IconsResolver({
+            prefix: "Icon",
+            extension: "jsx",
+          }),
+        ],
+      }),
       Icons({
-        compiler: "jsx",
         autoInstall: true,
+        compiler: "jsx",
         jsx: "react",
       }),
     ],
