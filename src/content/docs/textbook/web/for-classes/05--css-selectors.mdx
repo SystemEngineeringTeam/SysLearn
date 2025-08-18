@@ -1,0 +1,936 @@
+---
+title: CSSの基本とセレクター
+description: HTMLにスタイルを適用するCSSの基本を学び、要素セレクター、クラスセレクター、IDセレクターの使い方をマスターしましょう。
+slug: textbook/web/for-classes/css-selectors
+sidebar:
+  order: 5
+next: false
+---
+
+import { Aside, LinkCard } from "@astrojs/starlight/components";
+import SyscatComment from "@/components/SyscatComment.astro"
+import Sandpack from "@/components/Sandpack.astro";
+import Checkpoint from '@/components/Checkpoint.astro';
+import { Code } from '@astrojs/starlight/components';
+
+## CSSファイルをHTMLにリンクする方法
+
+CSSを書く方法は3つありますが、一番よく使われる**外部CSSファイル**の方法を覚えましょう。
+
+### 1. CSSファイルを作成する
+
+まず、HTMLファイルと同じフォルダに `style.css` というファイルを作ります。
+
+### 2. HTMLからCSSファイルをリンクする
+
+HTMLの `<head>` 部分に `<link>` タグを追加します: 
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSSリンクの例</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>みさきの読書記録</h1>
+  <p>今日は冒険小説を読みました。</p>
+  <p>主人公が勇敢で、とても感動しました。</p>
+</body>
+</html>
+```
+
+```css style.css
+h1 {
+  color: #2c5aa0;
+  font-size: 24px;
+}
+
+p {
+  color: #444;
+  line-height: 1.5;
+}
+```
+
+</Sandpack>
+
+<SyscatComment>
+
+`<link rel="stylesheet" href="style.css">` この1行で、HTMLとCSSを繋げることができるよ！
+
+</SyscatComment>
+
+## CSSの基本的な書き方
+
+CSSは以下の形で書きます: 
+
+```css
+セレクター {
+  プロパティ: 値;
+  プロパティ: 値;
+}
+```
+
+### CSSの構成要素
+
+- **セレクター**: どのHTML要素にスタイルを適用するか
+- **プロパティ**: 変更したいスタイルの種類（色、大きさなど）
+- **値**: プロパティをどう変更するか
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>CSS構文の例</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>ゆうきの映画感想</h1>
+  <p>今日は感動的な映画を見ました。</p>
+  <p>最後のシーンで涙が出てしまいました。</p>
+</body>
+</html>
+```
+
+```css style.css
+/* セレクター: h1 */
+h1 {
+  color: #e74c3c;        /* プロパティ: color、値: #e74c3c */
+  font-size: 32px;       /* プロパティ: font-size、値: 32px */
+  text-align: center;    /* プロパティ: text-align、値: center */
+}
+
+/* セレクター: p */
+p {
+  color: #2c3e50;        /* プロパティ: color、値: #2c3e50 */
+  font-size: 16px;       /* プロパティ: font-size、値: 16px */
+}
+```
+
+</Sandpack>
+
+## 要素セレクター
+
+**要素セレクター**は、HTMLタグ名を使ってスタイルを適用する方法です。
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>要素セレクターの例</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>さくらの自然観察日記</h1>
+  
+  <h2>今日の発見</h2>
+  <p>公園で小さな花を見つけました。白くて可愛い花びらでした。</p>
+  
+  <h2>観察メモ</h2>
+  <p>花の名前を調べてみようと思います。図書館で花の図鑑を借りてこよう。</p>
+</body>
+</html>
+```
+
+```css style.css
+/* すべてのh1要素に適用 */
+h1 {
+  color: #3498db;
+  font-size: 28px;
+}
+
+/* すべてのh2要素に適用 */
+h2 {
+  color: #27ae60;
+  font-size: 22px;
+}
+
+/* すべてのp要素に適用 */
+p {
+  color: #34495e;
+  line-height: 1.6;
+}
+```
+
+</Sandpack>
+
+### 実践: 要素セレクターを使ってみよう
+
+以下のコメントを参考に、要素セレクターでスタイルを適用してみてください: 
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>要素セレクターの練習</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>しろちゃんの散歩記録</h1>
+  
+  <h2>新しく見つけた公園</h2>
+  <p>最近、お気に入りの公園を見つけました。大きな木がたくさんあって、のんびりお散歩ができます。</p>
+  
+  <h2>お気に入りの場所</h2>
+  <p>噴水の近くや芝生の上、ベンチの周りなど、いろいろな場所で休憩するのが楽しいです。</p>
+</body>
+</html>
+```
+
+```css style.css
+/* TODO: h1要素に以下のスタイルを適用してください */
+/*   - color: #e67e22 */
+/*   - font-size: 30px */
+
+/* TODO: h2要素に以下のスタイルを適用してください */
+/*   - color: #8e44ad */
+/*   - font-size: 20px */
+
+/* TODO: p要素に以下のスタイルを適用してください */
+/*   - color: #2c3e50 */
+/*   - line-height: 1.5 */
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```html title="index.html"
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>要素セレクターの練習</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>しろちゃんの散歩記録</h1>
+  
+  <h2>新しく見つけた公園</h2>
+  <p>最近、お気に入りの公園を見つけました。大きな木がたくさんあって、のんびりお散歩ができます。</p>
+  
+  <h2>お気に入りの場所</h2>
+  <p>噴水の近くや芝生の上、ベンチの周りなど、いろいろな場所で休憩するのが楽しいです。</p>
+</body>
+</html>
+```
+
+```css title="style.css"
+h1 {
+  color: #e67e22;
+  font-size: 30px;
+}
+
+h2 {
+  color: #8e44ad;
+  font-size: 20px;
+}
+
+p {
+  color: #2c3e50;
+  line-height: 1.5;
+}
+```
+
+**要素セレクターのポイント:**
+- HTMLタグ名をそのまま使う（`<h1>` → `h1`）
+- そのタグ名の**すべての要素**にスタイルが適用される
+- 一番基本的で分かりやすいセレクター
+
+</details>
+
+## クラスセレクター
+
+**クラスセレクター**は、特定の要素にだけスタイルを適用したいときに使います。
+
+HTMLの要素に `class` 属性を付けて、CSSでは `.クラス名` でスタイルを指定します。
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>クラスセレクターの例</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>たまちゃんの昼寝記録</h1>
+  
+  <p>今日は窓際でお昼寝をしました。</p>
+  <p class="highlight">特に太陽の光が暖かくて、とても気持ちよく眠れました。</p>
+  <p>夕方は庭でお散歩する予定です。</p>
+  <p class="important">明日の天気予報も晴れなので、また窓際で寝ようと思います。</p>
+</body>
+</html>
+```
+
+```css style.css
+/* 要素セレクター: すべてのp要素 */
+p {
+  color: #2c3e50;
+}
+
+/* クラスセレクター: highlightクラスが付いた要素 */
+.highlight {
+  background-color: #f1c40f;
+  padding: 10px;
+}
+
+/* クラスセレクター: importantクラスが付いた要素 */
+.important {
+  color: #e74c3c;
+  font-weight: bold;
+}
+```
+
+</Sandpack>
+
+<SyscatComment>
+
+クラスは「グループ分け」のようなものだよ！同じクラス名を複数の要素に付けることもできるし、一つの要素に複数のクラスを付けることもできるんだ。
+
+</SyscatComment>
+
+### 実践: クラスセレクターを使ってみよう
+
+以下のコメントを参考に、クラスセレクターでスタイルを適用してみてください: 
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>クラスセレクターの練習</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>みけちゃんの冒険日記</h1>
+  
+  <p>今日は新しい探検コースを見つけました。</p>
+  <p class="special">小さな川があって、お魚さんたちが泳いでいるのを発見しました。</p>
+  <p>きれいな石もたくさん落ちていました。</p>
+  <p class="strong">また明日も探検に行きたいと思います。</p>
+</body>
+</html>
+```
+
+```css style.css
+/* 基本のスタイル */
+p {
+  color: #34495e;
+  line-height: 1.6;
+}
+
+/* TODO: specialクラスのスタイルを作成してください */
+/*   - background-color: #ecf0f1 */
+/*   - padding: 15px */
+/*   - border-left: 4px solid #3498db */
+
+/* TODO: strongクラスのスタイルを作成してください */
+/*   - color: #c0392b */
+/*   - font-weight: bold */
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```html title="index.html"
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>クラスセレクターの練習</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>みけちゃんの冒険日記</h1>
+  
+  <p>今日は新しい探検コースを見つけました。</p>
+  <p class="special">小さな川があって、お魚さんたちが泳いでいるのを発見しました。</p>
+  <p>きれいな石もたくさん落ちていました。</p>
+  <p class="strong">また明日も探検に行きたいと思います。</p>
+</body>
+</html>
+```
+
+```css title="style.css"
+/* 基本のスタイル */
+p {
+  color: #34495e;
+  line-height: 1.6;
+}
+
+.special {
+  background-color: #ecf0f1;
+  padding: 15px;
+  border-left: 4px solid #3498db;
+}
+
+.strong {
+  color: #c0392b;
+  font-weight: bold;
+}
+```
+
+**クラスセレクターのポイント:**
+- CSSでは `.クラス名` の形で書く（ピリオドが必要）
+- HTMLでは `class="クラス名"` の形で書く
+- 同じクラスを複数の要素に使用可能
+- 要素の種類に関係なく使用可能
+
+</details>
+
+**ヒント:** クラス名は英語で、内容が分かりやすい名前を付けましょう。例: `highlight`（強調）、`warning`（警告）、`special`（特別）など。
+
+## IDセレクター
+
+**IDセレクター**は、ページ内で1つだけの特別な要素にスタイルを適用するときに使います。
+
+HTMLの要素に `id` 属性を付けて、CSSでは `#ID名` でスタイルを指定します。
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>IDセレクターの例</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1 id="main-title">はなちゃんの花畑日記</h1>
+  
+  <h2>今月の目標</h2>
+  <p>毎日お花に水やりをすることにしました。</p>
+  
+  <h2>今日の振り返り</h2>
+  <p>目標通りお水をあげることができました。チューリップが少し大きくなったような気がします。</p>
+  
+  <div id="summary">
+    <h2>今月のまとめ</h2>
+    <p>お花のお世話の習慣が身についてきました。来月はもう少し難しいお花の種も蒔いてみたいと思います。</p>
+  </div>
+</body>
+</html>
+```
+
+```css style.css
+/* 通常のスタイル */
+h1 {
+  color: #2c3e50;
+}
+
+h2 {
+  color: #34495e;
+}
+
+/* IDセレクター: main-titleというIDの要素 */
+#main-title {
+  color: #e74c3c;
+  font-size: 36px;
+  text-align: center;
+  border-bottom: 3px solid #3498db;
+}
+
+/* IDセレクター: summaryというIDの要素 */
+#summary {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border: 2px solid #dee2e6;
+  border-radius: 5px;
+}
+```
+
+</Sandpack>
+
+### 実践: IDセレクターを使ってみよう
+
+以下のコメントを参考に、IDセレクターでスタイルを適用してみてください: 
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>IDセレクターの練習</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="header">
+    <h1>ちょこちゃんのおやつブログ</h1>
+    <p>美味しいおやつと楽しいお茶の時間の記録</p>
+  </div>
+  
+  <main>
+    <h2>今日のおやつ</h2>
+    <p>今日はクッキーを食べました。サクサクで家族にも好評でした。</p>
+    
+    <h2>明日の予定</h2>
+    <p>明日はケーキに挑戦する予定です。フルーツをたくさんのせてみたいと思います。</p>
+  </main>
+  
+  <div id="footer">
+    <p>© 2025 ちょこちゃんのおやつブログ</p>
+  </div>
+</body>
+</html>
+```
+
+```css style.css
+/* 基本のスタイル */
+h1 {
+  color: #2c3e50;
+}
+
+p {
+  color: #34495e;
+  line-height: 1.6;
+}
+
+/* TODO: headerというIDのスタイルを作成してください */
+/*   - background-color: #3498db */
+/*   - color: white */
+/*   - padding: 20px */
+/*   - text-align: center */
+
+/* TODO: footerというIDのスタイルを作成してください */
+/*   - background-color: #2c3e50 */
+/*   - color: white */
+/*   - padding: 15px */
+/*   - text-align: center */
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```html title="index.html"
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>IDセレクターの練習</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="header">
+    <h1>ちょこちゃんのおやつブログ</h1>
+    <p>美味しいおやつと楽しいお茶の時間の記録</p>
+  </div>
+  
+  <main>
+    <h2>今日のおやつ</h2>
+    <p>今日はクッキーを食べました。サクサクで家族にも好評でした。</p>
+    
+    <h2>明日の予定</h2>
+    <p>明日はケーキに挑戦する予定です。フルーツをたくさんのせてみたいと思います。</p>
+  </main>
+  
+  <div id="footer">
+    <p>© 2025 ちょこちゃんのおやつブログ</p>
+  </div>
+</body>
+</html>
+```
+
+```css title="style.css"
+/* 基本のスタイル */
+h1 {
+  color: #2c3e50;
+}
+
+p {
+  color: #34495e;
+  line-height: 1.6;
+}
+
+#header {
+  background-color: #3498db;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+#footer {
+  background-color: #2c3e50;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+```
+
+**IDセレクターのポイント:**
+- CSSでは `#ID名` の形で書く（シャープが必要）
+- HTMLでは `id="ID名"` の形で書く
+- 同じIDは1つのページで1回だけ使用
+- ページ内リンクの目印としても使用可能
+
+</details>
+
+## セレクターの詳細度と優先順位
+
+複数のセレクターが同じ要素に適用される場合、**詳細度**によって優先順位が決まります[^css-basics]。
+
+### 優先順位（高い順）
+
+1. **IDセレクター** `#main-title` 
+2. **クラスセレクター** `.highlight`
+3. **要素セレクター** `h1`
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>セレクターの優先順位</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 3つのセレクターがすべて適用される要素 -->
+  <h1 class="special-title" id="unique-title">ぽちちゃんの冒険記録</h1>
+  
+  <!-- 結果: color: red, font-size: 30px （IDセレクターが優先） -->
+  
+  <p>今日は森の奥で新しい小道を発見しました。</p>
+</body>
+</html>
+```
+
+```css style.css
+/* 要素セレクター: 詳細度が低い */
+h1 {
+  color: blue;
+  font-size: 20px;
+}
+
+/* クラスセレクター: 詳細度が中程度 */
+.special-title {
+  color: green;
+  font-size: 25px;
+}
+
+/* IDセレクター: 詳細度が高い */
+#unique-title {
+  color: red;
+  font-size: 30px;
+}
+```
+
+</Sandpack>
+
+### 同じ詳細度の場合
+
+同じ詳細度の場合は、**後に書かれたスタイル**が優先されます: 
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>同じ詳細度の場合</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 両方のクラスが適用される -->
+  <p class="first second">らんちゃんの遊び日記</p>
+  
+  <!-- 結果: color: red, background-color: yellow, font-size: 18px -->
+</body>
+</html>
+```
+
+```css style.css
+.first {
+  color: blue;
+  background-color: yellow;
+}
+
+.second {
+  color: red;      /* 後に書かれているので、こちらが優先 */
+  font-size: 18px;
+}
+```
+
+</Sandpack>
+
+### 実践: 優先順位を理解しよう
+
+以下のコードで、最終的にどんなスタイルが適用されるか予想してみてください: 
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>優先順位の練習</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 質問：この要素にはどんなスタイルが適用される？ -->
+  <p class="highlight important" id="special">こてつちゃんのお昼寝ノート</p>
+  
+  <!-- 通常の段落 -->
+  <p>今日は暖かい日向でお昼寝をしました。</p>
+  
+  <!-- クラス付きの段落 -->
+  <p class="highlight">ふわふわのクッションがとても気持ちよかったです。</p>
+</body>
+</html>
+```
+
+```css style.css
+/* 要素セレクター */
+p {
+  color: black;
+  font-size: 14px;
+  background-color: white;
+}
+
+/* クラスセレクター */
+.highlight {
+  color: blue;
+  font-size: 16px;
+}
+
+.important {
+  color: red;
+  background-color: yellow;
+}
+
+/* IDセレクター */
+#special {
+  color: green;
+  font-size: 20px;
+}
+```
+
+</Sandpack>
+
+<details>
+<summary>答えを見る</summary>
+
+**最初の段落（`class="highlight important" id="special"`）の最終スタイル:**
+- `color: green` ← IDセレクターが最優先
+- `font-size: 20px` ← IDセレクターが最優先
+- `background-color: yellow` ← クラスセレクターから（IDに該当プロパティなし）
+
+**優先順位の仕組み:**
+1. ID > クラス > 要素の順で優先
+2. 同じ詳細度なら後に書かれたものが優先
+3. より詳細なセレクターほど優先される
+
+</details>
+
+## 基本的なスタイリングの実践
+
+これまで学んだセレクターを組み合わせて、実際のページをスタイリングしてみましょう：
+
+<Sandpack options={{ editorHeight: 600 }}>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>総合練習</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="header">
+    <h1>ここちゃんの成長記録</h1>
+    <p>日々の遊びと発見を記録するブログ</p>
+  </div>
+  
+  <main>
+    <h2>今週の楽しかったこと</h2>
+    <p>今週は新しい遊び場を発見しました。滑り台やブランコがあって、とても楽しく遊ぶことができました。</p>
+    
+    <p class="special">特に、砂場での山作りがとても楽しかったです。大きなお山を作って、トンネルも掘りました。</p>
+    
+    <h2>来週の予定</h2>
+    <p>来週は新しいお友達と一緒に公園で遊ぶ予定です。みんなで楽しく過ごせるようにいろいろな遊びを考えたいと思います。</p>
+  </main>
+  
+  <div id="footer">
+    <p>© 2025 ここちゃんの成長記録</p>
+  </div>
+</body>
+</html>
+```
+
+```css style.css
+/* TODO: 以下のスタイルを追加してください */
+
+/* 1. body要素に基本的なスタイルを適用 */
+/*   - font-family: 'Hiragino Sans', sans-serif */
+/*   - line-height: 1.6 */
+/*   - color: #333 */
+
+/* 2. headerというIDに背景色とパディングを適用 */
+/*   - background-color: #34495e */
+/*   - color: white */
+/*   - padding: 20px */
+/*   - text-align: center */
+
+/* 3. h1要素の下余白を設定 */
+/*   - margin-bottom: 10px */
+
+/* 4. specialクラスに特別なスタイルを適用 */
+/*   - background-color: #f8f9fa */
+/*   - padding: 15px */
+/*   - border-left: 4px solid #007bff */
+
+/* 5. footerというIDにフッタースタイルを適用 */
+/*   - background-color: #6c757d */
+/*   - color: white */
+/*   - text-align: center */
+/*   - padding: 10px */
+/*   - margin-top: 30px */
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```html title="index.html"
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>総合練習</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="header">
+    <h1>ここちゃんの成長記録</h1>
+    <p>日々の遊びと発見を記録するブログ</p>
+  </div>
+  
+  <main>
+    <h2>今週の楽しかったこと</h2>
+    <p>今週は新しい遊び場を発見しました。滑り台やブランコがあって、とても楽しく遊ぶことができました。</p>
+    
+    <p class="special">特に、砂場での山作りがとても楽しかったです。大きなお山を作って、トンネルも掘りました。</p>
+    
+    <h2>来週の予定</h2>
+    <p>来週は新しいお友達と一緒に公園で遊ぶ予定です。みんなで楽しく過ごせるようにいろいろな遊びを考えたいと思います。</p>
+  </main>
+  
+  <div id="footer">
+    <p>© 2025 ここちゃんの成長記録</p>
+  </div>
+</body>
+</html>
+```
+
+```css title="style.css"
+/* 1. body要素に基本的なスタイルを適用 */
+body {
+  font-family: 'Hiragino Sans', sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* 2. headerというIDに背景色とパディングを適用 */
+#header {
+  background-color: #34495e;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+/* 3. h1要素の下余白を設定 */
+h1 {
+  margin-bottom: 10px;
+}
+
+/* 4. specialクラスに特別なスタイルを適用 */
+.special {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-left: 4px solid #007bff;
+}
+
+/* 5. footerというIDにフッタースタイルを適用 */
+#footer {
+  background-color: #6c757d;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  margin-top: 30px;
+}
+```
+
+**完成したページの特徴:**
+- 統一感のあるデザイン
+- 読みやすいフォントと行間
+- 視覚的な階層構造
+- 適切な余白とパディング
+
+</details>
+
+<Aside type="tip">
+**CSSの命名規則** — クラス名やID名は、英語で内容が分かりやすい名前を付けましょう。例: `main-content`、`navigation`、`highlight`、`warning` など。ハイフン（`-`）を使って単語を繋げるのが一般的です。
+</Aside>
+
+## CSSのベストプラクティス
+
+効果的なCSSを書くためのポイント: 
+
+> **チェックリスト**
+> - 外部CSSファイルを使用する
+> - 意味のあるクラス名・ID名を使う
+> - IDは1つのページで1回だけ使用
+> - セレクターの詳細度を理解して適切に使い分ける
+> - コメントを活用してコードを整理する
+
+<LinkCard
+  title="CSS リファレンス"
+  description="MDNで詳しく学ぶ"
+  href="https://developer.mozilla.org/ja/docs/Web/CSS/Reference"
+/>
+
+<Checkpoint>
+
+- [ ] CSSの役割と基本的な書き方を理解した
+- [ ] CSSファイルをHTMLにリンクする方法を覚えた
+- [ ] 要素セレクターの使い方を理解した
+- [ ] クラスセレクターの使い方を理解した
+- [ ] IDセレクターの使い方を理解した
+- [ ] セレクターの詳細度と優先順位を理解した
+- [ ] 基本的なスタイリングができるようになった
+
+</Checkpoint>
+
+[^css-basics]: [CSSの基本](https://sysken.esa.io/posts/1041) - esa#1041

@@ -1,0 +1,598 @@
+---
+title: セマンティックなHTML要素を使う
+description: 意味のあるHTMLタグを使って、コンピュータにも人間にも分かりやすい文書構造を作りましょう。
+slug: textbook/web/for-classes/html-semantic-elements
+sidebar:
+  order: 2
+---
+
+import { Aside, LinkCard } from "@astrojs/starlight/components";
+import SyscatComment from "@/components/SyscatComment.astro"
+import Sandpack from "@/components/Sandpack.astro";
+import Checkpoint from '@/components/Checkpoint.astro';
+import { Code } from '@astrojs/starlight/components';
+
+## セマンティックって何？
+
+**セマンティック**とは「意味的な」という意味です。
+
+HTMLでセマンティックにマークアップするということは、見た目ではなく「意味」でタグを選ぶということです[^html-elements]。
+
+> 例えば
+> - 文字を大きくしたいから `<h1>` を使う → ﾀﾞﾒｰ
+> - ページの主要な見出しだから `<h1>` を使う → ﾖｼ!
+
+## なぜセマンティックが大切？
+
+セマンティックなHTMLを書くと、以下のメリットがあります: 
+
+- **検索エンジン**: 正しく内容を理解して検索結果に表示
+- **スクリーンリーダー**: 視覚障害者の方が音声で内容を理解
+- **ブラウザ**: 適切なデフォルトスタイルを適用
+- **開発者**: コードが読みやすくメンテナンスしやすい
+
+## 現代のHTMLセマンティック要素
+
+現代のHTMLでは、文書の構造を明確にするための意味のあるタグが用意されています[^html-elements]。
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ねこちゃん日記</title>
+</head>
+<body>
+  <header>
+    <h1>みいちゃんの日記帳</h1>
+    <nav>
+      <ul>
+        <li><a href="#today">今日のできごと</a></li>
+        <li><a href="#favorite">好きなもの</a></li>
+        <li><a href="#friends">ともだち</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <main>
+    <article>
+      <h2>今日のお昼寝スポット</h2>
+      <p>今日は窓際の暖かい場所でお昼寝しました。太陽があたって気持ちよかったです。</p>
+    </article>
+  </main>
+  
+  <footer>
+    <p>🐾 みいちゃんの日記帳 2025</p>
+  </footer>
+</body>
+</html>
+```
+
+</Sandpack>
+
+<SyscatComment>
+
+従来は全部 `<div>` で囲んでいたけど、HTML5では意味のあるタグで構造を表現できるようになったよ！
+
+</SyscatComment>
+
+## 主要なセマンティック要素
+
+| 要素 | 意味 | 使用場面 |
+|------|------|----------|
+| `<header>` | ヘッダー | サイトのタイトルやナビゲーション |
+| `<nav>` | ナビゲーション | メニューやリンク集 |
+| `<main>` | メインコンテンツ | ページの主要な内容 |
+| `<article>` | 記事 | ブログ記事、ニュース記事など |
+| `<section>` | セクション | 関連する内容のまとまり |
+| `<aside>` | 補足情報 | サイドバーや関連リンク |
+| `<footer>` | フッター | 著作権情報や連絡先 |
+
+### 1. header要素
+
+`<header>` は、ページやセクションのヘッダー部分を表します。
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ぽんちゃん日記</title>
+</head>
+<body>
+  <header>
+    <h1>ぽんちゃんのわんわん日記</h1>
+    <p>毎日のお散歩とおやつの記録だワン！</p>
+  </header>
+  
+  <main>
+    <p>今日もいっぱい遊んだワン！</p>
+  </main>
+</body>
+</html>
+```
+
+</Sandpack>
+
+### 実践: header要素を使ってみよう
+
+header要素を使って、あなたの日記サイトのヘッダーを作ってみましょう: 
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>あなたの日記</title>
+</head>
+<body>
+  <header>
+    <h1>あなたの日記のタイトル</h1>
+    <p>日記の説明を書いてみてください</p>
+  </header>
+  
+  <main>
+    <p>ここに今日の出来事を書いてみましょう。</p>
+  </main>
+</body>
+</html>
+```
+
+</Sandpack>
+
+#### 実践: header要素を使ってみよう
+
+以下のコードを参考に、自分のサイトのヘッダーを作ってみましょう: 
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>私のサイトのヘッダー</title>
+</head>
+<body>
+  <header>
+    <h1>あなたの名前のサイト</h1>
+    <p>サイトの説明を書いてみましょう</p>
+  </header>
+</body>
+</html>
+```
+
+</Sandpack>
+
+### 2. nav要素
+
+`<nav>` は、ナビゲーションリンクの集まりを表します。
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ハムちゃん日記</title>
+</head>
+<body>
+  <header>
+    <h1>ハムちゃんの小さな冒険</h1>
+    <nav>
+      <ul>
+        <li><a href="#wheel">回し車タイム</a></li>
+        <li><a href="#snacks">おやつ記録</a></li>
+        <li><a href="#sleep">お昼寝日記</a></li>
+        <li><a href="#exploration">探検メモ</a></li>
+      </ul>
+    </nav>
+  </header>
+</body>
+</html>
+```
+
+</Sandpack>
+
+### 実践: nav要素でメニューを作ろう
+
+あなたの日記のナビゲーションメニューを作ってみましょう: 
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>私の日記ナビ</title>
+</head>
+<body>
+  <header>
+    <h1>私の日記帳</h1>
+    <nav>
+      <ul>
+        <li><a href="#today">今日の日記</a></li>
+        <li><a href="#hobby">趣味について</a></li>
+        <li><a href="#food">美味しかったもの</a></li>
+        <li><a href="#thoughts">思ったこと</a></li>
+      </ul>
+    </nav>
+  </header>
+</body>
+</html>
+```
+
+</Sandpack>
+
+### 3. main要素
+
+`<main>` は、ページの主要なコンテンツを表します。1つのページに1つだけ使用します。
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>うさちゃん日記</title>
+</head>
+<body>
+  <header>
+    <h1>ふわふわうさちゃん日記</h1>
+  </header>
+  
+  <main>
+    <h2>今日のにんじんレポート</h2>
+    <p>今日は朝からとっても甘いにんじんを食べました。オレンジ色がきれいで、カリカリ音がとても心地よかったです。</p>
+    <p>お昼にはキャベツの葉っぱも食べて、お腹いっぱいになりました。幸せな一日でした。</p>
+  </main>
+  
+  <footer>
+    <p>🥕 うさちゃんの野菜日記</p>
+  </footer>
+</body>
+</html>
+```
+
+</Sandpack>
+
+### 実践: main要素でメインコンテンツを作ろう
+
+main要素を使って、あなたの日記のメインコンテンツを作ってみましょう: 
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>私のメイン日記</title>
+</head>
+<body>
+  <header>
+    <h1>私の日記</h1>
+  </header>
+  
+  <main>
+    <h2>今日の出来事</h2>
+    <p>ここに今日あった嬉しかったことを書いてみてください。</p>
+    <p>どんな小さなことでも、記録に残すと後で読み返すのが楽しくなります。</p>
+  </main>
+  
+  <footer>
+    <p>私の日記帳</p>
+  </footer>
+</body>
+</html>
+```
+
+</Sandpack>
+
+### 4. article要素
+
+`<article>` は、独立した記事やコンテンツを表します。
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ひつじちゃん日記</title>
+</head>
+<body>
+  <main>
+    <article>
+      <h2>春のお花見散歩</h2>
+      <p>今日は暖かい春の日でした。牧場の桜が満開で、とてもきれいでした。</p>
+      <p>お友達のひつじちゃんたちと一緒にお花の下でのんびり過ごしました。</p>
+    </article>
+    
+    <article>
+      <h2>暖かい日向ぼっこ</h2>
+      <p>午後は大きな木の下で日向ぼっこをしました。風が気持ちよくて、ウトウトしてしまいました。</p>
+      <p>毛がふわふわになって、とても幸せな気分です。</p>
+    </article>
+  </main>
+</body>
+</html>
+```
+
+</Sandpack>
+
+### 実践: article要素で日記記事を作ろう
+
+複数の日記記事をarticle要素で作ってみましょう: 
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>私の日記アーカイブ</title>
+</head>
+<body>
+  <header>
+    <h1>私の日記帳</h1>
+  </header>
+  
+  <main>
+    <article>
+      <h2>美味しいパンケーキを作った日</h2>
+      <p>今日は初めてパンケーキを作りました。</p>
+      <p>ふわふわに焼けて、とても美味しかったです。</p>
+    </article>
+    
+    <article>
+      <h2>図書館で過ごした静かな午後</h2>
+      <p>図書館で好きな本を読んで過ごしました。</p>
+      <p>静かで集中できる環境で、とてもリラックスできました。</p>
+    </article>
+  </main>
+</body>
+</html>
+```
+
+</Sandpack>
+
+## 見出しの階層構造（h1〜h6）
+
+見出しタグは、文書の階層構造を表現するために使います[^html-elements]。
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ペンギンちゃんの一日</title>
+</head>
+<body>
+  <h1>ペンギンちゃんの南極日記</h1>
+  
+  <h2>朝の部: 氷の上でお散歩</h2>
+  <p>今朝は氷の上をペタペタ歩きました。滑らないように気をつけました。</p>
+  
+  <h2>昼の部: お魚さんと遊ぼう</h2>
+  <p>お昼は冷たい海でお魚さんたちと泳ぎました。</p>
+  
+  <h3>美味しいお魚発見</h3>
+  <p>きらきら光る小さなお魚をたくさん見つけました。</p>
+  
+  <h3>お友達と一緒に</h3>
+  <p>ペンギンのお友達と一緒に泳ぐのは楽しいです。</p>
+  
+  <h2>夜の部: 星空観察</h2>
+  <p>夜は南極の美しい星空を眺めました。</p>
+</body>
+</html>
+```
+
+</Sandpack>
+
+### 実践: 見出しの階層を正しく使おう
+
+正しい見出しの階層で、あなたの一日の記録を作ってみましょう: 
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>私の一日の記録</title>
+</head>
+<body>
+  <h1>私の楽しい一日</h1>
+  
+  <h2>朝の時間</h2>
+  <p>朝は余裕がある人？</p>
+  
+  <h2>昼の時間</h2>
+  <h3>お昼ごはん</h3>
+  <p>何を食べましたか？</p>
+  
+  <h3>午後の活動</h3>
+  <p>午後は何をしていたんですか。</p>
+  
+  <h2>夜の時間</h2>
+  <p>お勉強？ゲーム？作業？</p>
+</body>
+</html>
+```
+
+</Sandpack>
+
+### 見出しの使い方のルール
+
+> 見出しの階層ルール: 
+> - `<h1>` は1つのページに1つだけ（ページタイトル用）
+> - 階層を飛ばさない（h1→h3ではなく、h1→h2→h3の順）
+> - 見た目ではなく、論理的な構造で選ぶ
+
+## 段落要素（p）
+
+`<p>` タグは段落を表します。関連する文をまとめて1つの段落にします。
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ことりちゃんの日記</title>
+</head>
+<body>
+  <h1>ことりちゃんのさえずり日記</h1>
+  
+  <p>今日は朝早くから美しいメロディーで歌いました。小さな虫さんたちが音楽に合わせて踊っているようで、とても楽しい気分になりました。</p>
+  
+  <p>お昼には大きな木の枝で新しいお友達に出会いました。一緒におしゃべりして、美味しい木の実の在り処を教えてもらいました。友達って素晴らしいですね。</p>
+  
+  <p>夕方は夕日を見ながら静かに過ごしました。オレンジ色に染まった空がとても美しくて、心が穏やかになりました。明日もきっと素敵な一日になりそうです。</p>
+</body>
+</html>
+```
+
+</Sandpack>
+
+### 実践: 段落を正しく使い分けよう
+
+関連する文をまとめて、適切な段落を作ってみましょう: 
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>私の段落練習</title>
+</head>
+<body>
+  <h1>私の好きなもの</h1>
+  
+  <p>ここに最初のテーマについて書いてみてください。関連する文をまとめて一つの段落にしましょう。</p>
+  
+  <p>次のテーマについて書きます。新しい話題なので、新しい段落を作ります。</p>
+  
+  <p>最後の段落です。全体をまとめたり、感想を書いたりしてみてください。</p>
+</body>
+</html>
+```
+
+</Sandpack>
+
+## 全体を組み合わせよう
+
+これまで学んだ要素を全て使って、完成度の高いページを作ってみましょう
+
+<Sandpack options={{ editorHeight: 600 }}>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="くまちゃんの森の生活日記">
+  <title>くまちゃんの森日記</title>
+</head>
+<body>
+  <header>
+    <h1>くまちゃんの森ライフ日記</h1>
+    <p>自然豊かな森での日々を記録しています</p>
+    <nav>
+      <ul>
+        <li><a href="#daily">今日の出来事</a></li>
+        <li><a href="#food">美味しい発見</a></li>
+        <li><a href="#friends">森の仲間</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <main>
+    <section id="daily">
+      <h2>今日の森での冒険</h2>
+      
+      <article>
+        <h3>はちみつ発見大作戦</h3>
+        <p>今日は森の奥で甘いはちみつを発見しました。木の高いところにあったので、慎重に登って取りました。</p>
+        <p>とても甘くて美味しくて、幸せな気分になりました。少し分けてもらったので、明日のおやつにとっておこうと思います。</p>
+      </article>
+      
+      <article>
+        <h3>春の花見散歩</h3>
+        <p>午後は森に咲いている小さな花を見て回りました。ピンクや白の可愛い花がたくさん咲いていて、春の訪れを感じました。</p>
+      </article>
+    </section>
+    
+    <aside>
+      <h2>今週の森の天気</h2>
+      <ul>
+        <li>月曜日: 晴れ ☀️</li>
+        <li>火曜日: くもり ☁️</li>
+        <li>水曜日: 雨 🌧️</li>
+      </ul>
+    </aside>
+  </main>
+  
+  <footer id="contact">
+    <h2>くまちゃんへのお便り</h2>
+    <p>森のポスト: bear@forest.com</p>
+    <p>🐾 くまちゃんの森日記 2025年春号</p>
+  </footer>
+</body>
+</html>
+```
+
+</Sandpack>
+
+<Aside type="tip">
+**div要素との使い分け** — 意味的なタグがない場合のみ `<div>` を使いましょう。装飾やレイアウトのためのグループ化には `<div>` が適しています。
+</Aside>
+
+## セマンティックHTMLのベストプラクティス
+
+よいセマンティックHTMLを書くためのポイント: 
+
+> **チェックリスト**
+> - ページに `<h1>` は1つだけ
+> - 見出しの階層を正しく使用（h1→h2→h3の順）
+> - `<main>` はページに1つだけ
+> - 意味のない `<div>` の代わりにセマンティック要素を使用
+> - リンク集には `<nav>` を使用
+> - 独立したコンテンツには `<article>` を使用
+
+<LinkCard
+  title="セマンティックHTML要素の詳細"
+  description="MDNで詳しく学ぶ"
+  href="https://developer.mozilla.org/ja/docs/Web/HTML/Element"
+/>
+
+<Checkpoint>
+
+- [ ] セマンティックなマークアップの意味を理解した
+- [ ] HTML5のセマンティック要素（header、nav、main、article、section、aside、footer）を理解した
+- [ ] 見出しタグ（h1〜h6）の正しい階層構造を理解した
+- [ ] 段落タグ（p）の適切な使い方を理解した
+- [ ] 意味のあるマークアップでコンテンツを組み立てられる
+
+</Checkpoint>
+
+[^html-elements]: [HTMLの要素を表すタグ](https://sysken.esa.io/posts/1040) - esa#1040

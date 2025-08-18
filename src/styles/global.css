@@ -2,6 +2,10 @@
   navigation: auto;
 }
 
+:root {
+  --sl-content-width: 50rem;
+}
+
 ::view-transition-group(root) {
   animation-duration: 200ms;
 }
@@ -40,4 +44,3 @@ body {
     }
   }
 }
-

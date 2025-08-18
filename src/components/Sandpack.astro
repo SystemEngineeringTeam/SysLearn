@@ -1,0 +1,51 @@
+---
+import type { ComponentProps } from "react";
+import { Code } from "@astrojs/starlight/components";
+import { Sandpack as Sandpack_ } from "@codesandbox/sandpack-react";
+
+type Props = ComponentProps<typeof Sandpack_>;
+
+const props = Astro.props;
+---
+
+<style>
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.sandpack {
+  opacity: 0;
+  animation: fade-in 300ms ease-in-out forwards;
+  animation-delay: 2000ms;
+}
+</style>
+
+<div class="not-content sandpack">
+  <Fragment client:visible>
+    <Sandpack_
+      client:only="react"
+      options={{
+        showInlineErrors: true,
+        editorHeight: 500,
+        ...props.options
+      }}
+      template="static"
+      theme="light"
+      {...props}
+    >
+
+    <slot />
+
+  </Sandpack_>
+  </Fragment>
+</div>
+
+<div style="display: none;">
+  <Code code="a" />
+</div>
+

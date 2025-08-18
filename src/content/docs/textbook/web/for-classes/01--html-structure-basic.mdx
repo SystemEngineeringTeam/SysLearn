@@ -1,0 +1,323 @@
+---
+title: HTMLの基本構造を理解する
+description: Webページはどうやってできているの？  HTMLの基本的な仕組みから文書の構造まで、HTMLの基礎をしっかりと身につけましょう。
+slug: textbook/web/for-classes/html-structure-basic
+sidebar:
+    order: 1
+---
+
+import { Aside, LinkCard } from "@astrojs/starlight/components";
+import SyscatComment from "@/components/SyscatComment.astro"
+import Sandpack from "@/components/Sandpack.astro";
+import Checkpoint from '@/components/Checkpoint.astro';
+import { Code } from '@astrojs/starlight/components';
+
+## マークアップって何？
+
+文書を書くとき、どこが見出しで、どこが段落なのかを明確にする必要があります。これを**マークアップ**と呼びます。
+
+マークアップとは、文書に「目印」を付けることです
+- 「この部分は見出しです」
+- 「ここからここまでは段落です」
+- 「この語句は重要です」
+
+このような目印を付けることで、コンピュータも人間も文書の構造を理解できるようになります。
+
+## ハイパーリンクの力
+
+ハイパーテキストの「ハイパー」な部分は、**ハイパーリンク**にあります[^what-is-html]。
+
+文書を読んでいるときに、関連する別の文書をすぐに参照できる仕組みです。これにより、世界中の文書がリンクでつながった巨大な情報ネットワークが生まれました。
+
+## HTMLって何？
+
+HTMLとは、**HyperText Markup Language**の略で、Webページを作るための言語です[^what-is-html]。
+
+- **HyperText**: リンクでつながったテキスト
+- **Markup**: 文書に意味を付ける目印
+- **Language**: その規則や文法
+
+つまり、「文書に構造と意味を与えるための言語」ということです。
+
+## HTMLの3つの特徴
+
+HTMLであるためには、以下の3つの特徴があります[^what-is-html]: 
+
+1. **テキストベース**: 普通の文字で書かれている
+2. **ハイパーリンク**: 他の文書にリンクできる
+3. **Web標準技術**: 世界共通の規則に従っている
+
+## よいHTMLを書くことの大切さ
+
+HTMLは世界中の文書をつなげ、コンピュータが理解できる形で情報を整理する役割を持っています[^what-is-html]。
+
+検索エンジンが私たちの求める情報を見つけてくれるのも、コンピュータがHTMLの構造を正しく理解しているからです。
+
+> よいHTMLとは: 
+> - 正しいルールに従って書かれている
+> - 意味のある構造になっている  
+> - どんな環境でも正しく表示される
+
+正しいHTMLを書くことで、より多くの人にとって使いやすいWebページを作ることができます。
+
+## HTML文書の基本骨組み
+
+まずは最も基本的なHTML文書を見てみましょう。
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>はじめてのWebページ</title>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+    <p>これが私の最初のWebページです。</p>
+</body>
+</html>
+```
+
+</Sandpack>
+
+これがHTMLの最も基本的な構造です。各要素がどのような役割を持っているかを詳しく見ていきましょう。
+
+<SyscatComment>
+
+遠くからみると (一番左の階層だけを見ると), 次のような構造になっていることが分かるね。意外とシンプル！
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>...</head>
+<body>...</body>
+</html>
+```
+
+</SyscatComment>
+
+## HTML文書の構成要素
+
+| 要素 | 役割 | 説明 |
+|------|------|------|
+| `<!DOCTYPE html>` | 文書型宣言 | HTML5を使用することを宣言 |
+| `<html>` | ルート要素 | HTML文書全体を囲む最上位の要素 |
+| `<head>` | ヘッダ情報 | ブラウザや検索エンジン向けの情報 |
+| `<body>` | 文書本体 | 実際にページに表示される内容 |
+
+### 1. DOCTYPE宣言
+
+`<!DOCTYPE html>` は、この文書がHTML5で書かれていることをブラウザに伝える宣言です[^html-elements]。
+
+必ずHTML文書の最初に書きます。これがないと、ブラウザが古い表示モードになってしまう可能性があります。
+
+### 2. htmlタグ
+
+`<html lang="ja">` は、HTML文書全体を囲む最上位の要素です。
+
+> `lang` 属性で文書の言語を指定できます: 
+> - `lang="ja"`: 日本語
+> - `lang="en"`: 英語
+
+### 3. headタグ
+
+`<head>` タグの中には、ページの「メタ情報」を書きます。ここに書いた内容は、直接画面には表示されません。
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="私のWebサイトです">
+    <meta name="keywords" content="HTML, Web, 学習">
+    <title>詳しいメタ情報の例</title>
+</head>
+<body>
+    <h1>メタ情報について学ぼう</h1>
+    <p>ブラウザのタブにタイトルが表示されているのを確認してください。</p>
+</body>
+</html>
+```
+
+</Sandpack>
+
+#### よく使うheadタグの中身
+
+| タグ | 役割 | 例 |
+|------|------|------|
+| `<meta charset="UTF-8">` | 文字エンコーディング | 日本語を正しく表示 |
+| `<title>` | ページタイトル | ブラウザのタブに表示 |
+| `<meta name="description">` | ページの説明 | 検索結果に表示される |
+
+### 4. bodyタグ
+
+`<body>` タグの中には、実際にページに表示される内容を書きます。
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>bodyタグの中身</title>
+</head>
+<body>
+    <h1>これは見出しです</h1>
+    <p>これは段落です。bodyタグの中に書いた内容が画面に表示されます。</p>
+    <h2>小さな見出し</h2>
+    <p>もう一つの段落です。</p>
+</body>
+</html>
+```
+
+</Sandpack>
+
+## 実践してみよう
+
+### 実践1: 言語設定を変更してみよう
+
+`<html lang="ja">` の `"ja"` を `"en"` に変更してみましょう。見た目は変わりませんが、スクリーンリーダーや翻訳機能などの支援技術で読み上げ方が変わります。
+
+### 実践2: bodyタグの内容を充実させてみよう
+
+以下のように `<body>` タグの中身を書き換えて、より多くの要素を試してみましょう: 
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>私のプロフィール</title>
+</head>
+<body>
+    <h1>田中太郎のプロフィール</h1>
+    <h2>自己紹介</h2>
+    <p>こんにちは！私は田中太郎です。</p>
+    <p>プログラミングを勉強中です。</p>
+    
+    <h2>趣味</h2>
+    <p>読書と映画鑑賞が好きです。</p>
+</body>
+</html>
+```
+
+</Sandpack>
+
+### 実践3: メタ情報の違いを確認してみよう
+
+以下の2つのコードを比較して、メタ情報の有無でどう変わるかを確認してみましょう: 
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="田中太郎のプロフィールページです">
+    <meta name="author" content="田中太郎">
+    <meta name="keywords" content="プロフィール, 自己紹介, HTML学習">
+    <title>【充実版】田中太郎のプロフィール</title>
+</head>
+<body>
+    <h1>田中太郎のプロフィール</h1>
+    <p>このページにはメタ情報が充実しています。</p>
+    <p>ブラウザの「ページ情報を表示」機能で確認してみてください。</p>
+</body>
+</html>
+```
+
+</Sandpack>
+
+### 実践4: エラーを体験してみよう
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>はじめてのWebページ</title>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+    <p>これが私の最初のWebページです。</p>
+</body>
+</html>
+```
+
+</Sandpack>
+
+いろんなタグの `<` を削除してみたり、`</` を削除してみたり、タグの名前を変えたりと、いろいろ試してみましょう。
+
+<Aside type="tip">
+**HTMLは寛容** — HTMLは多少のタグの間違いがあっても、ブラウザが推測して表示してくれます。ただし、正しく書くことが大切です。
+</Aside>
+
+## W3Cによる標準化
+
+HTMLの仕様は、**W3C**（World Wide Web Consortium）という国際的な標準化団体によって決められています[^1039]。
+
+W3Cが標準化することで、世界中のどのブラウザでも同じように表示されるようになります。
+
+<LinkCard
+  title="HTML文書に必要な要素とその役割"
+  description="MDNで詳しく学ぶ"
+  href="https://developer.mozilla.org/ja/docs/Web/HTML/Element"
+/>
+
+## よいHTMLを書くために
+
+HTMLには「セマンティック（意味的）」という重要な概念があります[^1039]。
+
+> セマンティックなHTMLとは
+> - 見た目ではなく、**意味**でマークアップすること
+> - コンピュータにも理解しやすい構造にすること
+> - 検索エンジンや支援技術に適切な情報を提供すること
+
+例えば、文字を大きくするために `<h1>` を使うのではなく、実際に「見出し」として意味がある場合にのみ使うということです。
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>セマンティックなHTML</title>
+</head>
+<body>
+    <!-- 良い例: 意味でマークアップ -->
+    <h1>記事のタイトル</h1>
+    <p>この段落は記事の内容です。</p>
+    
+    <h2>章の見出し</h2>
+    <p>この段落は章の内容です。</p>
+    
+    <!-- 悪い例: 見た目だけでマークアップ -->
+    <!-- <h1>ただ文字を大きくしたいだけ</h1> -->
+</body>
+</html>
+```
+
+</Sandpack>
+
+<Checkpoint>
+
+- [ ] HTMLとは何かを理解した
+- [ ] HTML文書の基本構造（DOCTYPE、html、head、body）を理解した
+- [ ] headタグとbodyタグの違いを理解した
+- [ ] セマンティックなマークアップの重要性を理解した
+- [ ] W3Cによる標準化について知った
+
+</Checkpoint>
+
+[^what-is-html]: [HTMLとはなにか](https://sysken.esa.io/posts/1039) - esa#1039
+[^html-elements]: [HTMLの要素を表すタグ](https://sysken.esa.io/posts/1040) - esa#1040

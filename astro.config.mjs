@@ -95,7 +95,7 @@ export default defineConfig({
           // },
           {
             label: "Web",
-            link: "/textbook/web/for-classes",
+            link: "/textbook/web/for-classes/html-structure-basic",
             icon: "document",
             items: [
               {
@@ -134,6 +134,7 @@ export default defineConfig({
     remarkPlugins: [
       [remarkMermaid, { themes: ["dark", "neutral"] }],
       [wikiLinkPlugin, { markdownFolder: "src/content/docs" }],
+      // @ts-expect-error
       remarkSandpack,
     ],
     rehypePlugins: [
