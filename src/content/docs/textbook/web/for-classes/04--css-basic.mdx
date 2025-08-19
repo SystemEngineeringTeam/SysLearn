@@ -12,33 +12,21 @@ import Sandpack from "@/components/Sandpack.astro";
 import Checkpoint from '@/components/Checkpoint.astro';
 import { Code } from '@astrojs/starlight/components';
 
-## CSSって何？
+## CSSで見た目を美しくしよう
 
-**CSS**（Cascading Style Sheets）は、HTMLで作った文書に色や装飾を付けるための言語です[^css-basics]。
+前回まではHTMLの構造について学びました。今度はCSSを使って、文字の色やフォントを変更して、見た目を美しくしてみましょう[^css-basics]。
 
-HTMLが「骨組み」なら、CSSは「服や化粧」のようなものです。
+CSSを使うと、同じHTMLでも全く違った印象のページに変えることができます。
 
-<Sandpack>
+<SyscatComment>
 
-```html index.html
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>CSS なしのページ</title>
-</head>
-<body>
-  <h1>ももちゃんの花壇日記</h1>
-  <p>今日は初めてひまわりの種を植えました。</p>
-  <p>土がうまく掘れなくて、ちょっと浅くなってしまいました。</p>
-  <p>でも水やりはとても上手にできました。</p>
-</body>
-</html>
-```
+CSSは魔法みたい！同じ文章でも、色やフォントを変えるだけで印象がガラッと変わるよ。
 
-</Sandpack>
+</SyscatComment>
 
-上のページは「素のHTML」です。見た目は地味ですが、これに CSS を適用すると...
+## CSSファイルをHTMLに読み込む方法
+
+まず、CSSファイルをHTMLに読み込む方法を確認しましょう：
 
 <Sandpack>
 
@@ -47,43 +35,47 @@ HTMLが「骨組み」なら、CSSは「服や化粧」のようなものです�
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>CSS ありのページ</title>
+  <title>ぽんちゃんの散歩日記</title>
+  <!-- CSSファイルを読み込む -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>ももちゃんの花壇日記</h1>
-  <p>今日は初めてひまわりの種を植えました。</p>
-  <p>土がうまく掘れなくて、ちょっと浅くなってしまいました。</p>
-  <p>でも水やりはとても上手にできました。</p>
+  <h1>ぽんちゃんの散歩日記</h1>
+  <p>今日は公園でたくさんの友達に会いました。</p>
 </body>
 </html>
 ```
 
 ```css style.css
+/* これがCSSファイルです */
 h1 {
-  color: #2d5aa0;
-  font-size: 28px;
+  color: blue;
 }
 
 p {
-  color: #333;
-  line-height: 1.6;
+  color: green;
 }
 ```
 
 </Sandpack>
 
-<SyscatComment>
+`<link rel="stylesheet" href="style.css">` という行で、CSSファイルを読み込んでいます。
 
-CSSを使うと、文字の色や大きさを変えたり、レイアウトを整えたりできるよ！まずは基本から学んでいこう。
+<SyscatComment type="CONFUSED">
+
+え？  どこに CSS なんてあるかって？  ファイル名のあるタブの `style.css` をクリックすると、CSSファイルの内容が表示されるよ。
 
 </SyscatComment>
 
-## 色とフォントでページを美しく！
 
-HTMLとCSSの基本が分かったところで、今度は**色**と**フォント**を使ってページをもっと美しく、読みやすくしてみましょう。
 
-色やフォントの選び方一つで、ページの印象がガラッと変わります！
+## 文字色を変える（color プロパティ）
+
+`color` プロパティを使って、文字の色を変更できます。色の指定方法はいくつかあります[^css-properties]。
+
+### 色名での指定
+
+最も簡単な方法は、色の名前で指定することです：
 
 <Sandpack>
 
@@ -92,195 +84,53 @@ HTMLとCSSの基本が分かったところで、今度は**色**と**フォン�
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>色とフォントの違い</title>
+  <title>みーちゃんの観察日記</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="before">
-    <h1>まめちゃんの森探検記</h1>
-    <p>今日は森の奥深くまで探検しました。きれいな小川を見つけて、冷たい水を飲んだらとても美味しかったです。途中でリスさんとも出会えて、一緒にどんぐりを探しました。</p>
-  </div>
+  <h1>みーちゃんの観察日記</h1>
   
-  <div class="after">
-    <h1>まめちゃんの森探検記</h1>
-    <p>今日は森の奥深くまで探検しました。きれいな小川を見つけて、冷たい水を飲んだらとても美味しかったです。途中でリスさんとも出会えて、一緒にどんぐりを探しました。</p>
-  </div>
-</body>
-</html>
-```
-
-```css style.css
-/* ビフォー：デフォルトのスタイル */
-.before {
-  margin-bottom: 40px;
-  padding: 20px;
-  border: 2px solid #ccc;
-}
-
-/* アフター：色とフォントを設定 */
-.after {
-  padding: 20px;
-  background-color: #f8f9fa;
-  border: 2px solid #007bff;
-  font-family: 'Hiragino Sans', sans-serif;
-}
-
-.after h1 {
-  color: #2c5aa0;
-  font-size: 28px;
-  line-height: 1.4;
-}
-
-.after p {
-  color: #444;
-  font-size: 16px;
-  line-height: 1.6;
-}
-```
-
-</Sandpack>
-
-<SyscatComment>
-
-色とフォントを工夫するだけで、同じ内容でもこんなに印象が変わるんだね！読みやすさも全然違うよ。
-
-</SyscatComment>
-
-## 色の指定方法
-
-CSSで色を指定する方法はいくつかあります。主な方法を覚えましょう。
-
-### 1. カラーコード（16進数）
-
-**カラーコード**は `#` で始まる6桁の文字と数字の組み合わせです。
-
-<Sandpack>
-
-```html index.html
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>カラーコードの例</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>こうちゃんの季節観察日記</h1>
+  <h2>今日見つけた花</h2>
+  <p>公園でピンクの桜を見つけました。</p>
   
-  <div class="red-section">
-    <h2>秋の紅葉狩り</h2>
-    <p>公園のもみじが真っ赤に染まって、とても美しい景色でした。落ち葉を集めて花束を作りました。</p>
-  </div>
+  <h2>出会った動物たち</h2>
+  <p>小さな茶色いリスが木の実を食べていました。</p>
   
-  <div class="blue-section">
-    <h2>冬の澄んだ空</h2>
-    <p>今日は雲一つない青空で、空気がとても澄んでいました。遠くの山まではっきり見えました。</p>
-  </div>
-  
-  <div class="green-section">
-    <h2>春の新緑散歩</h2>
-    <p>新緑の季節になって、木々の緑がとても鮮やかです。鳥たちの歌声も聞こえて、心が軽やかになりました。</p>
-  </div>
+  <h2>今日の天気</h2>
+  <p>空が青くてとても気持ちの良い日でした。</p>
 </body>
 </html>
 ```
 
 ```css style.css
 h1 {
-  color: #2c3e50;
+  color: purple;
 }
 
-.red-section {
-  background-color: #ffebee;
-  border-left: 4px solid #e74c3c;
-  padding: 15px;
-  margin-bottom: 20px;
+h2 {
+  color: orange;
 }
 
-.red-section h2 {
-  color: #c0392b;
-}
-
-.blue-section {
-  background-color: #e3f2fd;
-  border-left: 4px solid #3498db;
-  padding: 15px;
-  margin-bottom: 20px;
-}
-
-.blue-section h2 {
-  color: #2980b9;
-}
-
-.green-section {
-  background-color: #e8f5e8;
-  border-left: 4px solid #27ae60;
-  padding: 15px;
-}
-
-.green-section h2 {
-  color: #229954;
-}
-```
-
-</Sandpack>
-
-### 2. 色名による指定
-
-よく使われる色は**色名**で指定することもできます。
-
-<Sandpack>
-
-```html index.html
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>色名の例</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>りんちゃんの野菜畑日記</h1>
-  
-  <p class="tomato-text">今日は真っ赤なトマトを収穫しました。太陽の光をたっぷり浴びて、とても甘くなっていました。</p>
-  <p class="orange-text">オレンジ色のにんじんも立派に育ちました。土の中からひょっこり顔を出している姿が可愛らしかったです。</p>
-  <p class="lime-text">レタスの葉っぱも青々と茂って、新鮮なサラダが作れそうです。</p>
-  <p class="purple-text">紫色のなすびも丸々と太って、美味しそうに光っていました。</p>
-</body>
-</html>
-```
-
-```css style.css
-h1 {
+p {
   color: black;
 }
-
-.tomato-text {
-  color: tomato;
-  font-weight: bold;
-}
-
-.orange-text {
-  color: orange;
-  font-weight: bold;
-}
-
-.lime-text {
-  color: limegreen;
-  font-weight: bold;
-}
-
-.purple-text {
-  color: purple;
-  font-weight: bold;
-}
 ```
 
 </Sandpack>
 
-### 3. RGB値による指定
+**よく使う色名：**
+- `red`（赤）
+- `blue`（青）
+- `green`（緑）
+- `orange`（オレンジ）
+- `purple`（紫）
+- `black`（黒）
+- `white`（白）
+- `gray`（灰色）
 
-**RGB**は光の三原色（赤・緑・青）の組み合わせで色を表現します。
+### 実践: 色名で文字色を変えてみよう
+
+以下のコメントを参考に、色名を使って文字色を設定してみてください：
 
 <Sandpack>
 
@@ -289,134 +139,31 @@ h1 {
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>RGB指定の例</title>
+  <title>こたろうの庭日記</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>ゆずちゃんの虹観察日記</h1>
+  <h1>こたろうの庭日記</h1>
   
-  <div class="red-rainbow">
-    <h2>虹の赤い部分</h2>
-    <p>RGB(255, 0, 0) - 赤100%、緑0%、青0%で表現される、虹の一番外側の色です。</p>
-  </div>
+  <h2>朝の庭</h2>
+  <p>朝露がキラキラ光っていて、とても美しかったです。</p>
   
-  <div class="green-rainbow">
-    <h2>虹の緑の部分</h2>
-    <p>RGB(0, 255, 0) - 赤0%、緑100%、青0%で表現される、虹の真ん中あたりの色です。</p>
-  </div>
+  <h2>お昼の庭</h2>
+  <p>蝶々がひらひらと花の周りを飛んでいました。</p>
   
-  <div class="mixed-rainbow">
-    <h2>虹のオレンジ部分</h2>
-    <p>RGB(255, 165, 0) - 赤と緑を混ぜて作られる、温かみのあるオレンジ色です。</p>
-  </div>
+  <h2>夕方の庭</h2>
+  <p>夕日で庭全体がオレンジ色に染まりました。</p>
 </body>
 </html>
 ```
 
 ```css style.css
-h1 {
-  color: rgb(44, 62, 80);
-}
+/* TODO: h1の文字色を green に設定してください */
 
-.red-rainbow {
-  background-color: rgb(255, 240, 240);
-  border: 2px solid rgb(255, 0, 0);
-  padding: 15px;
-  margin-bottom: 15px;
-}
+/* TODO: h2の文字色を blue に設定してください */
 
-.red-rainbow h2 {
-  color: rgb(200, 0, 0);
-}
+/* TODO: pの文字色を purple に設定してください */
 
-.green-rainbow {
-  background-color: rgb(240, 255, 240);
-  border: 2px solid rgb(0, 255, 0);
-  padding: 15px;
-  margin-bottom: 15px;
-}
-
-.green-rainbow h2 {
-  color: rgb(0, 150, 0);
-}
-
-.mixed-rainbow {
-  background-color: rgb(255, 248, 240);
-  border: 2px solid rgb(255, 165, 0);
-  padding: 15px;
-}
-
-.mixed-rainbow h2 {
-  color: rgb(255, 140, 0);
-}
-```
-
-</Sandpack>
-
-### 実践: 色指定を使ってみよう
-
-以下のコメントを参考に、様々な色指定方法を使ってスタイルを適用してみてください：
-
-<Sandpack>
-
-```html index.html
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>色指定の練習</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>ももちゃんのお花見日記</h1>
-  
-  <div class="sakura">
-    <h2>桜が咲きました</h2>
-    <p>公園の桜が満開で、とても美しい景色でした。ピンクの花びらが風に舞って、まるで雪が降っているようでした。お友達の猫ちゃんたちも一緒に桜の下でのんびり過ごしました。</p>
-  </div>
-  
-  <div class="dandelion">
-    <h2>たんぽぽも発見</h2>
-    <p>桜の木の下に黄色いたんぽぽが咲いていました。小さくて可愛らしいお花で、蜂さんも蜜を吸いに来ていました。風が吹くと綿毛が空に舞い上がって、とても幻想的でした。</p>
-  </div>
-  
-  <div class="grass">
-    <h2>新緑がきれい</h2>
-    <p>芝生や木々の緑色がとても鮮やかで、春の訪れを感じることができました。新芽が出始めた木々を見ていると、自然の力強さを感じます。小鳥たちも巣作りに忙しそうでした。</p>
-  </div>
-</body>
-</html>
-```
-
-```css style.css
-/* 基本のスタイル */
-h1 {
-  color: #2c3e50;
-}
-
-/* TODO: sakuraクラスのスタイルを作成してください */
-/*   - background-color: #fdf2f8 (薄いピンク) */
-/*   - border-left: 4px solid #ec4899 (ピンク) */
-/*   - padding: 15px */
-
-/* TODO: sakura h2のスタイルを作成してください */
-/*   - color: hotpink (色名指定) */
-
-/* TODO: dandelionクラスのスタイルを作成してください */
-/*   - background-color: rgb(255, 252, 240) (RGB指定) */
-/*   - border-left: 4px solid #f59e0b (黄色) */
-/*   - padding: 15px */
-
-/* TODO: dandelion h2のスタイルを作成してください */
-/*   - color: gold (色名指定) */
-
-/* TODO: grassクラスのスタイルを作成してください */
-/*   - background-color: rgb(240, 253, 244) (RGB指定) */
-/*   - border-left: 4px solid #10b981 (緑色) */
-/*   - padding: 15px */
-
-/* TODO: grass h2のスタイルを作成してください */
-/*   - color: #059669 (カラーコード指定) */
 ```
 
 </Sandpack>
@@ -424,66 +171,30 @@ h1 {
 <details>
 <summary>解答例を見る</summary>
 
-```css title="style.css"
-/* 基本のスタイル */
+```css
 h1 {
-  color: #2c3e50;
+  color: green;
 }
 
-.sakura {
-  background-color: #fdf2f8;
-  border-left: 4px solid #ec4899;
-  padding: 15px;
-  margin-bottom: 20px;
+h2 {
+  color: blue;
 }
 
-.sakura h2 {
-  color: hotpink;
-}
-
-.dandelion {
-  background-color: rgb(255, 252, 240);
-  border-left: 4px solid #f59e0b;
-  padding: 15px;
-  margin-bottom: 20px;
-}
-
-.dandelion h2 {
-  color: gold;
-}
-
-.grass {
-  background-color: rgb(240, 253, 244);
-  border-left: 4px solid #10b981;
-  padding: 15px;
-}
-
-.grass h2 {
-  color: #059669;
+p {
+  color: purple;
 }
 ```
 
-**色指定のポイント:**
-- カラーコード（#ffffff）：正確な色が指定できる
-- 色名（red, blue, green）：覚えやすく使いやすい
-- RGB（rgb(255, 0, 0)）：数値で色を理解しやすい
-- 背景色との組み合わせを考えて読みやすさを重視
+**色選びのポイント：**
+- 読みやすさを最優先に考える
+- 背景色とのコントラストを意識する
+- 一つのページで使う色は3-4色程度に抑える
 
 </details>
 
-<SyscatComment>
+### 16進数カラーコード（#hex）での指定
 
-色の指定方法はたくさんあるけど、最初はカラーコードと色名を覚えておけば十分だよ！慣れてきたらRGBも使ってみてね。
-
-</SyscatComment>
-
-## フォントの設定
-
-フォントを変更することで、ページの印象や読みやすさが大きく変わります。
-
-### font-family（フォントの種類）
-
-`font-family` プロパティでフォントの種類を指定します。
+より詳細な色指定には、16進数カラーコードを使います。`#` から始まる6桁の英数字で色を表現します：
 
 <Sandpack>
 
@@ -492,62 +203,62 @@ h1 {
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>フォントファミリーの例</title>
+  <title>はなちゃんの季節日記</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>しろちゃんの動物園見学記</h1>
+  <h1>はなちゃんの季節日記</h1>
   
-  <div class="default-font">
-    <h2>デフォルトフォント</h2>
-    <p>今日は動物園に行って、たくさんの動物たちに会いました。象さんは大きくて優しい目をしていて、長い鼻で器用に餌を食べていました。</p>
-  </div>
+  <h2>春の訪れ</h2>
+  <p>桜の淡いピンクが空に映えて美しかったです。</p>
   
-  <div class="sans-serif-font">
-    <h2>サンセリフフォント</h2>
-    <p>今日は動物園に行って、たくさんの動物たちに会いました。象さんは大きくて優しい目をしていて、長い鼻で器用に餌を食べていました。</p>
-  </div>
+  <h2>夏の思い出</h2>
+  <p>深い緑の葉っぱの間から、蝉の声が聞こえてきました。</p>
   
-  <div class="serif-font">
-    <h2>セリフフォント</h2>
-    <p>今日は動物園に行って、たくさんの動物たちに会いました。象さんは大きくて優しい目をしていて、長い鼻で器用に餌を食べていました。</p>
-  </div>
+  <h2>秋の風景</h2>
+  <p>オレンジ色の紅葉が風に舞って、まるで舞踏会のようでした。</p>
 </body>
 </html>
 ```
 
 ```css style.css
 h1 {
-  font-family: 'Hiragino Sans', sans-serif;
-  color: #2c3e50;
+  color: #ff6b9d; /* ピンク色 */
 }
 
-.default-font {
-  margin-bottom: 20px;
-  padding: 15px;
-  background-color: #f8f9fa;
+h2 {
+  color: #4a90e2; /* 青色 */
 }
 
-.sans-serif-font {
-  font-family: 'Hiragino Sans', 'Noto Sans JP', sans-serif;
-  margin-bottom: 20px;
-  padding: 15px;
-  background-color: #e3f2fd;
-}
-
-.serif-font {
-  font-family: 'Times New Roman', serif;
-  margin-bottom: 20px;
-  padding: 15px;
-  background-color: #fff3e0;
+p {
+  color: #555555; /* ダークグレー */
 }
 ```
 
 </Sandpack>
 
-### font-size（文字サイズ）
+**16進数カラーコードの構造：**
+```
+#RRGGBB
+ ||||||
+ ||||++-- B（青）の強さ (00-FF)
+ ||++---- G（緑）の強さ (00-FF)  
+ ++------ R（赤）の強さ (00-FF)
+```
 
-`font-size` プロパティで文字の大きさを指定します。
+**よく使う16進数カラーコード：**
+- `#000000`（黒）
+- `#ffffff`（白）
+- `#ff0000`（赤）
+- `#00ff00`（緑）
+- `#0000ff`（青）
+- `#ffff00`（黄色）
+- `#ff00ff`（マゼンタ）
+- `#00ffff`（シアン）
+
+### RGB関数での指定
+
+RGB（Red, Green, Blue）の値を0-255の数値で指定する方法もあります：
 
 <Sandpack>
 
@@ -556,60 +267,428 @@ h1 {
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>フォントサイズの例</title>
+  <title>ももちゃんの色探し日記</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>はなちゃんの冒険メモ</h1>
+  <h1>ももちゃんの色探し日記</h1>
   
-  <div class="adventure-log">
-    <h2 class="large-title">今日の大冒険</h2>
-    <p class="normal-text">裏山に探検に行って、秘密の洞窟を発見しました。中にはキラキラ光る石がたくさんありました。</p>
-    <p class="small-note">※お母さんには内緒だよ</p>
-    <p class="tiny-memo">メモ: 明日は懐中電灯を持参する</p>
-  </div>
+  <h2>赤い発見</h2>
+  <p>真っ赤なてんとう虫を見つけました。</p>
+  
+  <h2>緑の世界</h2>
+  <p>新緑の季節で、緑がとても鮮やかです。</p>
+  
+  <h2>青い空</h2>
+  <p>雲一つない青い空が広がっていました。</p>
 </body>
 </html>
 ```
 
 ```css style.css
 h1 {
-  font-size: 32px;
-  color: #e74c3c;
+  color: rgb(255, 100, 150); /* 明るいピンク */
 }
 
-.large-title {
-  font-size: 24px;
-  color: #3498db;
+h2 {
+  color: rgb(70, 130, 180); /* スチールブルー */
+}
+
+p {
+  color: rgb(85, 85, 85); /* ダークグレー */
+}
+```
+
+</Sandpack>
+
+**RGB関数の特徴：**
+- 各色の値は 0-255 の数値で指定
+- `rgb(赤, 緑, 青)` の順番で記述
+- 数値が大きいほどその色が強くなる
+- `rgb(0, 0, 0)` は黒、`rgb(255, 255, 255)` は白
+
+## 背景色を変える（background-color プロパティ）
+
+`background-color` プロパティで背景色を設定できます：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ふわりんの雲観察日記</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>ふわりんの雲観察日記</h1>
+  
+  <section class="morning">
+    <h2>朝の雲</h2>
+    <p>薄いピンク色の雲が空に浮かんでいました。</p>
+  </section>
+  
+  <section class="afternoon">
+    <h2>昼の雲</h2>
+    <p>真っ白でふわふわの雲が青空に映えていました。</p>
+  </section>
+  
+  <section class="evening">
+    <h2>夕方の雲</h2>
+    <p>オレンジ色に染まった雲が美しく光っていました。</p>
+  </section>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #f0f8ff; /* アリスブルー */
+}
+
+h1 {
+  background-color: #fff8dc; /* コーンシルク */
+  color: #4169e1; /* ロイヤルブルー */
+}
+
+.morning {
+  background-color: #ffe4e6; /* 薄いピンク */
+}
+
+.afternoon {
+  background-color: #e6f3ff; /* 薄い青 */
+}
+
+.evening {
+  background-color: #fff4e6; /* 薄いオレンジ */
+}
+```
+
+</Sandpack>
+
+### 実践: 背景色と文字色を組み合わせてみよう
+
+読みやすいコントラストを意識して、背景色と文字色を設定してみてください：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ぺんぺんのお魚観察日記</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>ぺんぺんのお魚観察日記</h1>
+  
+  <section class="ocean">
+    <h2>深海の魚</h2>
+    <p>暗い海の中で光る魚を見つけました。とても神秘的でした。</p>
+  </section>
+  
+  <section class="coral">
+    <h2>サンゴ礁の魚</h2>
+    <p>カラフルな熱帯魚がサンゴの間を泳いでいました。</p>
+  </section>
+  
+  <section class="river">
+    <h2>川の魚</h2>
+    <p>清流で小さな鮎が元気よく泳いでいる姿を見ました。</p>
+  </section>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #f0f8ff;
+}
+
+h1 {
+  /* TODO: 背景色を濃い青 (#1e3a8a) に設定 */
+  /* TODO: 文字色を白 (white) に設定 */
+}
+
+.ocean {
+  /* TODO: 背景色を黒 (#000000) に設定 */
+  /* TODO: 文字色を明るい青 (#87ceeb) に設定 */
+}
+
+.coral {
+  /* TODO: 背景色を薄いオレンジ (#fff4e6) に設定 */
+  /* TODO: 文字色を濃いオレンジ (#ff6600) に設定 */
+}
+
+.river {
+  /* TODO: 背景色を薄い緑 (#f0fff0) に設定 */
+  /* TODO: 文字色を緑 (#228b22) に設定 */
+}
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```css
+h1 {
+  background-color: #1e3a8a;
+  color: white;
+}
+
+.ocean {
+  background-color: #000000;
+  color: #87ceeb;
+}
+
+.coral {
+  background-color: #fff4e6;
+  color: #ff6600;
+}
+
+.river {
+  background-color: #f0fff0;
+  color: #228b22;
+}
+```
+
+**コントラストのポイント：**
+- 暗い背景には明るい文字色
+- 明るい背景には暗い文字色
+- 同じような明度の色の組み合わせは避ける
+- 色だけでなく、明度の差も重要
+
+</details>
+
+## フォントの種類を指定する（font-family プロパティ）
+
+`font-family` プロパティで、使用するフォントを指定できます[^css-properties]：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ちびちゃんの文字研究日記</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>ちびちゃんの文字研究日記</h1>
+  
+  <section class="serif-text">
+    <h2>明朝体で書かれた詩</h2>
+    <p>古い本で見つけた美しい詩を、明朝体で表現してみました。上品で読みやすい雰囲気になります。</p>
+  </section>
+  
+  <section class="sans-serif-text">
+    <h2>ゴシック体のメモ</h2>
+    <p>今日学んだことをゴシック体でメモしました。現代的で読みやすい印象になります。</p>
+  </section>
+  
+  <section class="monospace-text">
+    <h2>等幅フォントのコード</h2>
+    <p>プログラミングコードは等幅フォントで書くときれいに揃います。HTML CSSも等幅で見やすく。</p>
+  </section>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #fafafa;
+  color: #333333;
+}
+
+h1 {
+  font-family: "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
+  color: #2c5aa0;
+}
+
+.serif-text {
+  font-family: "Times New Roman", "游明朝", YuMincho, "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", serif;
+}
+
+.sans-serif-text {
+  font-family: Verdana, "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", sans-serif;
+}
+
+.monospace-text {
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  background-color: #f5f5f5;
+}
+```
+
+</Sandpack>
+
+**フォントファミリーの種類：**
+
+- **serif（明朝体系）**: 文字の端に小さな装飾があるフォント。上品で読書向き
+- **sans-serif（ゴシック体系）**: 装飾のないシンプルなフォント。現代的で読みやすい
+- **monospace（等幅系）**: 全ての文字が同じ幅のフォント。プログラミングコード向き
+- **cursive（手書き風系）**: 筆記体のような装飾的なフォント
+- **fantasy（装飾系）**: デザイン性の高い装飾的なフォント
+
+### 実践: 用途に応じてフォントを選んでみよう
+
+内容に応じて適切なフォントを選択してみてください：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>とらちゃんの読書感想文</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>とらちゃんの読書感想文</h1>
+  
+  <section class="book-title">
+    <h2>今月読んだ本</h2>
+    <p>「森の動物たちの冒険」という素敵な本を読みました。</p>
+  </section>
+  
+  <section class="code-example">
+    <h2>本の中にあったプログラム</h2>
+    <p>&lt;p&gt;Hello, Forest Animals!&lt;/p&gt;</p>
+  </section>
+  
+  <section class="modern-note">
+    <h2>現代風メモ</h2>
+    <p>デジタル時代に合わせて、読書記録もスマートに管理したいと思います。</p>
+  </section>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #f9f9f9;
+  color: #444444;
+}
+
+h1 {
+  color: #8b4513;
+}
+
+/* TODO: .book-title を明朝体系（serif）のフォントに設定してください */
+.book-title {
+  
+}
+
+/* TODO: .code-example を等幅系（monospace）のフォントに設定してください */
+.code-example {
+  
+}
+
+/* TODO: .modern-note をゴシック体系（sans-serif）のフォントに設定してください */
+.modern-note {
+  
+}
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```css
+.book-title {
+  font-family: "Times New Roman", "游明朝", YuMincho, serif;
+}
+
+.code-example {
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  background-color: #f0f0f0;
+}
+
+.modern-note {
+  font-family: Verdana, "游ゴシック", YuGothic, sans-serif;
+}
+```
+
+**フォント選択のガイドライン：**
+- **読み物・文学**: serif（明朝体）で上品な印象
+- **コード・プログラム**: monospace（等幅）で文字が揃う
+- **現代的な文書**: sans-serif（ゴシック体）でクリーンな印象
+
+</details>
+
+## 文字サイズを調整する（font-size プロパティ）
+
+`font-size` プロパティで文字の大きさを指定できます：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>くまちゃんのサイズ実験日記</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>くまちゃんのサイズ実験日記</h1>
+  
+  <p class="small-text">小さな文字で書いた秘密のメモです。</p>
+  
+  <p class="normal-text">普通のサイズで書いた今日の出来事です。</p>
+  
+  <p class="large-text">大きな文字で書いた重要なお知らせです。</p>
+  
+  <p class="extra-large-text">とても大きな文字で書いた特別な発見です。</p>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #fff8e7;
+  color: #5d4037;
+  font-family: "游ゴシック", YuGothic, sans-serif;
+}
+
+h1 {
+  font-size: 32px;
+  color: #8d6e63;
+}
+
+.small-text {
+  font-size: 12px;
 }
 
 .normal-text {
   font-size: 16px;
-  color: #2c3e50;
 }
 
-.small-note {
-  font-size: 14px;
-  color: #7f8c8d;
+.large-text {
+  font-size: 24px;
 }
 
-.tiny-memo {
-  font-size: 12px;
-  color: #95a5a6;
-}
-
-.adventure-log {
-  padding: 20px;
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
+.extra-large-text {
+  font-size: 36px;
 }
 ```
 
 </Sandpack>
 
-### font-weight（フォントの太さ）
+**文字サイズの単位：**
 
-`font-weight` プロパティで文字の太さを指定します。
+- **px（ピクセル）**: 絶対的なサイズ。`16px`、`24px` など
+- **em**: 親要素の文字サイズを基準とした相対サイズ。`1.2em`、`0.8em` など  
+- **rem**: ルート要素（html）の文字サイズを基準とした相対サイズ。`1.5rem`、`0.9rem` など
+
+### 相対単位（em、rem）を使ってみよう
+
+相対単位を使うと、レスポンシブで柔軟なサイズ指定ができます：
 
 <Sandpack>
 
@@ -618,74 +697,81 @@ h1 {
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>フォントウェイトの例</title>
+  <title>りすちゃんの相対サイズ実験</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>ちょこちゃんの成長記録</h1>
+  <h1>りすちゃんの相対サイズ実験</h1>
   
-  <div class="growth-record">
-    <h2 class="subject">体重測定</h2>
-    <p class="normal-weight">普通の文字：今日は月1回の体重測定の日でした。</p>
-    <p class="bold-weight">太い文字：なんと50グラムも増えていました！</p>
-    <p class="light-weight">細い文字：健康的に成長している証拠です。</p>
-    
-    <h2 class="subject">運動能力</h2>
-    <p class="important">重要：高いところからのジャンプが上手になりました！</p>
-    <p class="emphasis">強調：バランス感覚もとても良くなっています。</p>
-  </div>
+  <section class="story">
+    <h2>今日の出来事</h2>
+    <p>どんぐりを <span class="emphasis">たくさん</span> 見つけました。</p>
+    <p class="small-note">※どんぐりは冬の準備のために大切に保存します</p>
+  </section>
+  
+  <section class="large-section">
+    <h2>大発見</h2>
+    <p>新しい木の穴を発見しました。とても <span class="emphasis">快適</span> そうです。</p>
+  </section>
 </body>
 </html>
 ```
 
 ```css style.css
+html {
+  font-size: 18px; /* ベースサイズ */
+}
+
+body {
+  background-color: #f4f1e8;
+  color: #4a4a4a;
+  font-family: "游ゴシック", YuGothic, sans-serif;
+}
+
 h1 {
-  font-weight: bold;
-  color: #8e44ad;
+  font-size: 2rem; /* 18px × 2 = 36px */
+  color: #8b4513;
 }
 
-.subject {
-  font-weight: 600;
-  color: #3498db;
+h2 {
+  font-size: 1.5rem; /* 18px × 1.5 = 27px */
+  color: #a0522d;
 }
 
-.normal-weight {
-  font-weight: normal; /* または 400 */
-  color: #2c3e50;
-}
-
-.bold-weight {
-  font-weight: bold; /* または 700 */
-  color: #e74c3c;
-}
-
-.light-weight {
-  font-weight: 300;
-  color: #7f8c8d;
-}
-
-.important {
-  font-weight: 800;
-  color: #e67e22;
+p {
+  font-size: 1rem; /* 18px × 1 = 18px */
 }
 
 .emphasis {
-  font-weight: 500;
-  color: #27ae60;
+  font-size: 1.2em; /* 親要素の1.2倍 */
+  font-weight: bold;
+  color: #ff6b35;
 }
 
-.growth-record {
-  padding: 20px;
-  background-color: #fdfdfd;
-  border: 2px solid #ecf0f1;
+.small-note {
+  font-size: 0.8rem; /* 18px × 0.8 = 14.4px */
+  color: #888888;
+}
+
+.large-section {
+  font-size: 1.2rem; /* 18px × 1.2 = 21.6px */
+}
+
+.large-section .emphasis {
+  font-size: 1.2em; /* 21.6px × 1.2 = 25.92px */
 }
 ```
 
 </Sandpack>
 
-### 実践: フォント設定を使ってみよう
+**相対単位の利点：**
+- **em**: 親要素に応じて自動的にサイズが調整される
+- **rem**: ページ全体の基本サイズを変更すると、すべての要素が比例して変わる
+- **レスポンシブ**: 画面サイズや設定に応じて適切にスケールする
 
-以下のコメントを参考に、フォントの設定を練習してみてください：
+## 文字の太さを変更する（font-weight プロパティ）
+
+`font-weight` プロパティで文字の太さを指定できます：
 
 <Sandpack>
 
@@ -694,67 +780,155 @@ h1 {
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>フォント設定の練習</title>
+  <title>ひよこちゃんの太さ研究</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>みけちゃんの一日</h1>
+  <h1>ひよこちゃんの太さ研究</h1>
   
-  <div class="morning">
-    <h2>朝の時間</h2>
-    <p>早起きをして、お日様と一緒に窓際でのんびりしました。</p>
-  </div>
+  <p class="light">軽やかな文字で書いた朝の挨拶です。</p>
   
-  <div class="afternoon">
-    <h2>昼の時間</h2>
-    <p>お昼ごはんの後は、お気に入りのクッションでお昼寝をしました。</p>
-  </div>
+  <p class="normal">普通の太さで書いた日常の記録です。</p>
   
-  <div class="evening">
-    <h2>夜の時間</h2>
-    <p>夕方はベランダから外を眺めて、鳥さんたちを観察していました。</p>
-  </div>
+  <p class="bold">太い文字で書いた重要なお知らせです。</p>
+  
+  <p class="extra-bold">とても太い文字で書いた緊急のメッセージです。</p>
 </body>
 </html>
 ```
 
 ```css style.css
-/* TODO: h1のスタイルを作成してください */
-/*   - font-family: 'Hiragino Sans', sans-serif */
-/*   - font-size: 30px */
-/*   - font-weight: bold */
-/*   - color: #2c3e50 */
+body {
+  background-color: #fffacd;
+  color: #8b7d3a;
+  font-family: "游ゴシック", YuGothic, sans-serif;
+  font-size: 18px;
+}
 
-/* TODO: morningクラスのスタイルを作成してください */
-/*   - background-color: #fff7ed */
-/*   - padding: 20px */
+h1 {
+  font-weight: bold;
+  color: #ff8c00;
+}
 
-/* TODO: morning h2のスタイルを作成してください */
-/*   - font-size: 22px */
-/*   - font-weight: 600 */
-/*   - color: #ea580c */
+.light {
+  font-weight: 300; /* または light */
+}
 
-/* TODO: morning pのスタイルを作成してください */
-/*   - font-size: 16px */
-/*   - font-weight: normal */
+.normal {
+  font-weight: 400; /* または normal */
+}
 
-/* TODO: afternoonクラスのスタイルを作成してください */
-/*   - background-color: #f0f9ff */
-/*   - padding: 20px */
+.bold {
+  font-weight: 700; /* または bold */
+}
 
-/* TODO: afternoon h2のスタイルを作成してください */
-/*   - font-size: 22px */
-/*   - font-weight: 600 */
-/*   - color: #0369a1 */
+.extra-bold {
+  font-weight: 900;
+}
+```
 
-/* TODO: eveningクラスのスタイルを作成してください */
-/*   - background-color: #f3e8ff */
-/*   - padding: 20px */
+</Sandpack>
 
-/* TODO: evening h2のスタイルを作成してください */
-/*   - font-size: 22px */
-/*   - font-weight: 600 */
-/*   - color: #7c3aed */
+**font-weight の値：**
+- **数値**: 100, 200, 300, 400, 500, 600, 700, 800, 900
+- **キーワード**: 
+  - `normal`（400相当）
+  - `bold`（700相当）
+  - `lighter`（親要素より一段階軽く）
+  - `bolder`（親要素より一段階太く）
+
+### 実践: 文字の太さで情報の重要度を表現してみよう
+
+文字の太さを使って、情報の重要度を視覚的に表現してみてください：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>うさぎちゃんの重要度別メモ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>うさぎちゃんの重要度別メモ</h1>
+  
+  <section>
+    <h2 class="urgent">緊急</h2>
+    <p class="urgent-text">人参が少なくなってきました。明日買い物に行く必要があります。</p>
+  </section>
+  
+  <section>
+    <h2 class="important">重要</h2>
+    <p class="important-text">新しい穴掘りスポットを見つけました。来週確認する予定です。</p>
+  </section>
+  
+  <section>
+    <h2 class="normal">通常</h2>
+    <p class="normal-text">今日は天気が良くて、お散歩が気持ちよかったです。</p>
+  </section>
+  
+  <section>
+    <h2 class="memo">メモ</h2>
+    <p class="memo-text">クローバーが美味しい季節になってきました。</p>
+  </section>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #f0f8f0;
+  color: #2e4d2e;
+  font-family: "游ゴシック", YuGothic, sans-serif;
+  font-size: 16px;
+}
+
+h1 {
+  color: #8fbc8f;
+  font-weight: bold;
+}
+
+/* TODO: .urgent のh2を font-weight: 900 に設定 */
+.urgent {
+  
+}
+
+/* TODO: .urgent-text を font-weight: bold に設定 */
+.urgent-text {
+  
+}
+
+/* TODO: .important のh2を font-weight: 700 に設定 */
+.important {
+  
+}
+
+/* TODO: .important-text を font-weight: 600 に設定 */
+.important-text {
+  
+}
+
+/* TODO: .normal のh2を font-weight: normal に設定 */
+.normal {
+  
+}
+
+/* TODO: .normal-text を font-weight: normal に設定 */
+.normal-text {
+  
+}
+
+/* TODO: .memo のh2を font-weight: 300 に設定 */
+.memo {
+  
+}
+
+/* TODO: .memo-text を font-weight: 300 に設定 */
+.memo-text {
+  
+}
 ```
 
 </Sandpack>
@@ -762,66 +936,57 @@ h1 {
 <details>
 <summary>解答例を見る</summary>
 
-```css title="style.css"
-h1 {
-  font-family: 'Hiragino Sans', sans-serif;
-  font-size: 30px;
+```css
+.urgent {
+  font-weight: 900;
+  color: #dc3545;
+}
+
+.urgent-text {
   font-weight: bold;
-  color: #2c3e50;
+  color: #721c24;
 }
 
-.morning {
-  background-color: #fff7ed;
-  padding: 20px;
-  margin-bottom: 20px;
+.important {
+  font-weight: 700;
+  color: #fd7e14;
 }
 
-.morning h2 {
-  font-size: 22px;
+.important-text {
   font-weight: 600;
-  color: #ea580c;
+  color: #8a4a0a;
 }
 
-.morning p {
-  font-size: 16px;
+.normal {
+  font-weight: normal;
+  color: #28a745;
+}
+
+.normal-text {
   font-weight: normal;
 }
 
-.afternoon {
-  background-color: #f0f9ff;
-  padding: 20px;
-  margin-bottom: 20px;
+.memo {
+  font-weight: 300;
+  color: #6c757d;
 }
 
-.afternoon h2 {
-  font-size: 22px;
-  font-weight: 600;
-  color: #0369a1;
-}
-
-.evening {
-  background-color: #f3e8ff;
-  padding: 20px;
-}
-
-.evening h2 {
-  font-size: 22px;
-  font-weight: 600;
-  color: #7c3aed;
+.memo-text {
+  font-weight: 300;
+  color: #495057;
 }
 ```
 
-**フォント設定のポイント:**
-- `font-family`: 読みやすいフォントを選ぶ
-- `font-size`: 内容の重要度に応じてサイズを変える
-- `font-weight`: 強調したい部分は太くする
-- 色との組み合わせで視覚的な階層を作る
+**太さを使った情報デザイン：**
+- **緊急・重要**: 太い文字（700-900）と目立つ色
+- **通常**: 標準的な太さ（400）
+- **補足情報**: 細い文字（100-300）と控えめな色
 
 </details>
 
-## 行間の調整（line-height）
+## 行間を調整する（line-height プロパティ）
 
-`line-height` プロパティで行と行の間隔を調整することで、文章の読みやすさが大きく改善されます。
+`line-height` プロパティで行と行の間隔を調整できます。読みやすさに大きく影響します：
 
 <Sandpack>
 
@@ -830,366 +995,157 @@ h1 {
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>行間の例</title>
+  <title>ねこちゃんの行間実験</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>ぽんちゃんの昔話感想</h1>
+  <h1>ねこちゃんの行間実験</h1>
   
-  <div class="tight-line">
-    <h2>行間が狭い文章</h2>
-    <p>昨日おばあちゃんが読んでくれた昔話がとても面白かったです。勇敢な動物たちが力を合わせて悪い魔法使いを倒すお話で、ドキドキハラハラしながら聞いていました。最後はみんなが幸せになって、心がほっこりしました。</p>
-  </div>
+  <section class="narrow">
+    <h2>狭い行間</h2>
+    <p>狭い行間で書いた文章です。文字がぎゅっと詰まって見えます。長い文章を読むときは少し疲れるかもしれません。でも情報を詰め込みたいときには有効です。</p>
+  </section>
   
-  <div class="normal-line">
-    <h2>普通の行間の文章</h2>
-    <p>昨日おばあちゃんが読んでくれた昔話がとても面白かったです。勇敢な動物たちが力を合わせて悪い魔法使いを倒すお話で、ドキドキハラハラしながら聞いていました。最後はみんなが幸せになって、心がほっこりしました。</p>
-  </div>
+  <section class="normal">
+    <h2>標準的な行間</h2>
+    <p>標準的な行間で書いた文章です。読みやすさと情報量のバランスが取れています。一般的なWebサイトではこのくらいの行間が使われることが多いです。</p>
+  </section>
   
-  <div class="loose-line">
-    <h2>行間が広い文章</h2>
-    <p>昨日おばあちゃんが読んでくれた昔話がとても面白かったです。勇敢な動物たちが力を合わせて悪い魔法使いを倒すお話で、ドキドキハラハラしながら聞いていました。最後はみんなが幸せになって、心がほっこりしました。</p>
-  </div>
+  <section class="wide">
+    <h2>広い行間</h2>
+    <p>広い行間で書いた文章です。ゆったりとした印象で、読書に集中しやすくなります。高級感や上品さを演出したいときにも効果的です。</p>
+  </section>
 </body>
 </html>
 ```
 
 ```css style.css
+body {
+  background-color: #fff5ee;
+  color: #4a4a4a;
+  font-family: "游ゴシック", YuGothic, sans-serif;
+  font-size: 16px;
+}
+
 h1 {
-  font-family: 'Hiragino Sans', sans-serif;
-  color: #2c3e50;
+  color: #ff7f50;
+  line-height: 1.2;
 }
 
 h2 {
-  color: #3498db;
-  font-size: 18px;
+  color: #ff6347;
+  line-height: 1.3;
 }
 
-.tight-line {
-  background-color: #ffebee;
-  padding: 15px;
-  margin-bottom: 20px;
+.narrow {
+  line-height: 1.2; /* 文字サイズの1.2倍 */
 }
 
-.tight-line p {
-  line-height: 1.2;  /* 狭い行間 */
+.normal {
+  line-height: 1.6; /* 文字サイズの1.6倍 */
 }
 
-.normal-line {
-  background-color: #e8f5e8;
-  padding: 15px;
-  margin-bottom: 20px;
-}
-
-.normal-line p {
-  line-height: 1.6;  /* 標準的な行間 */
-}
-
-.loose-line {
-  background-color: #e3f2fd;
-  padding: 15px;
-}
-
-.loose-line p {
-  line-height: 2.0;  /* 広い行間 */
+.wide {
+  line-height: 2.0; /* 文字サイズの2倍 */
 }
 ```
 
 </Sandpack>
 
-<SyscatComment>
+**line-height の指定方法：**
+- **数値のみ**: `1.6` - 文字サイズの倍数で指定（推奨）
+- **単位あり**: `24px`、`1.6em` - 絶対値や相対値で指定
+- **パーセント**: `160%` - 文字サイズに対する割合
 
-行間はとても大切だよ！狭すぎると読みにくくて、広すぎても読みにくくなっちゃう。1.5〜1.6くらいが読みやすいとされているんだ。
+**読みやすさのガイドライン：**
+- **1.2-1.4**: やや詰まった印象、情報を多く表示したい場合
+- **1.5-1.8**: 読みやすい標準的な行間
+- **2.0以上**: ゆったりした印象、高級感を演出
 
-</SyscatComment>
+## 総合演習: 動物日記サイトを完成させよう
 
-## 色選びのコツ
+これまで学んだ色とフォントの知識を使って、完全な動物日記サイトを作ってみましょう。
+以下のHTMLに対して、指示に従ってCSSを完成させてください。
 
-読みやすく美しいページを作るための色選びのポイントを学びましょう。
+**＜A＞ページ全体のベーススタイル**
+- bodyの背景色を薄いクリーム色（#faf8f3）に設定
+- 基本の文字色を濃いグレー（#333333）に設定
+- フォントファミリーを読みやすいゴシック体に設定
+- 基本の文字サイズを16pxに設定
 
-### コントラストを意識する
+**＜B＞ヘッダーのスタイリング**
+- h1（メインタイトル）を大きく目立つように設定（36px、太字、森をイメージする緑色）
+- サブタイトルを控えめで上品に設定（斜体、少し小さめ、薄いグレー）
 
-文字色と背景色の**コントラスト**（明暗の差）が適切でないと、文字が読みにくくなります。
+**＜C＞日記エントリーのベーススタイル**
+- 各diary-entryに余白と背景色を設定して読みやすく
+- 角を丸くして優しい印象に
 
-<Sandpack>
+**＜D＞動物別のテーマカラー**
+- うさぎ（.rabbit）：ピンク系の色合い
+- りす（.squirrel）：オレンジ系の色合い  
+- くま（.bear）：茶色系の色合い
+
+**＜E＞文字の階層とアクセント**
+- h2（動物名）を各動物のテーマカラーで大きく表示
+- h3（日記タイトル）を適度なサイズに設定
+- .highlightクラスで重要な部分を強調
+- .timestampクラスで時刻を控えめに表示
+
+**＜F＞フッターのスタイリング**
+- 背景色を少し暗めに設定
+- 文字を中央揃えに
+- 適切な余白を設定
+
+<Sandpack options={{ editorHeight: 600 }}>
 
 ```html index.html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>コントラストの例</title>
+  <title>森の仲間たちの日記帳</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>らんちゃんの色彩観察日記</h1>
-  
-  <div class="bad-contrast">
-    <h2>悪いコントラストの例</h2>
-    <p>この文字は読みにくいです。朝霧の中で遠くの景色を見ているような感じです。</p>
-  </div>
-  
-  <div class="good-contrast">
-    <h2>良いコントラストの例</h2>
-    <p>この文字は読みやすいです。晴れた日の青空と白い雲のようにはっきりと見えます。</p>
-  </div>
-  
-  <div class="excellent-contrast">
-    <h2>とても良いコントラストの例</h2>
-    <p>この文字はとても読みやすいです。夜空に輝く満月のようにくっきりと際立っています。</p>
-  </div>
-</body>
-</html>
-```
-
-```css style.css
-h1 {
-  color: #2c3e50;
-}
-
-.bad-contrast {
-  background-color: #bdc3c7;
-  color: #95a5a6;  /* 背景色と似ている - 読みにくい */
-  padding: 15px;
-  margin-bottom: 15px;
-}
-
-.good-contrast {
-  background-color: #ecf0f1;
-  color: #2c3e50;  /* 適度なコントラスト - 読みやすい */
-  padding: 15px;
-  margin-bottom: 15px;
-}
-
-.excellent-contrast {
-  background-color: #2c3e50;
-  color: #ffffff;  /* 高いコントラスト - とても読みやすい */
-  padding: 15px;
-}
-```
-
-</Sandpack>
-
-### 色の組み合わせを考える
-
-**同系色**や**補色**を使った色の組み合わせで、統一感のあるデザインを作りましょう。
-
-<Sandpack>
-
-```html index.html
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>色の組み合わせ</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>そらちゃんの色彩散歩</h1>
-  
-  <div class="blue-theme">
-    <h2>海の色合い</h2>
-    <p>青を基調とした海のような配色です。波の音を聞いているような落ち着いた気持ちになります。カモメたちも気持ちよさそうに飛んでいます。</p>
-    <div class="color-sample blue-light"></div>
-    <div class="color-sample blue-medium"></div>
-    <div class="color-sample blue-dark"></div>
-  </div>
-  
-  <div class="green-theme">
-    <h2>森の色合い</h2>
-    <p>緑を基調とした森のような配色です。木陰で休んでいるような心地よさがあります。小鳥たちのさえずりも聞こえてきそうです。</p>
-    <div class="color-sample green-light"></div>
-    <div class="color-sample green-medium"></div>
-    <div class="color-sample green-dark"></div>
-  </div>
-  
-  <div class="warm-theme">
-    <h2>夕日の色合い</h2>
-    <p>オレンジや赤を使った夕焼けのような配色です。温かい日差しに包まれているような優しい気持ちになります。</p>
-    <div class="color-sample orange-light"></div>
-    <div class="color-sample orange-medium"></div>
-    <div class="color-sample red-medium"></div>
-  </div>
-</body>
-</html>
-```
-
-```css style.css
-h1 {
-  color: #2c3e50;
-  text-align: center;
-}
-
-/* 青系テーマ */
-.blue-theme {
-  background-color: #f0f8ff;
-  border: 2px solid #3498db;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.blue-theme h2 {
-  color: #2980b9;
-}
-
-/* 緑系テーマ */
-.green-theme {
-  background-color: #f0fff0;
-  border: 2px solid #27ae60;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.green-theme h2 {
-  color: #229954;
-}
-
-/* 暖色系テーマ */
-.warm-theme {
-  background-color: #fff8f0;
-  border: 2px solid #e67e22;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.warm-theme h2 {
-  color: #d35400;
-}
-
-/* カラーサンプル */
-.color-sample {
-  width: 50px;
-  height: 30px;
-  display: inline-block;
-  margin-right: 10px;
-  border: 1px solid #bdc3c7;
-}
-
-.blue-light { background-color: #85c1e9; }
-.blue-medium { background-color: #3498db; }
-.blue-dark { background-color: #2980b9; }
-
-.green-light { background-color: #82e0aa; }
-.green-medium { background-color: #27ae60; }
-.green-dark { background-color: #229954; }
-
-.orange-light { background-color: #f8c471; }
-.orange-medium { background-color: #e67e22; }
-.red-medium { background-color: #e74c3c; }
-```
-
-</Sandpack>
-
-## 総合練習: 美しいページを作ろう
-
-これまで学んだ色とフォントの知識を使って、統一感のある美しいページを作ってみましょう：
-
-<Sandpack>
-
-```html index.html
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>総合練習</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header id="main-header">
-    <h1>ふわりちゃんの自然観察日記</h1>
-    <p>毎日の小さな発見と動物たちとの出会いを記録しています</p>
+  <header>
+    <h1>森の仲間たちの日記帳</h1>
+    <p class="subtitle">みんなで綴る、楽しい毎日の記録</p>
   </header>
   
   <main>
-    <section class="diary-entry">
-      <h2>今日の素敵な出会い</h2>
-      <p>今日は初めて蝶々を間近で見ることができました。黄色と黒の美しい模様の蝶々で、お花の蜜を吸っている姿がとても優雅でした。しばらく見とれていると、他にも色とりどりの蝶々たちがやってきて、まるで花畑が踊っているようでした。</p>
-    </section>
+    <article class="diary-entry rabbit">
+      <h2>うさぎのももちゃん</h2>
+      <h3>新緑の季節</h3>
+      <p>今日は森の奥で美味しそうなクローバーを見つけました。<span class="highlight">とても甘くて新鮮</span>で、お腹いっぱい食べることができました。</p>
+      <p class="timestamp">2025年5月15日 午前10時</p>
+    </article>
     
-    <section class="special-moment">
-      <h2>魔法のような瞬間</h2>
-      <p>その蝶々がなんと私の鼻先にそっととまってくれました！とても軽くて、羽がキラキラと虹色に光って、まるで小さな妖精さんみたいでした。息を止めてじっと動かずにいたら、しばらく休憩してから空高く舞い上がって行きました。</p>
-    </section>
+    <article class="diary-entry squirrel">
+      <h2>りすのちびちゃん</h2>
+      <h3>どんぐり集めの成果</h3>
+      <p>昨日の夜から探していたどんぐりを<span class="highlight">20個</span>も見つけました。冬に向けての準備が順調に進んでいます。</p>
+      <p class="timestamp">2025年5月15日 午後2時</p>
+    </article>
     
-    <section class="tomorrow-plan">
-      <h2>明日の楽しい計画</h2>
-      <p>明日はお友達の動物たちと一緒に同じお花畑に行って、また蝶々に会えるかどうか探してみようと思います。虫眼鏡と小さなスケッチブックも持って行って、美しい蝶々の模様を絵に描いてみたいです。</p>
-    </section>
+    <article class="diary-entry bear">
+      <h2>くまのぽんちゃん</h2>
+      <h3>川でのお魚タイム</h3>
+      <p>今日は川で大きな鮭を捕まえることができました。<span class="highlight">今年一番の大物</span>で、とても嬉しかったです。</p>
+      <p class="timestamp">2025年5月15日 午後4時</p>
+    </article>
   </main>
   
-  <footer id="main-footer">
-    <p>© 2024 ふわりちゃんの自然観察日記 🌸🦋</p>
+  <footer>
+    <p>🌲 森の仲間たちの日記帳 - 自然とともに暮らす仲間たちの記録 🌿</p>
   </footer>
 </body>
 </html>
 ```
 
 ```css style.css
-/* TODO: 以下のスタイルを追加してください */
+/* TODO: 上記の指示＜A＞〜＜F＞に従ってCSSを記述してください */
 
-/* 1. body要素に基本設定を適用 */
-/*   - font-family: 'Hiragino Sans', sans-serif */
-/*   - line-height: 1.6 */
-/*   - color: #333 */
-/*   - margin: 0 */
-
-/* 2. main-headerのスタイルを作成 */
-/*   - background-color: #6c5ce7 */
-/*   - color: white */
-/*   - padding: 30px 20px */
-/*   - text-align: center */
-
-/* 3. main-header h1のスタイルを作成 */
-/*   - font-size: 32px */
-/*   - font-weight: bold */
-/*   - margin-bottom: 10px */
-
-/* 4. main-header pのスタイルを作成 */
-/*   - font-size: 16px */
-/*   - font-weight: 300 */
-
-/* 5. mainのスタイルを作成 */
-/*   - padding: 40px 20px */
-/*   - max-width: 800px */
-/*   - margin: 0 auto */
-
-/* 6. sectionの共通スタイルを作成 */
-/*   - margin-bottom: 30px */
-/*   - padding: 25px */
-/*   - border-radius: 8px */
-
-/* 7. diary-entryのスタイルを作成 */
-/*   - background-color: #fff7f0 */
-/*   - border-left: 5px solid #ff7675 */
-
-/* 8. special-momentのスタイルを作成 */
-/*   - background-color: #f0f8ff */
-/*   - border-left: 5px solid #74b9ff */
-
-/* 9. tomorrow-planのスタイルを作成 */
-/*   - background-color: #f0fff0 */
-/*   - border-left: 5px solid #00b894 */
-
-/* 10. section h2の共通スタイルを作成 */
-/*    - font-size: 24px */
-/*    - font-weight: 600 */
-/*    - margin-bottom: 15px */
-
-/* 11. diary-entry h2のスタイルを作成 */
-/*    - color: #e17055 */
-
-/* 12. special-moment h2のスタイルを作成 */
-/*    - color: #0984e3 */
-
-/* 13. tomorrow-plan h2のスタイルを作成 */
-/*    - color: #00a085 */
-
-/* 14. main-footerのスタイルを作成 */
-/*    - background-color: #2d3436 */
-/*    - color: white */
-/*    - text-align: center */
-/*    - padding: 20px */
-/*    - font-size: 14px */
 ```
 
 </Sandpack>
@@ -1197,139 +1153,173 @@ h1 {
 <details>
 <summary>解答例を見る</summary>
 
-```css title="style.css"
-/* 1. body要素に基本設定を適用 */
+```css
+/* ＜A＞ページ全体のベーススタイル */
 body {
-  font-family: 'Hiragino Sans', sans-serif;
+  background-color: #faf8f3;
+  color: #333333;
+  font-family: "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", sans-serif;
+  font-size: 16px;
   line-height: 1.6;
-  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* ＜B＞ヘッダーのスタイリング */
+header {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #f0f4f0;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: bold;
+  color: #2d5a2d;
+  margin: 0 0 10px 0;
+}
+
+.subtitle {
+  font-style: italic;
+  font-size: 14px;
+  color: #666666;
   margin: 0;
 }
 
-/* 2. main-headerのスタイルを作成 */
-#main-header {
-  background-color: #6c5ce7;
-  color: white;
-  padding: 30px 20px;
-  text-align: center;
-}
-
-/* 3. main-header h1のスタイルを作成 */
-#main-header h1 {
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-/* 4. main-header pのスタイルを作成 */
-#main-header p {
-  font-size: 16px;
-  font-weight: 300;
-}
-
-/* 5. mainのスタイルを作成 */
+/* ＜C＞日記エントリーのベーススタイル */
 main {
-  padding: 40px 20px;
   max-width: 800px;
   margin: 0 auto;
-}
-
-/* 6. sectionの共通スタイルを作成 */
-section {
-  margin-bottom: 30px;
-  padding: 25px;
-  border-radius: 8px;
-}
-
-/* 7. diary-entryのスタイルを作成 */
-.diary-entry {
-  background-color: #fff7f0;
-  border-left: 5px solid #ff7675;
-}
-
-/* 8. special-momentのスタイルを作成 */
-.special-moment {
-  background-color: #f0f8ff;
-  border-left: 5px solid #74b9ff;
-}
-
-/* 9. tomorrow-planのスタイルを作成 */
-.tomorrow-plan {
-  background-color: #f0fff0;
-  border-left: 5px solid #00b894;
-}
-
-/* 10. section h2の共通スタイルを作成 */
-section h2 {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 15px;
-}
-
-/* 11. diary-entry h2のスタイルを作成 */
-.diary-entry h2 {
-  color: #e17055;
-}
-
-/* 12. special-moment h2のスタイルを作成 */
-.special-moment h2 {
-  color: #0984e3;
-}
-
-/* 13. tomorrow-plan h2のスタイルを作成 */
-.tomorrow-plan h2 {
-  color: #00a085;
-}
-
-/* 14. main-footerのスタイルを作成 */
-#main-footer {
-  background-color: #2d3436;
-  color: white;
-  text-align: center;
   padding: 20px;
+}
+
+.diary-entry {
+  background-color: #ffffff;
+  margin: 30px 0;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ＜D＞動物別のテーマカラー */
+.rabbit {
+  border-left: 5px solid #ff6b9d;
+}
+
+.rabbit h2 {
+  color: #ff6b9d;
+}
+
+.squirrel {
+  border-left: 5px solid #ff8c42;
+}
+
+.squirrel h2 {
+  color: #ff8c42;
+}
+
+.bear {
+  border-left: 5px solid #8b4513;
+}
+
+.bear h2 {
+  color: #8b4513;
+}
+
+/* ＜E＞文字の階層とアクセント */
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 0 15px 0;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #555555;
+  margin: 0 0 15px 0;
+}
+
+p {
+  margin: 15px 0;
+  line-height: 1.8;
+}
+
+.highlight {
+  background-color: #fff2cc;
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.timestamp {
+  font-size: 14px;
+  color: #888888;
+  font-style: italic;
+  text-align: right;
+  margin-top: 20px;
+}
+
+/* ＜F＞フッターのスタイリング */
+footer {
+  background-color: #e8ebe8;
+  text-align: center;
+  padding: 30px 20px;
+  margin-top: 40px;
+}
+
+footer p {
+  margin: 0;
+  color: #666666;
   font-size: 14px;
 }
 ```
 
-**完成したページの特徴:**
-- 統一感のある色の組み合わせ
-- 読みやすいフォントサイズと行間
-- 適切なコントラストで視認性が良い
-- セクションごとに色分けされて見やすい
+**設計のポイント：**
+- **色の一貫性**: 各動物に専用の色を割り当てて視覚的な区別を明確に
+- **階層構造**: フォントサイズと太さで情報の重要度を表現
+- **読みやすさ**: 適切な行間とコントラストで読書体験を向上
+- **余白の活用**: padding と margin で要素間の関係を明確に
+- **アクセシビリティ**: 十分なコントラスト比を確保して読みやすさを重視
 
 </details>
 
-<Aside type="tip">
-**色選びのコツ** — 色の組み合わせに迷ったときは、同じ色相（色合い）の明度（明るさ）や彩度（鮮やかさ）を変えた色を使うと統一感が出ます。また、メインカラー、サブカラー、アクセントカラーの3色程度に抑えると上品なデザインになります。
-</Aside>
+## よい色とフォントの組み合わせのポイント
 
-## まとめ
+効果的な色とフォントの組み合わせを作るためのガイドライン：
 
-色とフォントは、Webページの第一印象を決める重要な要素です。
-
-> **今回学んだポイント**
-> - カラーコード、色名、RGB値による色指定
-> - font-family、font-size、font-weightによるフォント設定
-> - line-heightによる行間調整で読みやすさを向上
-> - コントラストを意識した色選び
-> - 統一感のある色の組み合わせ
+> **デザインチェックリスト**: 
+> - ✅ 背景色と文字色のコントラストが十分
+> - ✅ 使用する色は3-5色程度に制限
+> - ✅ フォントファミリーは内容に適している
+> - ✅ 文字サイズに階層がある（h1 > h2 > p）
+> - ✅ 行間が読みやすい（1.5-1.8程度）
+> - ✅ 重要な情報は太字や色で強調されている
 
 <LinkCard
-  href="https://developer.mozilla.org/ja/docs/Web/CSS/color"
-  title="CSS color プロパティ - MDN"
+  title="CSS色の指定方法"
   description="MDNで詳しく学ぶ"
+  href="https://developer.mozilla.org/ja/docs/Web/CSS/color_value"
+/>
+
+<LinkCard
+  title="CSSフォント関連プロパティ"
+  description="MDNで詳しく学ぶ"
+  href="https://developer.mozilla.org/ja/docs/Web/CSS/font"
 />
 
 <Checkpoint>
 
-- [ ] カラーコード、色名、RGB値での色指定方法を理解した
-- [ ] \`color\`プロパティで文字色を変更できるようになった
-- [ ] \`background-color\`プロパティで背景色を設定できるようになった
-- [ ] \`font-family\`でフォントの種類を指定できるようになった
-- [ ] \`font-size\`で文字サイズを調整できるようになった
-- [ ] \`font-weight\`で文字の太さを変更できるようになった
-- [ ] \`line-height\`で行間を調整して読みやすさを向上させられるようになった
-- [ ] 適切なコントラストを意識した色選びができるようになった
-- [ ] 統一感のある配色でページをデザインできるようになった
+- [ ] color プロパティで文字色を設定できる
+- [ ] background-color プロパティで背景色を設定できる
+- [ ] 色名、16進数、RGB関数での色指定方法を理解した
+- [ ] font-family プロパティでフォントを指定できる
+- [ ] font-size プロパティで文字サイズを調整できる
+- [ ] font-weight プロパティで文字の太さを変更できる
+- [ ] line-height プロパティで行間を調整できる
+- [ ] 読みやすいコントラストを意識したデザインができる
 
 </Checkpoint>
+
+[^css-basics]: [CSSの基本](https://sysken.esa.io/posts/1041) - esa#1041
+[^css-properties]: [CSSの代表的なプロパティ](https://sysken.esa.io/posts/1042) - esa#1042
