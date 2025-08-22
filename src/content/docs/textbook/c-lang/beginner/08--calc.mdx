@@ -1,0 +1,251 @@
+---
+title : 四則演算
+description: C言語の四則演算について、演算子 の使い方、計算の優先順位を解説する。
+slug: textbook/c-lang/beginner/calc
+---
+
+import { Aside, Card } from "@astrojs/starlight/components";
+
+## 四則演算
+
+---
+
+C言語の四則演算は、基本的な数学の計算を行うための演算子（オペレーター）を使う。
+
+|  演算子     | 説明                |
+|------------|---------------------|
+| `+`        | 加算（足し算）        |
+| `-`        | 減算（引き算）        |
+| `*`        | 乗算（掛け算）        |
+| `/`        | 除算（割り算）        |
+| `%`        | 剰余（割ったあまり）   |
+
+### 加算（`+`）
+
+加算演算子（`+`）は、2つの数値を足し算するために使う。
+
+```c {5}
+#include <stdio.h>
+
+int main(void) {
+    int a = 10, b = 3;
+    printf("a + b = %d\n", a + b);  // 10 + 3 = 13
+    return 0;
+}
+```
+
+**実行結果**
+
+```sh
+a + b = 13
+```
+
+### 減算（`-`）
+
+減算演算子（`-`）は、2つの数値を引き算するために使う。
+
+```c {5}
+#include <stdio.h>
+
+int main(void) {
+    int a = 10, b = 3;
+    printf("a - b = %d\n", a - b);  // 10 - 3 = 7
+    return 0;
+}
+```
+
+**実行結果**
+
+```sh
+a - b = 7
+```
+
+### 乗算（`*`）
+
+乗算演算子（`*`）は、2つの数値を掛け算するために使う。
+
+```c {5}
+#include <stdio.h>
+
+int main(void) {
+    int a = 10, b = 3;
+    printf("a * b = %d\n", a * b);  // 10 * 3 = 30
+    return 0;
+}
+```
+
+**実行結果**
+
+```sh
+a * b = 30
+```
+
+### 除算（`/`）
+
+除算演算子（`/`）は、2つの数値を割り算するために使う。
+
+```c {5}
+#include <stdio.h>
+
+int main(void) {
+    int a = 10, b = 3;
+    printf("a / b = %d\n", a / b);  // 10 / 3 = 3（整数の割り算）
+    return 0;
+}
+```
+
+**実行結果**
+
+```sh
+a / b = 3
+```
+
+<Aside type="caution">
+
+`a / b` の結果が `3` になっているのは、整数同士で割り算をすると小数は切り捨てられるからである。
+
+小数点以下を求めたい場合は、`float` や `double`型 を使いましょう。
+
+</Aside>
+
+### 剰余（`%`）
+
+剰余演算子（`%`）は、割り算したときの余りを求めるときに使う。
+
+```c {5}
+#include <stdio.h>
+
+int main(void) {
+    int a = 17, b = 5;
+    printf("a %% b = %d\n", a % b); // 17 % 5 = 2
+    return 0;
+}
+```
+
+**実行結果**
+
+```sh
+a % b = 2
+```
+
+これは、`17` を `5` で割ると `3` あまり `2` になるため、`2` が出力される。
+
+<Aside type="caution">
+
+`printf` で `%`を表示するには `%%` と書かないとエラーになる。
+
+```c "%%"
+printf("10 %% 3 = %d\n", 10 % 3);
+```
+
+`%` と書くと `printf` のフォーマット指定と解釈される。
+
+</Aside>
+
+<Card>
+### 練習問題1
+`int`型の変数`a`、`b`に数値`10`、`5`を代入し、それらを使って加算、減算、乗算、除算、剰余の結果を出力してください。 
+
+**実行結果**
+
+```sh
+10 + 5 = 15
+10 - 5 = 5
+10 * 5 = 50
+10 / 5 = 2
+10 % 5 = 0
+```
+
+ファイル名: `03_issue1.c`
+
+<details>
+<summary>ヒント</summary>
+<Aside type="tip">
+`+`, `-`, `*`, `/`, `%` の演算子を使って計算し、それぞれ `printf` で出力しよう 
+</Aside>
+</details>
+
+<details>
+<summary>模範解答</summary>
+
+```c title="03_issue1.c"
+
+#include <stdio.h>
+
+int main(void) {
+    int a = 10, b = 5;
+    printf("%d + %d = %d\n", a, b, a + b);
+    printf("%d - %d = %d\n", a, b, a - b);
+    printf("%d * %d = %d\n", a, b, a * b);
+    printf("%d / %d = %d\n", a, b, a / b);
+    printf("%d %% %d = %d\n", a, b, a % b);
+    return 0;
+}
+```
+
+</details>
+</Card>
+
+## 演算子の優先順位
+
+---
+
+C言語では、演算子の優先順位が決まっており、基本的に数学と同じルールに従う。
+
+### 優先順位（高い順）
+
+1. `(...)`（かっこ内の計算が最優先）
+1. `*` `/` `%`（掛け算・割り算・剰余）
+1. `+` `-`（足し算・引き算）
+
+```c
+#include <stdio.h>
+
+int main(void) {
+    int result1 = 10 + 2 * 3;
+    printf("10 + 2 * 3 = %d\n", result1); // 10 + 2 * 3 = 16
+
+    int result2 = (10 + 2) * 3;
+    printf("(10 + 2) * 3 = %d\n", result2); // (10 + 2) * 3 = 36
+
+    return 0;
+}
+```
+
+- `10 + 2 * 3` → `2 * 3` を先に計算 → `10 + 6 = 16`
+- `(10 + 2) * 3` → `10 + 2` を先に計算 → `12 * 3 = 36`
+
+<Card>
+### 練習問題2
+次の数式の計算結果を`double`型で出力してください。
+
+![2 * (10 + 5) / 4 - 3](/calc_pra2.drawio.svg)
+
+**実行結果**
+```sh
+計算結果: 5.500000
+```
+ファイル名: `03_issue2.c`
+<details>
+<summary>ヒント</summary>
+<Aside type="tip">
+C言語では、`*`（掛け算）と `/`（割り算）は `+`（足し算）や `-`（引き算）よりも優先される。 
+ただし、`(...)` を使うことで計算の順番を変えることができる。 
+</Aside>
+</details>
+
+<details>
+<summary>模範解答</summary>
+```c title="03_issue2.c"
+#include <stdio.h>
+
+int main(void) {
+    double result = 2 * (10 + 5) / 4 - 3;
+    printf("計算結果: %lf\n", result);
+    return 0;
+}
+```
+</details>
+</Card>
+
+
