@@ -1,0 +1,281 @@
+---
+title: while文
+description: while文について学びます!
+slug: textbook/c-lang/beginner/while
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+## while
+---
+
+while文は、条件式が真の間、繰り返し処理を行う構文である。  
+
+```c
+while (条件式) {
+    // 条件式が真の場合に実行される処理
+}
+```
+
+以下は、1から10までの数字を表示するプログラムである。
+```c
+#include <stdio.h>
+int main(void) {
+    int i = 1;
+    while (i <= 10) {
+        printf("%d\n", i);
+        i++;
+    }
+    return 0;
+}
+```
+<details>
+  <summary>実行結果</summary>
+```
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+```
+</details>
+
+{/* while文の条件式に1を指定することで無限ループを作成できる */}
+{/* for文のフローチャートと同じもの */}
+フローチャートで表すと以下のようになる。
+![フローチャート](/fc_1_10_for.drawio.svg)
+
+### 練習問題
+
+変数`count`が5になるまで繰り返し処理をする`while`文を書いてください。
+
+```c
+#include <stdio.h>
+
+int main() {
+    int count = 1;
+
+    // ここにwhile文を書いてください
+
+    return 0;
+}
+```
+#### 実行結果
+```
+count: 1
+count: 2
+count: 3
+count: 4
+count: 5
+```
+<Aside type="tip"> 
+ <details> while文は条件が真の間、処理を繰り返します。 例：`while (count <= 5)` のように条件を書くと、countが5以下の間ループします。 ループ内で`count`を増やすことを忘れないでください。 </details>
+</Aside> 
+<details> 
+ <summary>模範解答</summary>
+```c
+#include <stdio.h>
+
+int main() {
+    int count = 1;
+
+    while (count <= 5) {
+        printf("count: %d\n", count);
+        count++;
+    }
+
+    return 0;
+}
+```
+</details>
+
+
+<Aside type="tip">
+### while文とfor文の違い
+ <details>
+  <summary></summary>
+---
+
+while文とfor文は、どちらも繰り返し処理を行うための構文である。 
+
+while文の構造には、初期化,更新式が無いため、ループ回数が決まっていない場合に使用するとよい。  
+以下は、0が入力されるまで数値を入力し続けるプログラムである。
+```c
+#include <stdio.h>
+
+int main(void) {
+    int num;
+    printf("0 を入力すると終了します。\n");
+    printf("数値を入力してください: ");
+    scanf("%d", &num); // 最初の入力を取得
+    while (1) { // 無限ループ
+        printf("数値を入力してください: ");
+        scanf("%d", &num);
+        printf("入力された数値: %d\n", num);
+        if (num == 0) {
+        break; // 0 が入力されたらループを抜ける
+        }
+    }
+    
+    printf("終了しました。\n");
+    return 0;
+}
+```
+実行結果
+```
+0 を入力すると終了します。
+数値を入力してください: 2
+入力された数値: 2
+数値を入力してください: 1
+入力された数値: 1
+数値を入力してください: -5
+入力された数値: -5
+数値を入力してください: 0
+入力された数値: 0
+終了しました。
+```
+---
+
+ </details>
+</Aside>
+
+## do-while文
+---
+
+do-while文は、while文と同様に、条件式が真の間繰り返し処理を行う構文である。  
+while文との違いは、条件式の判定を処理の後に行うため、**条件式が偽であっても1回は処理を実行する。**  
+特に理由がなければ、while文を使用することが推奨される。
+
+```c
+do {
+    // 条件式が真の場合に実行される処理
+} while (条件式);
+```
+
+以下は、0が入力されるまで数値を入力し続けるプログラムである。
+```c
+#include <stdio.h>
+
+int main(void) {
+    int num = 1; //　0以外の数値で初期化
+    printf("0 を入力すると終了します。\n");
+    
+    do { // 無限ループ
+        printf("数値を入力してください: ");
+        scanf("%d", &num);
+        printf("入力された数値: %d\n", num);
+    }while(num != 0); // 0 が入力されたらループを抜ける
+    
+    printf("終了しました。\n");
+    return 0;
+}
+```
+<details>
+  <summary>実行結果</summary>
+実行結果
+```
+0 を入力すると終了します。
+数値を入力してください: 2
+入力された数値: 2
+数値を入力してください: 1
+入力された数値: 1
+数値を入力してください: -5
+入力された数値: -5
+数値を入力してください: 0
+入力された数値: 0
+終了しました。
+```
+---
+</details>
+
+
+
+フローチャートで表すと以下のようになる。
+![フローチャート](/fc_inf_loop.drawio.svg)
+
+### 練習問題
+
+`do-while`文を使って、入力した数が0でない限り繰り返し続けるプログラムを作成してください。
+
+```c
+#include <stdio.h>
+
+int main() {
+    int num;
+
+    // ここにdo-while文を書いてください
+    // numが0のときにループを終了します
+
+    return 0;
+}
+```
+#### 実行結果
+```
+数値を入力してください：5
+数値を入力してください：3
+数値を入力してください：0
+終了します
+```
+
+<Aside type="tip">
+ <details> do-while文は必ず1回はループ内の処理が実行されます。 ループの条件は`while (num != 0);`のように記述します。 scanfで入力した値を`num`に読み込み、0ならループを抜けます。 </details> 
+</Aside> 
+<details> 
+ <summary>模範解答</summary>
+ ```c
+ #include <stdio.h>
+
+int main() {
+    int num;
+
+    do {
+        printf("数値を入力してください：");
+        scanf("%d", &num);
+    } while (num != 0);
+
+    printf("終了します\n");
+
+    return 0;
+}
+```
+</details>
+
+## 理解度チェック
+---
+
+{/* <Quize>
+{
+while文を使用して、ユーザーが 0 を入力するまで数値を合計し表示しなさい
+}
+</Quize>
+
+<Anser ans={
+```c
+#include <stdio.h>
+
+int main(void) {
+    int num;
+    int sum = 0;
+
+    printf("数値を入力してください（0で終了）:\n");
+
+    while (1) { // 無限ループ
+        scanf("%d", &num);  // ユーザー入力
+        if (num == 0) { // 0が入力されたらループ終了
+            break;
+        }
+        sum += num; // 合計に加算
+    }
+
+    printf("合計: %d\n", sum);
+    return 0;
+}
+```    
+}>
+{while文の条件式に1を指定することで無限ループを作成できる}
+</Anser> */}
