@@ -1,0 +1,1587 @@
+---
+title: CSSでのレイアウトと余白
+description: 要素の余白、境界線、配置方法を学んで、読みやすく整理されたWebページを作りましょう。margin、padding、flexboxを使ったレイアウト設計をマスターします。
+slug: textbook/web/for-classes/css-layout-padding
+sidebar:
+  order: 6
+---
+
+import { Aside, LinkCard } from "@astrojs/starlight/components";
+import SyscatComment from "@/components/SyscatComment.astro"
+import Sandpack from "@/components/Sandpack.astro";
+import Checkpoint from '@/components/Checkpoint.astro';
+import { Code } from '@astrojs/starlight/components';
+
+## 要素の配置と余白を自由自在に操ろう
+
+前回はCSSの基本とセレクターについて学びました。今度は要素同士の配置や余白を調整して、見やすく整理されたレイアウトを作ってみましょう[^css-box-model]。
+
+要素の配置を理解すると、まるで部屋の模様替えをするように、Webページの要素を思い通りの場所に配置できるようになります。
+
+<SyscatComment>
+
+レイアウトって奥が深いのね！要素がきちんと整理されていると、読みやすさが全然違うよ。
+
+</SyscatComment>
+
+## ボックスモデルとは何か
+
+HTMLの全ての要素は「箱（ボックス）」として扱われます。この箱には4つの領域があります[^css-properties]：
+
+1. **Content（内容）**: 文字や画像が表示される部分
+2. **Padding（内側余白）**: 内容と境界線の間の余白
+3. **Border（境界線）**: 要素の枠線
+4. **Margin（外側余白）**: 他の要素との間の余白
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ぽんちゃんのボックスモデル体験</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>ぽんちゃんのボックスモデル体験</h1>
+  
+  <div class="box-example">
+    <p>これがぽんちゃんの日記の一部です。ボックスモデルを体験してみましょう。</p>
+  </div>
+  
+  <div class="visual-guide">
+    <div class="content">内容（Content）</div>
+    <div class="padding-demo">内側余白（Padding）</div>
+    <div class="border-demo">境界線（Border）</div>
+    <div class="margin-demo">外側余白（Margin）</div>
+  </div>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #f9f9f9;
+  padding: 20px;
+}
+
+h1 {
+  color: #8b4513;
+  text-align: center;
+}
+
+.box-example {
+  background-color: #fff8dc;
+  border: 3px solid #daa520;
+  padding: 20px;
+  margin: 30px;
+}
+
+.visual-guide {
+  margin-top: 40px;
+}
+
+.content {
+  background-color: #87ceeb;
+  padding: 10px;
+  margin: 5px;
+  text-align: center;
+}
+
+.padding-demo {
+  background-color: #98fb98;
+  padding: 25px;
+  margin: 5px;
+  text-align: center;
+}
+
+.border-demo {
+  background-color: #ffa07a;
+  border: 5px solid #ff6347;
+  padding: 15px;
+  margin: 5px;
+  text-align: center;
+}
+
+.margin-demo {
+  background-color: #dda0dd;
+  padding: 15px;
+  margin: 40px;
+  text-align: center;
+}
+```
+
+</Sandpack>
+
+それぞれの要素の周りに色々な種類の空間があることが分かりますね。これらを適切に調整することで、美しいレイアウトが作れます。
+
+## Padding（内側余白）を使いこなそう
+
+`padding` プロパティは要素の内容と境界線の間の余白を設定します：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>みーちゃんのお部屋作り日記</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>みーちゃんのお部屋作り日記</h1>
+  
+  <div class="room small">
+    <h2>狭いお部屋</h2>
+    <p>コンパクトで可愛らしいお部屋です。</p>
+  </div>
+  
+  <div class="room medium">
+    <h2>ちょうど良いお部屋</h2>
+    <p>とても居心地が良いです。</p>
+  </div>
+  
+  <div class="room large">
+    <h2>広々としたお部屋</h2>
+    <p>開放感があって気持ちが良いです。</p>
+  </div>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #fff5ee;
+  color: #4a4a4a;
+  margin-inline: 20px;
+}
+
+h1 {
+  color: #ff69b4;
+  text-align: center;
+}
+
+.room {
+  background-color: #ffffff;
+  border: 2px solid #ffb6c1;
+  margin-block: 20px;
+  border-radius: 8px;
+}
+
+.small {
+  padding: 8px;
+}
+
+.medium {
+  padding: 20px;
+}
+
+.large {
+  padding: 35px;
+}
+
+h2 {
+  color: #ff1493;
+  margin: 0 0 10px 0;
+}
+
+p {
+  margin: 0;
+  line-height: 1.6;
+}
+```
+
+</Sandpack>
+
+### Padding の詳細な指定方法
+
+paddingは上下左右を個別に指定することもできます：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>こたろうの庭園設計日記</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>こたろうの庭園設計日記</h1>
+  
+  <div class="garden equal">
+    <h2>正方形の庭園</h2>
+    <p>四方向すべて同じ余裕があります。</p>
+  </div>
+  
+  <div class="garden vertical-horizontal">
+    <h2>縦横の庭園</h2>
+    <p>上下と左右で異なる余裕です。</p>
+  </div>
+  
+  <div class="garden individual">
+    <h2>個別設定の庭園</h2>
+    <p>四方向それぞれ違う余裕です。</p>
+  </div>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #f0f8f0;
+  color: #2e4d2e;
+  margin-inline: 20px;
+}
+
+h1 {
+  color: #228b22;
+  text-align: center;
+}
+
+.garden {
+  background-color: #ffffff;
+  border: 2px solid #90ee90;
+  margin-block: 20px;
+  border-radius: 12px;
+}
+
+.equal {
+  padding: 20px; /* 四方向すべて20px */
+}
+
+.vertical-horizontal {
+  padding-block: 25px; /* 上下25px */
+  padding-inline: 15px; /* 左右15px */
+}
+
+.individual {
+  padding-block-start: 10px; /* 上10px */
+  padding-inline-end: 25px; /* 右25px */
+  padding-block-end: 20px; /* 下20px */
+  padding-inline-start: 15px; /* 左15px */
+}
+
+h2 {
+  color: #006400;
+  margin: 0 0 10px 0;
+}
+
+p {
+  margin: 0;
+  line-height: 1.6;
+}
+```
+
+</Sandpack>
+
+**Padding の指定パターン：**
+- `padding: 20px;` - 四方向すべて同じ
+- `padding-block: 30px; padding-inline: 15px;` - 上下と左右を論理プロパティで指定
+- `padding-block-start: 10px;` - 上側のみ（論理プロパティ）
+- `padding-inline-start: 15px;` - 左側のみ（論理プロパティ）
+
+<SyscatComment type="SURPRISED">
+
+  上下 30px、左右 15px (`padding-block: 30px; padding-inline: 15px;`) の余白を設定したいときは、`padding: 30px 15px;` と書くことができるよ！  
+  さらに、上下左右それぞれの余白を個別に設定したい場合は、`padding: 10px 15px 20px 25px;` のように書くこともできるよ！  
+  ここあたりの引数の柔軟性 (一括指定プロパティー) は、 [padding - MDN](https://developer.mozilla.org/ja/docs/Web/CSS/padding) で詳しく解説されているよ。
+
+</SyscatComment>
+
+### 実践: 読みやすい日記レイアウトを作ってみよう
+
+paddingを使って、読みやすい日記のレイアウトを作成してみてください：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>はなちゃんの季節観察日記</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>はなちゃんの季節観察日記</h1>
+  
+  <article class="diary-entry spring">
+    <h2>春の発見</h2>
+    <p>小さな桜のつぼみを見つけました。</p>
+  </article>
+  
+  <article class="diary-entry summer">
+    <h2>夏の思い出</h2>
+    <p>蝉の声がとても賑やかでした。</p>
+  </article>
+  
+  <article class="diary-entry autumn">
+    <h2>秋の風景</h2>
+    <p>紅葉がとても美しかったです。</p>
+  </article>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #fefefe;
+  color: #333333;
+  margin-inline: 20px;
+}
+
+h1 {
+  color: #8b4513;
+  text-align: center;
+  margin-block-end: 25px;
+}
+
+.diary-entry {
+  background-color: #ffffff;
+  border-radius: 8px;
+  margin-block: 20px;
+  border-inline-start: 4px solid;
+}
+
+/* TODO: .spring に適切なpadding（20px程度）を設定してください */
+.spring {
+  border-color: #ffb6c1;
+}
+
+/* TODO: .summer により大きなpadding（30px程度）を設定してください */
+.summer {
+  border-color: #87ceeb;
+}
+
+/* TODO: .autumn に上下と左右で異なるpadding（上下15px、左右20px）を設定してください */
+.autumn {
+  border-color: #daa520;
+}
+
+h2 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+}
+
+p {
+  margin: 0;
+  line-height: 1.7;
+}
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```css
+.spring {
+  border-color: #ffb6c1;
+  padding: 20px;
+}
+
+.summer {
+  border-color: #87ceeb;
+  padding: 30px;
+}
+
+.autumn {
+  border-color: #daa520;
+  padding-block: 15px;
+  padding-inline: 20px;
+}
+```
+
+**Paddingの効果：**
+- 内容が枠線にくっつかず、読みやすくなる
+- 要素全体が大きく見え、重要度を表現できる
+- 適度な余白が上品で落ち着いた印象を与える
+
+</details>
+
+## Margin（外側余白）で要素間の距離を調整しよう
+
+`margin` プロパティは要素同士の間の余白を設定します：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ももちゃんの友達関係観察日記</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>ももちゃんの友達関係観察日記</h1>
+  
+  <div class="friend close">
+    <h2>とても仲良しの友達</h2>
+    <p>いつも一緒にいる友達です。</p>
+  </div>
+  
+  <div class="friend close">
+    <h2>一緒に遊ぶ友達</h2>
+    <p>よく遊ぶ楽しい友達です。</p>
+  </div>
+  
+  <div class="friend normal">
+    <h2>学校で話す友達</h2>
+    <p>学校で話をする友達です。</p>
+  </div>
+  
+  <div class="friend distant">
+    <h2>挨拶をする友達</h2>
+    <p>時々挨拶をする友達です。</p>
+  </div>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #fff0f5;
+  color: #4a4a4a;
+  padding-inline: 20px;
+}
+
+h1 {
+  color: #ff69b4;
+  text-align: center;
+  margin-block-end: 25px;
+}
+
+.friend {
+  background-color: #ffffff;
+  border: 2px solid #ffb6c1;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.close {
+  margin-block: 8px; /* 仲良しは距離が近い */
+}
+
+.normal {
+  margin-block: 20px; /* 普通の友達は適度な距離 */
+}
+
+.distant {
+  margin-block: 35px; /* 距離がある友達 */
+}
+
+h2 {
+  color: #ff1493;
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+p {
+  margin: 0;
+  line-height: 1.6;
+}
+```
+
+</Sandpack>
+
+### Margin の便利な機能：中央揃え
+
+`margin-inline: auto;` を使うと、要素を中央に配置できます：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ちびちゃんの整理整頓日記</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>ちびちゃんの整理整頓日記</h1>
+  
+  <div class="container">
+    <div class="item left">
+      <h2>左寄せの箱</h2>
+      <p>左側に置いてある小箱です。</p>
+    </div>
+    
+    <div class="item center">
+      <h2>中央の箱</h2>
+      <p>中央に配置した箱です。</p>
+    </div>
+    
+    <div class="item right">
+      <h2>右寄せの箱</h2>
+      <p>右側に置いてある箱です。</p>
+    </div>
+  </div>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #f8f8ff;
+  color: #4a4a4a;
+  padding-inline: 20px;
+}
+
+h1 {
+  color: #9370db;
+  text-align: center;
+  margin-block-end: 25px;
+}
+
+.container {
+  max-width: 600px;
+  margin-inline: auto; /* コンテナ全体を中央揃え */
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.item {
+  background-color: #ffffff;
+  border: 2px solid #dda0dd;
+  padding: 12px;
+  margin-block: 15px;
+  border-radius: 8px;
+  width: 250px;
+}
+
+.left {
+  margin-inline-start: 0; /* 左寄せ */
+}
+
+.center {
+  margin-inline: auto; /* 中央揃え */
+}
+
+.right {
+  margin-inline-start: auto; /* 右寄せ */
+}
+
+h2 {
+  color: #8a2be2;
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+p {
+  margin: 0;
+  line-height: 1.6;
+}
+```
+
+</Sandpack>
+
+## Border（境界線）で要素を装飾しよう
+
+`border` プロパティで要素に枠線を付けることができます：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>くまちゃんの額縁コレクション日記</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>くまちゃんの額縁コレクション日記</h1>
+  
+  <div class="frame solid">
+    <h2>シンプルな額縁</h2>
+    <p>実線の額縁です。</p>
+  </div>
+  
+  <div class="frame dashed">
+    <h2>点線の額縁</h2>
+    <p>可愛らしい点線です。</p>
+  </div>
+  
+  <div class="frame thick">
+    <h2>太い額縁</h2>
+    <p>存在感のある太い額縁です。</p>
+  </div>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #faf0e6;
+  color: #4a4a4a;
+  padding-inline: 20px;
+}
+
+h1 {
+  color: #8b4513;
+  text-align: center;
+  margin-block-end: 25px;
+}
+
+.frame {
+  background-color: #ffffff;
+  padding: 18px;
+  margin-block: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  margin-inline: auto;
+}
+
+.solid {
+  border: 2px solid #cd853f;
+}
+
+.dashed {
+  border: 2px dashed #daa520;
+}
+
+.thick {
+  border: 4px solid #8b4513;
+}
+
+h2 {
+  color: #a0522d;
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+p {
+  margin: 0;
+  line-height: 1.6;
+}
+```
+
+</Sandpack>
+
+**Border の指定方法：**
+- `border: 太さ スタイル 色;` - まとめて指定
+- `border-width: 2px;` - 太さのみ
+- `border-style: solid;` - スタイルのみ（solid, dashed, dotted など）
+- `border-color: #333;` - 色のみ
+- `border-block-start:`, `border-inline-end:` など - 論理プロパティで個別指定
+
+## Flexboxで要素を簡単に配置しよう
+
+`display: flex` を使うと、要素を横並びにしたり、中央に配置したりできます[^flexbox-guide]：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>りすちゃんの整理術日記</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>りすちゃんの整理術日記</h1>
+  
+  <section class="storage">
+    <h2>どんぐりの保管場所</h2>
+    <div class="flex-container">
+      <div class="box">
+        <h3>小さなどんぐり</h3>
+        <p>来月食べる予定です。</p>
+      </div>
+      <div class="box">
+        <h3>中くらいのどんぐり</h3>
+        <p>冬に備えて保存中です。</p>
+      </div>
+      <div class="box">
+        <h3>大きなどんぐり</h3>
+        <p>特別な日に食べます。</p>
+      </div>
+    </div>
+  </section>
+  
+  <section class="tools">
+    <h2>便利な道具たち</h2>
+    <div class="flex-container centered">
+      <div class="tool">掘る道具</div>
+      <div class="tool">運ぶ道具</div>
+      <div class="tool">隠す道具</div>
+    </div>
+  </section>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #f4f1e8;
+  color: #4a4a4a;
+  padding-inline: 20px;
+}
+
+h1 {
+  color: #8b4513;
+  text-align: center;
+  margin-block-end: 25px;
+}
+
+section {
+  margin-block: 30px;
+}
+
+h2 {
+  color: #a0522d;
+  margin-block-end: 15px;
+}
+
+.flex-container {
+  display: flex; /* Flexboxを有効にする */
+  gap: 15px; /* 要素間の間隔 */
+  flex-wrap: wrap; /* 狭い画面で折り返し */
+}
+
+.box {
+  background-color: #ffffff;
+  border: 2px solid #daa520;
+  padding: 15px;
+  border-radius: 8px;
+  flex: 1; /* 等幅に分割 */
+  min-width: 120px; /* 最小幅を設定 */
+}
+
+.tools {
+  background-color: #fff8dc;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.centered {
+  justify-content: center; /* 水平方向の中央揃え */
+}
+
+.tool {
+  background-color: #f0e68c;
+  border: 2px solid #bdb76b;
+  padding: 10px 15px;
+  border-radius: 15px;
+  font-weight: bold;
+  color: #556b2f;
+}
+
+h3 {
+  color: #8b4513;
+  margin: 0 0 8px 0;
+  font-size: 14px;
+}
+
+.box p {
+  margin: 0;
+  line-height: 1.6;
+  font-size: 14px;
+}
+```
+
+</Sandpack>
+
+### Flexboxの主要なプロパティ
+
+Flexboxには要素の配置を制御する便利なプロパティがあります：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ひよこちゃんの配置実験日記</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>ひよこちゃんの配置実験日記</h1>
+  
+  <section class="experiment">
+    <h2>左に詰めて配置</h2>
+    <div class="flex-container start">
+      <div class="chick">ぴよ</div>
+      <div class="chick">ちび</div>
+      <div class="chick">こと</div>
+    </div>
+  </section>
+  
+  <section class="experiment">
+    <h2>中央に集合</h2>
+    <div class="flex-container center">
+      <div class="chick">ぴよ</div>
+      <div class="chick">ちび</div>
+      <div class="chick">こと</div>
+    </div>
+  </section>
+  
+  <section class="experiment">
+    <h2>間隔を空けて配置</h2>
+    <div class="flex-container between">
+      <div class="chick">ぴよ</div>
+      <div class="chick">ちび</div>
+      <div class="chick">こと</div>
+    </div>
+  </section>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #fffacd;
+  color: #4a4a4a;
+  padding-inline: 20px;
+}
+
+h1 {
+  color: #ff8c00;
+  text-align: center;
+  margin-block-end: 25px;
+}
+
+.experiment {
+  margin-block: 25px;
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 12px;
+  border: 2px solid #ffd700;
+}
+
+h2 {
+  color: #ff6347;
+  margin: 0 0 12px 0;
+  font-size: 16px;
+}
+
+.flex-container {
+  display: flex;
+  background-color: #f5f5dc;
+  padding: 12px;
+  border-radius: 8px;
+  min-height: 50px;
+  align-items: center; /* 垂直方向の中央揃え */
+  gap: 8px;
+  flex-wrap: wrap; /* 狭い画面で折り返し */
+}
+
+.start {
+  justify-content: flex-start; /* 左寄せ */
+}
+
+.center {
+  justify-content: center; /* 中央揃え */
+}
+
+.between {
+  justify-content: space-between; /* 両端揃え */
+}
+
+.chick {
+  background-color: #fff8dc;
+  border: 2px solid #daa520;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-weight: bold;
+  color: #b8860b;
+  font-size: 14px;
+}
+```
+
+</Sandpack>
+
+**Flexboxの主要プロパティ：**
+- `justify-content`: 水平方向の配置（flex-start, center, space-between, space-around）
+- `align-items`: 垂直方向の配置（flex-start, center, flex-end, stretch）
+- `flex-direction`: 並び方向（row, column）
+- `flex-wrap`: 折り返し（wrap, nowrap）
+- `gap`: 要素間の間隔
+
+### 実践: Flexboxでカード型レイアウトを作ってみよう
+
+Flexboxを使って、カード型レイアウトを作成してみてください：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ねこちゃんの趣味紹介日記</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>ねこちゃんの趣味紹介日記</h1>
+  
+  <section class="hobbies">
+    <h2>私の趣味たち</h2>
+    <div class="hobby-cards">
+      <div class="card">
+        <h3>お昼寝</h3>
+        <p>日向ぼっこをしながらのお昼寝は最高です。</p>
+      </div>
+      <div class="card">
+        <h3>毛づくろい</h3>
+        <p>きれいな毛並みを保つため丁寧にしています。</p>
+      </div>
+      <div class="card">
+        <h3>鳥観察</h3>
+        <p>窓から見える鳥たちの観察が大好きです。</p>
+      </div>
+    </div>
+  </section>
+  
+  <section class="favorites">
+    <h2>お気に入りアイテム</h2>
+    <div class="items">
+      <div class="item">クッション</div>
+      <div class="item">おもちゃのねずみ</div>
+      <div class="item">ブランケット</div>
+    </div>
+  </section>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #f8f4f0;
+  color: #4a4a4a;
+  padding-inline: 20px;
+  max-width: 800px;
+  margin-inline: auto;
+}
+
+h1 {
+  color: #8b4513;
+  text-align: center;
+  margin-block-end: 30px;
+}
+
+section {
+  margin-block: 30px;
+}
+
+h2 {
+  color: #a0522d;
+  margin-block-end: 20px;
+  font-size: 20px;
+}
+
+/* TODO: .hobby-cards をFlexboxコンテナにして、カードを横並びにしてください */
+.hobby-cards {
+  /* ここにFlexboxのプロパティを追加 */
+}
+
+.card {
+  background-color: #ffffff;
+  border: 2px solid #deb887;
+  padding: 15px;
+  border-radius: 12px;
+  /* TODO: カードが等幅になるようにflexプロパティを追加してください */
+}
+
+/* TODO: .items をFlexboxコンテナにして、アイテムを中央揃えにしてください */
+.items {
+  /* ここにFlexboxのプロパティを追加 */
+}
+
+.item {
+  background-color: #fff8dc;
+  border: 2px solid #f4a460;
+  padding: 12px 15px;
+  border-radius: 15px;
+  font-weight: bold;
+  color: #8b4513;
+  text-align: center;
+  font-size: 14px;
+}
+
+h3 {
+  color: #8b4513;
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+.card p {
+  margin: 0;
+  line-height: 1.7;
+  font-size: 14px;
+}
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```css
+.hobby-cards {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background-color: #ffffff;
+  border: 2px solid #deb887;
+  padding: 15px;
+  border-radius: 12px;
+  flex: 1;
+  min-width: 150px;
+}
+
+.items {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+```
+
+**Flexboxレイアウトの利点：**
+- **簡単な横並び**: `display: flex` だけで要素が横に並ぶ
+- **等幅分割**: `flex: 1` で要素を等しい幅に分割
+- **中央揃え**: `justify-content: center` で簡単に中央配置
+- **レスポンシブ**: `flex-wrap` で画面サイズに応じて折り返し
+
+</details>
+
+## CSS Grid で格子状レイアウトを作ろう
+
+`display: grid` を使うと、格子状の複雑なレイアウトも簡単に作れます：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>うさぎちゃんの畑作り日記</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>うさぎちゃんの畑作り日記</h1>
+  
+  <section class="garden">
+    <h2>私の小さな畑</h2>
+    <div class="garden-grid">
+      <div class="plot carrot">人参</div>
+      <div class="plot lettuce">レタス</div>
+      <div class="plot cabbage">キャベツ</div>
+      <div class="plot spinach">ほうれん草</div>
+      <div class="plot radish">大根</div>
+      <div class="plot herbs">ハーブ</div>
+    </div>
+  </section>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #f0f8f0;
+  color: #2e4d2e;
+  padding-inline: 20px;
+  max-width: 700px;
+  margin-inline: auto;
+}
+
+h1 {
+  color: #228b22;
+  text-align: center;
+  margin-block-end: 30px;
+}
+
+section {
+  margin-block: 30px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 2px solid #90ee90;
+}
+
+h2 {
+  color: #006400;
+  margin-block-end: 15px;
+}
+
+.garden-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3列の等幅グリッド */
+  gap: 12px;
+}
+
+.plot {
+  background-color: #f0fff0;
+  border: 2px solid #9acd32;
+  padding: 15px;
+  text-align: center;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #556b2f;
+  font-size: 14px;
+}
+
+.carrot { background-color: #ffd4a3; border-color: #ff8c00; }
+.lettuce { background-color: #d4f4d4; border-color: #32cd32; }
+.cabbage { background-color: #e6ffe6; border-color: #90ee90; }
+.spinach { background-color: #ccffcc; border-color: #228b22; }
+.radish { background-color: #fff0f5; border-color: #ff69b4; }
+.herbs { background-color: #f0f8ff; border-color: #87ceeb; }
+```
+
+</Sandpack>
+
+### Grid の基本的な使い方
+
+CSS Grid の主要なプロパティを理解しましょう：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ぽんちゃんの写真整理日記</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>ぽんちゃんの写真整理日記</h1>
+  
+  <section class="album">
+    <h2>今月撮った写真</h2>
+    <div class="photo-grid">
+      <div class="photo large">森の散歩</div>
+      <div class="photo">お昼寝</div>
+      <div class="photo">お友達</div>
+      <div class="photo">はちみつ</div>
+      <div class="photo wide">川での水遊び</div>
+      <div class="photo">夕日</div>
+    </div>
+  </section>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  background-color: #faf0e6;
+  color: #4a4a4a;
+  padding-inline: 20px;
+  max-width: 600px;
+  margin-inline: auto;
+}
+
+h1 {
+  color: #8b4513;
+  text-align: center;
+  margin-block-end: 30px;
+}
+
+section {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 2px solid #deb887;
+}
+
+h2 {
+  color: #a0522d;
+  margin-block-end: 15px;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3列 */
+  grid-template-rows: repeat(3, 80px); /* 3行、各80px */
+  gap: 12px;
+}
+
+.photo {
+  background-color: #f5deb3;
+  border: 2px solid #d2b48c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #8b4513;
+  font-size: 14px;
+}
+
+.large {
+  grid-column: span 2; /* 2列分の幅 */
+  grid-row: span 2; /* 2行分の高さ */
+  background-color: #ffd700;
+  border-color: #daa520;
+}
+
+.wide {
+  grid-column: span 2; /* 2列分の幅 */
+  background-color: #87ceeb;
+  border-color: #4682b4;
+  color: #2f4f4f;
+}
+```
+
+</Sandpack>
+
+**CSS Grid の主要プロパティ：**
+- `grid-template-columns`: 列の定義（`repeat(3, 1fr)` で3等分など）
+- `grid-template-rows`: 行の定義
+- `gap`: グリッド間の間隔
+- `grid-column: span 2`: 要素を2列分にまたがせる
+- `grid-row: span 2`: 要素を2行分にまたがせる
+
+## 総合演習: レスポンシブな動物日記サイトを完成させよう
+
+これまで学んだボックスモデル、margin、padding、flexbox、gridの知識を使って、動物日記サイトを作ってみましょう。
+
+<Sandpack options={{ editorHeight: 600 }}>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>森の仲間たちの日記</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <h1>森の仲間たちの日記</h1>
+    <p class="subtitle">みんなで作る森の生活記録</p>
+  </header>
+  
+  <main class="main">
+    <section class="featured">
+      <h2>今日の特集</h2>
+      <div class="stories">
+        <article class="story main-story">
+          <h3>春の森フェスティバル開催</h3>
+          <p>今年も春のフェスティバルが開催されました。たくさんの仲間たちが集まりました。</p>
+        </article>
+        <article class="story">
+          <h3>新しい仲間が森に</h3>
+          <p>ハリネズミの家族が引っ越してきました。</p>
+        </article>
+        <article class="story">
+          <h3>木の実スポット発見</h3>
+          <p>新しいスポットを見つけました。</p>
+        </article>
+      </div>
+    </section>
+    
+    <section class="entries">
+      <h2>今日の日記</h2>
+      <div class="entries-list">
+        <article class="entry">
+          <div class="entry-header">
+            <h3>うさぎのももちゃん</h3>
+            <span class="time">午前10:30</span>
+          </div>
+          <p>新緑の季節になって、美味しい若葉がたくさん食べられます。</p>
+          <div class="tags">
+            <span class="tag">食べ物</span>
+            <span class="tag">春</span>
+          </div>
+        </article>
+        
+        <article class="entry">
+          <div class="entry-header">
+            <h3>りすのちびちゃん</h3>
+            <span class="time">午後2:15</span>
+          </div>
+          <p>今日はどんぐりを20個も見つけました。</p>
+          <div class="tags">
+            <span class="tag">準備</span>
+            <span class="tag">どんぐり</span>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+  
+  <footer class="footer">
+    <p>🌲 森の仲間たちの日記 🌿</p>
+  </footer>
+</body>
+</html>
+```
+
+```css style.css
+/* TODO: 以下の要件に従ってCSSを完成させてください */
+
+/* 1. 基本設定 */
+/* - bodyに適切なmargin、padding、背景色、フォントを設定 */
+/* - max-widthで全体の最大幅を制限し、中央揃えに */
+
+/* 2. ヘッダーのレイアウト */
+/* - 中央揃えで適切なpadding */
+/* - h1とsubtitleに適切なmarginとスタイル */
+
+/* 3. 特集セクション (.featured) */
+/* - .stories をCSS Gridで3列レイアウトに（狭い画面では1列） */
+/* - .story.main-story を2列分にまたがせる */
+/* - 各ストーリーに適切なpadding、margin、border */
+
+/* 4. 日記エントリーセクション (.entries) */
+/* - .entries-list をFlexboxで縦並び */
+/* - 各entryに適切なpadding、margin、背景色 */
+/* - .entry-header をFlexboxで左右に配置 */
+/* - .tags をFlexboxで横並び */
+
+/* 5. フッター */
+/* - 中央揃え、適切なpadding、背景色 */
+
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```css
+/* 1. 基本設定 */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #faf8f3;
+  color: #333333;
+  line-height: 1.6;
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+/* 2. ヘッダーのレイアウト */
+.header {
+  text-align: center;
+  padding: 30px 20px;
+  background-color: #f0f4f0;
+  border-radius: 0 0 15px 15px;
+  margin-block-end: 25px;
+}
+
+.header h1 {
+  margin: 0 0 8px 0;
+  color: #2d5a2d;
+  font-size: 24px;
+}
+
+.subtitle {
+  margin: 0;
+  color: #666666;
+  font-style: italic;
+  font-size: 14px;
+}
+
+/* 3. 特集セクション */
+.main {
+  padding-inline: 20px;
+}
+
+.featured {
+  margin-block-end: 30px;
+}
+
+.featured h2 {
+  color: #2d5a2d;
+  margin-block-end: 15px;
+  font-size: 20px;
+}
+
+.stories {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.story {
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 12px;
+  border: 2px solid #e8ebe8;
+}
+
+.story.main-story {
+  grid-column: span 2;
+  background-color: #f8fffe;
+  border-color: #90ee90;
+}
+
+.story h3 {
+  margin: 0 0 8px 0;
+  color: #2d5a2d;
+  font-size: 14px;
+}
+
+.story p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* 4. 日記エントリーセクション */
+.entries h2 {
+  color: #2d5a2d;
+  margin-block-end: 15px;
+  font-size: 20px;
+}
+
+.entries-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.entry {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  border-inline-start: 4px solid #90ee90;
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block-end: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.entry-header h3 {
+  margin: 0;
+  color: #2d5a2d;
+  font-size: 16px;
+}
+
+.time {
+  color: #888888;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.entry p {
+  margin: 0 0 12px 0;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background-color: #e8f5e8;
+  color: #2d5a2d;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  border: 1px solid #90ee90;
+}
+
+/* 5. フッター */
+.footer {
+  background-color: #e8ebe8;
+  text-align: center;
+  padding: 25px 20px;
+  margin-block-start: 40px;
+  border-radius: 15px 15px 0 0;
+}
+
+.footer p {
+  margin: 0;
+  color: #666666;
+  font-size: 14px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 500px) {
+  .stories {
+    grid-template-columns: 1fr;
+  }
+  
+  .story.main-story {
+    grid-column: span 1;
+  }
+  
+  .entry-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+```
+
+**レイアウト設計のポイント：**
+- **Grid**: 複雑な格子状レイアウトに最適
+- **Flexbox**: 一次元の配置（横並び・縦並び）に最適
+- **論理プロパティ**: `margin-inline`、`padding-block` などで将来対応
+- **レスポンシブ**: メディアクエリで小画面対応
+- **視覚的階層**: 色とスペースで情報の重要度を表現
+
+</details>
+
+## レイアウト設計のベストプラクティス
+
+効果的なレイアウトを作るためのガイドライン：
+
+> **レイアウトチェックリスト**: 
+> - ✅ 適切な余白（padding/margin）で要素が読みやすい
+> - ✅ 関連する要素同士は近く、無関係な要素は離れている
+> - ✅ Flexboxで一次元レイアウト、Gridで二次元レイアウト
+> - ✅ 中央揃えや等幅分割が適切に使われている
+> - ✅ モバイル端末でも見やすいレスポンシブ対応
+> - ✅ 論理プロパティ（margin-inline、padding-blockなど）を活用
+
+<LinkCard
+  title="Flexbox完全ガイド"
+  description="MDNで詳しく学ぶ"
+  href="https://developer.mozilla.org/ja/docs/Web/CSS/CSS_Flexible_Box_Layout"
+/>
+
+<LinkCard
+  title="CSS Grid レイアウト"
+  description="MDNで詳しく学ぶ"
+  href="https://developer.mozilla.org/ja/docs/Web/CSS/CSS_Grid_Layout"
+/>
+
+<Checkpoint>
+
+- [ ] ボックスモデル（content、padding、border、margin）を理解した
+- [ ] padding プロパティで内側余白を調整できる
+- [ ] margin プロパティで外側余白を調整できる
+- [ ] margin-inline: auto で中央揃えができる
+- [ ] border プロパティで境界線を設定できる
+- [ ] display: flex でFlexboxレイアウトを作れる
+- [ ] justify-content で水平配置を制御できる
+- [ ] display: grid でGridレイアウトを作れる
+- [ ] 論理プロパティ（padding-block、margin-inlineなど）を使える
+- [ ] レスポンシブ対応の基本を理解した
+
+</Checkpoint>
+
+[^css-box-model]: [CSSボックスモデルの基本](https://sysken.esa.io/posts/1046) - esa#1046
+[^css-properties]: [CSSレイアウトプロパティ](https://sysken.esa.io/posts/1047) - esa#1047
+[^flexbox-guide]: [Flexboxレイアウトガイド](https://sysken.esa.io/posts/1049) - esa#1049

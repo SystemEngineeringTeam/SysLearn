@@ -1,0 +1,1093 @@
+---
+title: 射的ゲーム作成の前準備
+description: HTMLの基礎復習から始めて、クリックイベントの捕捉、要素の配置、的の見た目作りまで。射的ゲームを作るための土台をしっかりと固めましょう。
+slug: textbook/web/for-classes/shateki-prepare
+sidebar:
+  order: 7
+---
+
+import { Aside, LinkCard } from "@astrojs/starlight/components";
+import SyscatComment from "@/components/SyscatComment.astro"
+import Sandpack from "@/components/Sandpack.astro";
+import Checkpoint from '@/components/Checkpoint.astro';
+import { Code } from '@astrojs/starlight/components';
+import IconRiTerminalFill from "~icons/ri/terminal-fill"
+import { transform } from "typescript";
+
+## 射的ゲームを作ってみよう！
+
+今回からは、これまで学んだHTML、CSS、JavaScriptの知識を使って、本格的な**射的ゲーム**を作っていきます！お祭りの射的のように、動く的をクリックしてスコアを競うゲームです[^1049]。
+
+JavaScriptは現在、Webページ制作に欠かせないプログラミング言語として世界中で広く使われています[^javascript-basic]。最終的には制限時間やスコア表示がある本格的なゲームになりますが、まずはしっかりと基礎を固めることから始めましょう。
+
+<SyscatComment>
+
+射的ゲーム！お祭りの射的みたいで楽しそう！でも、最初は簡単なところから始めるのが大切だよね。
+
+</SyscatComment>
+
+## 今回の目標
+
+この回では、射的ゲームの**土台**となる部分を作ります：
+
+1. **前準備（前の勉強会の復習）** - HTMLに要素を追加してCSSで装飾
+2. **クリックイベントの捕捉** - JavaScriptでクリックを検知
+3. **要素の範囲を拡大する** - 画面全体をクリック範囲に
+4. **的の見た目を整える** - 赤い丸い的を画面中央に配置
+
+<SyscatComment type="CONFUSED">
+
+あれ？いきなりゲームを作るの？  でも、心配しないで！一つ一つ丁寧に進めていくから、きっとできるよ。  
+プログラミングは積み重ねが大切なんだ。
+
+</SyscatComment>
+
+## 1. 前準備（前の勉強会の復習）
+
+まずは、これまで学んだHTMLとCSSの基礎を使って、簡単な要素を作ってみましょう。
+
+### HTML に要素を追加する
+
+HTMLファイルに `div` 要素を追加します。`div` は「division（分割）」の略で、特に意味を持たない汎用的な箱のような要素です：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>射的ゲーム Step 1</title>
+  
+  <!-- CSSファイルを読み込む -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- これが「的」の元となる要素です -->
+  <div class="rect"></div>
+</body>
+</html>
+```
+
+```css style.css
+/* まだCSSは空っぽです */
+```
+
+</Sandpack>
+
+**HTMLのポイント：**
+- `<div class="rect"></div>` で箱を作成
+- `class="rect"` でCSSから指定できるように名前を付ける
+- `<link rel="stylesheet" href="style.css">` でCSSファイルを読み込み
+
+### CSS で色と大きさを付ける
+
+次に、CSSを使って `.rect` クラスに色と大きさを設定しましょう：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>射的ゲーム Step 1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="rect"></div>
+</body>
+</html>
+```
+
+```css style.css
+.rect {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+}
+```
+
+</Sandpack>
+
+<SyscatComment>
+
+おお！赤い四角ができた！これが的の最初の形なんだね。
+
+</SyscatComment>
+
+**CSSのポイント：**
+- `width: 100px` で横幅を100ピクセルに設定
+- `height: 100px` で高さを100ピクセルに設定  
+- `background-color: red` で背景色を赤に設定
+
+### 実践: 自分で要素を作ってみよう
+
+以下のコメントを参考に、青い長方形を作ってみてください：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>練習: 青い長方形</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- TODO: class="blue-rect" のdiv要素を追加してください -->
+  
+</body>
+</html>
+```
+
+```css style.css
+/* TODO: .blue-rect に以下のスタイルを設定してください */
+/* - 横幅: 150px */
+/* - 高さ: 80px */
+/* - 背景色: blue */
+
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```html index.html
+<div class="blue-rect"></div>
+```
+
+```css style.css
+.blue-rect {
+  width: 150px;
+  height: 80px;
+  background-color: blue;
+}
+```
+
+**復習のポイント：**
+- HTMLで要素を作り、CSSで見た目を整える基本の流れ
+- クラス名は意味がわかりやすいものを選ぶ
+- 横幅と高さを変えることで、様々な形の要素が作れる
+
+</details>
+
+## 2. クリックイベントの捕捉
+
+次に、JavaScriptを使って、要素がクリックされたときに反応するようにしましょう。
+
+### JavaScript ファイルを HTML に読み込む
+
+まず、HTMLファイルにJavaScriptファイルを読み込みます：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>射的ゲーム Step 2</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="rect"></div>
+
+  <!-- JavaScriptファイルを読み込む -->
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+.rect {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+}
+```
+
+```js script.js
+// まだJavaScriptは空っぽです
+```
+
+</Sandpack>
+
+**重要なポイント：**
+- `<script src="script.js"></script>` は `</body>` の直前に配置
+- これにより、HTMLが完全に読み込まれてからJavaScriptが実行される
+
+### 要素を取得してクリックイベントを設定
+
+JavaScriptで要素を取得し、クリックイベントを設定します：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>射的ゲーム Step 2</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="rect"></div>
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+.rect {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+}
+```
+
+```js script.js
+// --- 要素の取得 ---
+// document.querySelector() は、CSSセレクタに一致する要素を見つけてくる命令です
+// ここでは、HTMLに書いた <div class="rect"></div> を取得しています
+const rectElement = document.querySelector(".rect");
+
+// --- イベントリスナーの設定 ---
+// addEventListener は、特定のイベントが発生したときに処理を実行する命令です
+// rectElement に対して「クリックされたら、次の処理をしてね」とお願いしています
+rectElement.addEventListener("click", () => {
+  // console.log() は、ブラウザの開発者ツールにメッセージを表示する命令です
+  // プログラムが正しく動いているか確認するための重要なツールです
+  console.log("クリックしました！");
+});
+```
+
+</Sandpack>
+
+<SyscatComment type="TADA">
+
+おお！赤い四角をクリックしたら、<IconRiTerminalFill style={{ display: "inline", transform: "translateY(3px)"}} /> のところに「クリックしました！」って表示されるよ！
+
+</SyscatComment>
+
+**JavaScript の重要な概念：**
+
+1. **要素の取得**: `document.querySelector(".rect")` で HTML の要素を JavaScript で操作できるようにする[^dom-manipulation]
+2. **イベントリスナー**: `addEventListener("click", ...)` でクリックを「聞き耳を立てて」待つ[^event-handling]
+3. **コンソール出力**: `console.log()` で開発者ツールに情報を表示して動作確認[^javascript-debugging]
+
+### 実践: クリックイベントを自分で書いてみよう
+
+以下のコメントを参考に、クリックイベントを設定してみてください：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>練習: クリックイベント</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="my-button">ここをクリック！</div>
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+.my-button {
+  width: 200px;
+  height: 60px;
+  background-color: green;
+  color: white;
+  text-align: center;
+  line-height: 60px;
+  cursor: pointer;
+}
+```
+
+```js script.js
+// TODO: .my-button 要素を取得してください
+// const buttonElement = document.querySelector("???");
+
+// TODO: クリックイベントを設定してください
+// buttonElement.addEventListener("click", () => {
+//   console.log("???");
+// });
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```js script.js
+// .my-button 要素を取得
+const buttonElement = document.querySelector(".my-button");
+
+// クリックイベントを設定
+buttonElement.addEventListener("click", () => {
+  console.log("ボタンがクリックされました！");
+});
+```
+
+**クリックイベントの流れ：**
+1. `document.querySelector()` で要素を取得
+2. `addEventListener()` でクリックを待機
+3. クリックされたら指定した処理を実行
+4. `console.log()` で動作確認
+
+</details>
+
+## 3. 要素の範囲を拡大する
+
+射的ゲームでは、画面のどこをクリックしても反応するようにしたいので、要素の範囲を画面全体に広げてみましょう。
+
+### 画面全体に要素を広げる
+
+CSSの `vw`（viewport width）と `vh`（viewport height）という単位を使います：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>射的ゲーム Step 3</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="rect"></div>
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+.rect {
+  /* vw は 'viewport width' の略で、画面の横幅に対する割合を指定する単位です */
+  /* 100vw は「画面の横幅の100%」という意味になります */
+  width: 100vw;
+
+  /* vh は 'viewport height' の略で、画面の高さに対する割合を指定する単位です */
+  /* 100vh は「画面の高さの100%」という意味になります */
+  height: 100vh;
+
+  /* 次に作る的の色をわかりやすくするために背景色を変えます */
+  background-color: darkblue;
+}
+```
+
+```js script.js
+const rectElement = document.querySelector(".rect");
+
+rectElement.addEventListener("click", () => {
+  console.log("画面全体のどこかがクリックされました！");
+});
+```
+
+</Sandpack>
+
+<SyscatComment>
+
+わあ！画面全体が濃い青になって、どこをクリックしても反応するようになったよ！
+
+</SyscatComment>
+
+**viewport単位の便利さ：**
+- `100vw` = 画面の横幅の100%（画面いっぱいの幅）
+- `100vh` = 画面の高さの100%（画面いっぱいの高さ）
+- 画面サイズが変わっても自動的に調整される
+- レスポンシブなデザインに重要
+
+### 実践: 画面サイズに合わせた要素を作ってみよう
+
+viewport単位を使って、画面の半分のサイズの要素を作ってみてください：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>練習: viewport単位</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="half-screen">画面の半分</div>
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+.half-screen {
+  /* TODO: 画面の横幅の50%に設定してください */
+  width: ???;
+  
+  /* TODO: 画面の高さの50%に設定してください */
+  height: ???;
+  
+  background-color: purple;
+  color: white;
+  
+  /* 最新のCSS Gridを使った中央寄せ */
+  display: grid;
+  place-content: center;
+}
+```
+
+```js script.js
+const halfElement = document.querySelector(".half-screen");
+
+halfElement.addEventListener("click", () => {
+  console.log("画面の半分がクリックされました！");
+});
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```css style.css
+.half-screen {
+  width: 50vw;
+  height: 50vh;
+  background-color: purple;
+  color: white;
+  
+  /* 最新のCSS Gridを使った中央寄せ */
+  display: grid;
+  place-content: center;
+}
+```
+
+**viewport単位の活用例：**
+- `25vw` = 画面幅の25%（4分の1）
+- `75vh` = 画面高さの75%（4分の3）
+- `100vmin` = 画面の縦横のうち小さい方の100%
+- `100vmax` = 画面の縦横のうち大きい方の100%
+
+</details>
+
+## 4. 的の見た目を整える
+
+いよいよ射的の「的」を作ります！赤い丸い的を画面の中央に配置しましょう。
+
+### HTMLに的の要素を追加
+
+まず、ゲームエリア（`.rect`）の中に的の要素（`.target`）を追加します：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>射的ゲーム Step 4</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ゲームのプレイエリア -->
+  <div class="rect">
+    <!-- "target"がプレイヤーが狙う「的」です -->
+    <div class="target"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+.rect {
+  width: 100vw;
+  height: 100vh;
+  background-color: darkblue;
+}
+
+/* まだ .target のスタイルは空っぽです */
+```
+
+```js script.js
+const rectElement = document.querySelector(".rect");
+
+rectElement.addEventListener("click", () => {
+  console.log("ゲームエリアがクリックされました！");
+});
+```
+
+</Sandpack>
+
+### 的を丸い形にする
+
+CSSを使って、的を赤い丸にしましょう：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>射的ゲーム Step 4</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="rect">
+    <div class="target"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+.rect {
+  width: 100vw;
+  height: 100vh;
+  background-color: darkblue;
+}
+
+/* 的のスタイルを定義していきます */
+.target {
+  /* 的の大きさを指定します */
+  width: 100px;
+  height: 100px;
+
+  /* 的の形を丸くするために、角を丸くします */
+  border-radius: 50%;
+
+  /* 的の色を指定します */
+  background-color: red;
+}
+```
+
+```js script.js
+const rectElement = document.querySelector(".rect");
+
+rectElement.addEventListener("click", () => {
+  console.log("ゲームエリアがクリックされました！");
+});
+```
+
+</Sandpack>
+
+<SyscatComment>
+
+おお！赤い丸ができた！でも、画面の左上の角にあるね。これを真ん中に持っていきたいな。
+
+</SyscatComment>
+
+**丸い形を作るテクニック：**
+- `border-radius: 50%` で角を丸くして円形に
+- 正方形（縦横同じサイズ）に `border-radius: 50%` を適用すると完全な円になる
+
+### 的を画面中央に配置する
+
+CSS Gridを使って、最もシンプルな方法で的を中央に配置してみましょう：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>射的ゲーム Step 4 - 最新CSS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="rect">
+    <div class="target"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+.rect {
+  width: 100vw;
+  height: 100vh;
+  background-color: darkblue;
+  
+  /* CSS Gridで中央配置 - 最もシンプルな方法！ */
+  display: grid;
+  place-content: center;
+}
+
+.target {
+  /* 的の大きさを指定します */
+  width: 100px;
+  height: 100px;
+
+  /* 的の形を丸くするために、角を丸くします */
+  border-radius: 50%;
+
+  /* 的の色を指定します */
+  background-color: red;
+  
+  /* クリックできることを示すカーソル */
+  cursor: pointer;
+}
+```
+
+```js script.js
+const rectElement = document.querySelector(".rect");
+
+rectElement.addEventListener("click", () => {
+  console.log("ゲームエリアがクリックされました！");
+});
+```
+
+</Sandpack>
+
+<SyscatComment type="TADA">
+
+わあ！たった2行で中央寄せができちゃった！  CSS Gridの `place-content: center` ってすごくシンプルだね！
+
+</SyscatComment>
+
+**解説**
+- `display: grid` でGridレイアウトを有効化
+- `place-content: center` で水平・垂直の両方向を一度に中央寄せ
+
+### Flexboxを使った方法も知っておこう
+
+Flexboxも現在よく使われる中央配置の方法です：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>射的ゲーム Step 4 - Flexbox版</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="rect">
+    <div class="target"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+.rect {
+  width: 100vw;
+  height: 100vh;
+  background-color: darkblue;
+  
+  /* Flexboxで中央配置 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.target {
+  /* 的の大きさを指定します */
+  width: 100px;
+  height: 100px;
+
+  /* 的の形を丸くするために、角を丸くします */
+  border-radius: 50%;
+
+  /* 的の色を指定します */
+  background-color: red;
+  
+  /* クリックできることを示すカーソル */
+  cursor: pointer;
+}
+```
+
+```js script.js
+const rectElement = document.querySelector(".rect");
+
+rectElement.addEventListener("click", () => {
+  console.log("ゲームエリアがクリックされました！");
+});
+```
+
+</Sandpack>
+
+**モダンCSS Flexboxの特徴：**
+- `display: flex` でFlexboxレイアウトを有効化
+- `align-items: center` で子要素を垂直方向に中央寄せ
+- `justify-content: center` で子要素を水平方向に中央寄せ
+- 幅広くサポートされており、信頼性が高い
+
+### 従来の方法（position + transform）も知っておこう
+
+一方で、従来の `position` と `transform` を使った中央配置も重要なテクニックです：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>射的ゲーム Step 4 - 従来版</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="rect">
+    <div class="target"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+.rect {
+  width: 100vw;
+  height: 100vh;
+  background-color: darkblue;
+  
+  /* 位置指定の基準点にする */
+  position: relative;
+}
+
+.target {
+  /* 的の大きさを指定します */
+  width: 100px;
+  height: 100px;
+
+  /* 的の形を丸くするために、角を丸くします */
+  border-radius: 50%;
+
+  /* 的の色を指定します */
+  background-color: red;
+
+  /* 画面の中心に配置するためのスタイルです */
+  /* 位置を自由に指定できるようにします */
+  position: absolute;
+
+  /* top: 50%;
+     親要素の上から50%の位置に、要素の「上辺」を移動します */
+  top: 50%;
+
+  /* left: 50%;
+     親要素の左から50%の位置に、要素の「左辺」を移動します */
+  left: 50%;
+
+  /* transform: translate(-50%, -50%);
+     要素自身の大きさの半分だけ、上と左に移動させます
+     これにより、要素の「中心」が親要素の「中心」にぴったり合致します
+     Web制作で非常によく使われるテクニックです */
+  transform: translate(-50%, -50%);
+  
+  cursor: pointer;
+}
+```
+
+```js script.js
+const rectElement = document.querySelector(".rect");
+
+rectElement.addEventListener("click", () => {
+  console.log("ゲームエリアがクリックされました！");
+});
+```
+
+</Sandpack>
+
+<SyscatComment type="TADA">
+
+すごい！赤い丸が画面のど真ん中に来た！この中央配置のテクニック、覚えておくと便利そうだね。
+
+</SyscatComment>
+
+**どの方法を使うべき？**
+- **CSS Grid（最推奨）**: 最もシンプルで分かりやすく、最新の手法
+- **Flexbox（推奨）**: 安定しており、幅広くサポートされている
+- **position + transform**: より細かい位置制御が必要な場合や、複数の要素を重ねる場合に有効
+
+
+### 実践: 的のクリックイベントを設定してみよう
+
+今度は的自体にクリックイベントを設定してみましょう：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>練習: 的のクリック</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="rect">
+    <div class="target"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+.rect {
+  width: 100vw;
+  height: 100vh;
+  background-color: darkblue;
+  
+  /* CSS Gridで中央配置（推奨） */
+  display: grid;
+  place-content: center;
+}
+
+.target {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: red;
+  cursor: pointer; /* マウスを乗せたときに指のカーソルになる */
+}
+```
+
+```js script.js
+// TODO: .target 要素を取得してください
+// const targetElement = document.querySelector("???");
+
+// TODO: 的がクリックされたときのイベントを設定してください
+// targetElement.addEventListener("click", () => {
+//   console.log("???");
+// });
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```js script.js
+// .target 要素を取得
+const targetElement = document.querySelector(".target");
+
+// 的がクリックされたときのイベントを設定
+targetElement.addEventListener("click", () => {
+  console.log("的に命中しました！");
+});
+```
+
+**ユーザビリティの改善：**
+- `cursor: pointer` でマウスを乗せたときに指のカーソルになる
+- クリックできることがユーザーに伝わりやすくなる
+- ゲームの操作性が向上する
+
+</details>
+
+## 総合演習: 射的ゲームの基礎を完成させよう
+
+これまで学んだ知識を使って、射的ゲームの基礎部分を完成させてみましょう。
+以下の要件を満たすように、コメントを参考にして完成させてください。
+
+**要件：**
+- ゲームエリアは画面全体に広がり、濃い青色の背景
+- 的は赤い丸で、画面中央に配置
+- 的をクリックすると「命中！」とコンソールに表示
+- ゲームエリア（的以外）をクリックすると「外れ」とコンソールに表示
+- マウスを的に乗せるとカーソルが指の形になる
+
+<Sandpack options={{ editorHeight: 600 }}>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>射的ゲーム基礎完成版</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- TODO: ゲームエリアと的の要素を追加してください -->
+  
+  
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+/* TODO: ゲームエリア（.rect）のスタイルを設定 */
+/* - 画面全体のサイズ */
+/* - 濃い青色の背景 */
+/* - CSS Gridで中央配置の準備 */
+
+
+/* TODO: 的（.target）のスタイルを設定 */
+/* - 100px × 100px のサイズ */
+/* - 赤い色 */
+/* - 丸い形 */
+/* - カーソルを指の形に */
+/* ※ CSS Gridを使うので、positionでの配置は不要 */
+
+```
+
+```js script.js
+// TODO: ゲームエリア要素を取得
+
+
+// TODO: 的要素を取得
+
+
+// TODO: ゲームエリアのクリックイベント（外れの処理）
+
+
+// TODO: 的のクリックイベント（命中の処理）
+// ヒント: event.stopPropagation() を使うと、親要素のイベントを止められます
+
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```html index.html
+<div class="rect">
+  <div class="target"></div>
+</div>
+```
+
+```css style.css
+/* ゲームエリアのスタイル */
+.rect {
+  width: 100vw;
+  height: 100vh;
+  background-color: darkblue;
+  
+  /* 最新のCSS Gridで中央配置 */
+  display: grid;
+  place-content: center;
+}
+
+/* 的のスタイル */
+.target {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: red;
+  cursor: pointer;
+}
+```
+
+```js script.js
+// ゲームエリア要素を取得
+const rectElement = document.querySelector(".rect");
+
+// 的要素を取得
+const targetElement = document.querySelector(".target");
+
+// ゲームエリアのクリックイベント（外れの処理）
+rectElement.addEventListener("click", () => {
+  console.log("外れ");
+});
+
+// 的のクリックイベント（命中の処理）
+targetElement.addEventListener("click", (event) => {
+  console.log("命中！");
+  // 親要素（ゲームエリア）のクリックイベントが発火しないように止める
+  event.stopPropagation();
+});
+```
+
+**重要なテクニック：**
+- **CSS Grid中央配置**: `display: grid` + `place-content: center`（最もシンプル）
+- **event.stopPropagation()**: 親要素へのイベント伝播を止める[^event-propagation]
+- 的をクリックしたときに「外れ」が表示されないようにする
+- イベントバブリング（親要素への伝播）を制御する高度なテクニック[^event-bubbling]
+
+</details>
+
+## まとめ
+
+今回は射的ゲームの基礎となる部分を学びました：
+
+> **今回学んだこと**: 
+> - ✅ HTMLとCSSの基礎復習（要素の作成と装飾）
+> - ✅ JavaScriptによるクリックイベントの捕捉
+> - ✅ viewport単位を使った画面全体への要素拡大
+> - ✅ 最新CSS Grid（place-content: center）を使った中央配置
+> - ✅ Flexboxやposition + transformによる中央配置の選択肢
+> - ✅ 的の見た目作り（丸い形と配置）
+> - ✅ イベントバブリングの制御
+
+<SyscatComment>
+
+基礎がしっかりできた！次回はこの的を動かしたり、スコアをつけたりして、本格的なゲームにしていくんだね。楽しみ！
+
+</SyscatComment>
+
+次回は、この土台を使って的をランダムに動かしたり、スコアをカウントしたりして、本格的な射的ゲームに発展させていきます。
+
+しっかりと基礎を理解して、次のステップに進みましょう！
+
+<LinkCard
+  title="JavaScript イベント処理"
+  description="MDNで詳しく学ぶ"
+  href="https://developer.mozilla.org/ja/docs/Web/API/EventTarget/addEventListener"
+/>
+
+<LinkCard
+  title="CSS Positioning"
+  description="MDNで詳しく学ぶ"
+  href="https://developer.mozilla.org/ja/docs/Web/CSS/position"
+/>
+
+<LinkCard
+  title="CSS Grid Layout"
+  description="MDNで詳しく学ぶ"
+  href="https://developer.mozilla.org/ja/docs/Web/CSS/CSS_Grid_Layout"
+/>
+
+<Checkpoint>
+
+- [ ] HTMLに要素を追加し、CSSで装飾できる
+- [ ] JavaScriptでクリックイベントを設定できる
+- [ ] viewport単位（vw、vh）を理解して使える
+- [ ] CSS Grid（place-content: center）で中央配置ができる
+- [ ] Flexbox や position + transform の中央配置手法を理解している
+- [ ] border-radius で丸い要素を作れる
+- [ ] event.stopPropagation() でイベント伝播を制御できる
+- [ ] コンソールでJavaScriptの動作確認ができる
+
+</Checkpoint>
+
+[^1049]: [射的ゲーム実装仕様](https://sysken.esa.io/posts/1049) - esa#1049
+[^javascript-basic]: [JavaScriptとは](https://sysken.esa.io/posts/1049#JavaScript%E3%81%A8%E3%81%AF) - esa#1049
+[^dom-manipulation]: [JavaScriptでHTMLとCSSを操作する](https://sysken.esa.io/posts/1049#JavaScript%E3%81%A7HTML%E3%81%A8CSS%E3%82%92%E6%93%8D%E4%BD%9C%E3%81%99%E3%82%8B) - esa#1049
+[^event-handling]: [HTMLのイベント](https://sysken.esa.io/posts/1049#HTML%E3%81%AE%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88) - esa#1049
+[^javascript-debugging]: [JavaScriptデバッギング](https://sysken.esa.io/posts/1049#JavaScript%E3%83%87%E3%83%90%E3%83%83%E3%82%AE%E3%83%B3%E3%82%B0) - esa#1049
+[^event-propagation]: [イベントとJavaScriptを関連付ける方法](https://sysken.esa.io/posts/1049#%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88%E3%81%A8JavaScript%E3%82%92%E9%96%A2%E9%80%A3%E4%BB%98%E3%81%91%E3%82%8B%E6%96%B9%E6%B3%95) - esa#1049
+[^event-bubbling]: [イベントとJavaScriptを関連付ける方法](https://sysken.esa.io/posts/1049#%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88%E3%81%A8JavaScript%E3%82%92%E9%96%A2%E9%80%A3%E4%BB%98%E3%81%91%E3%82%8B%E6%96%B9%E6%B3%95) - esa#1049

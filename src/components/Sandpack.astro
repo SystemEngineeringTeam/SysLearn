@@ -6,6 +6,7 @@ import { Sandpack as Sandpack_ } from "@codesandbox/sandpack-react";
 type Props = ComponentProps<typeof Sandpack_>;
 
 const props = Astro.props;
+const {options, ...rest} = props;
 ---
 
 <style>
@@ -31,12 +32,14 @@ const props = Astro.props;
       client:only="react"
       options={{
         showInlineErrors: true,
+        showConsoleButton: true,
+        showLineNumbers: true,
         editorHeight: 500,
-        ...props.options
+        ...options,
       }}
       template="static"
       theme="light"
-      {...props}
+      {...rest}
     >
 
     <slot />

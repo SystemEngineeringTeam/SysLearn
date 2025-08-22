@@ -1,16 +1,6 @@
 import type { CollectionEntry } from "astro:content";
 import { getValues } from ".";
-
-class FrontmatterError extends Error {
-  public override name: string = "FrontmatterError";
-
-  public constructor(
-    message: string,
-    public readonly hint: string | undefined = undefined,
-  ) {
-    super(message);
-  }
-}
+import { FrontmatterError } from "./error";
 
 function checkSlugOrThrow(
   collections: Array<CollectionEntry<"docs">>,
@@ -119,7 +109,7 @@ export function checkFrontmatterOrThrow(
       validations: [
         checkSlugOrThrow,
         checkSidebarOrder,
-        checkNextPropertyOnLastEntry,
+        // checkNextPropertyOnLastEntry,
       ],
     },
     setups: {

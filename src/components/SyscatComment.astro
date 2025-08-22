@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import { FrontmatterError } from "@/lib/utils/error";
 import { SYSCAT } from "@/lib/utils/syscat";
 
 
@@ -8,6 +9,16 @@ type Props = {
 };
 
 const { type } = Astro.props as Props;
+
+const entry = SYSCAT[type ?? "DEFAULT"];
+
+if (entry == null) {
+  throw new FrontmatterError(
+    `Unknown SYSCAT entry for type \`${type}\``,
+    `シスにゃんの種別 (\`${type}\`) が不明です.  使用可能な種別は \`src/lib/utils/syscat.ts\` を参照してください.`,
+  );
+}
+
 ---
 
 <div class="syscat-comment">
