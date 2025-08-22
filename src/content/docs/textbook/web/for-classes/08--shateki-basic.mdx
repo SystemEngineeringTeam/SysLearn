@@ -1,0 +1,1255 @@
+---
+title: 射的ゲーム 基本編 (的の動きとスコア管理)
+description: 的をランダムに動かし、スコアをカウントし、制限時間をつけて、ゲーム開始ボタンで管理する本格的な射的ゲームを作ります。
+slug: textbook/web/for-classes/shateki-basic
+sidebar:
+  order: 8
+---
+
+import { Aside, LinkCard } from "@astrojs/starlight/components";
+import SyscatComment from "@/components/SyscatComment.astro"
+import Sandpack from "@/components/Sandpack.astro";
+import Checkpoint from '@/components/Checkpoint.astro';
+import { Code } from '@astrojs/starlight/components';
+
+## 射的ゲームに本格的な機能を追加しよう！
+
+前回の「07 射的ゲーム準備編」では、HTML・CSS・JavaScriptを使って基本的な的と射撃の仕組みを作りました。今回は、本格的なゲームらしい機能を追加していきます[^1049]。
+
+ここから射的ゲームがどんどん楽しくなっていきます！動く的、スコア表示、制限時間など、本物のゲームに近づけていきましょう。
+
+<SyscatComment>
+
+わーい！今度は的が動いたり、スコアが表示されたりするんだね！本格的なゲームになりそうで楽しみ！
+
+</SyscatComment>
+
+## 今回の目標
+
+この回では、射的ゲームを**本格的なゲーム**に発展させます：
+
+1. **的をランダムに動かす** - クリック後に的がランダムな位置に移動
+2. **命中回数のカウント** - スコア機能の実装
+3. **制限時間をつける** - タイマー機能とゲーム終了処理
+4. **ゲーム開始ボタン** - ゲーム状態の管理
+
+<SyscatComment type="CONFUSED">
+
+4つも新しい機能！大丈夫かな？でも、一つずつ丁寧に進めていけば、きっとできるよね！
+
+</SyscatComment>
+
+## 1. 的をランダムに動かす（クリック後に移動）
+
+まず、的をクリックしたときにランダムな位置に移動させる機能を作ります。前回作った基礎に少しずつ機能を追加していきましょう。
+
+### ランダム移動の基本を理解しよう
+
+まずは、JavaScriptの `Math.random()`[^math-random] を使って、的をランダムな位置に動かしてみます：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>射的ゲーム Step 5 - ランダム移動</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="rect">
+    <div class="target"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.rect {
+  width: 100vw;
+  height: 100vh;
+  background-color: darkblue;
+  
+  /* CSS Gridで中央配置の準備 */
+  display: grid;
+  place-content: center;
+  position: relative;
+}
+
+.target {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: red;
+  cursor: pointer;
+  
+  /* 絶対位置指定で自由に移動できるようにする */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+```
+
+```js script.js
+// 的の要素を取得
+const targetElement = document.querySelector(".target");
+
+// 的がクリックされたときの処理
+targetElement.addEventListener("click", () => {
+  // 0から90までのランダムな数値を生成
+  const randomLeft = Math.random() * 90;
+  const randomTop = Math.random() * 90;
+
+  // 的の位置を変更
+  targetElement.style.left = `${randomLeft}%`;
+  targetElement.style.top = `${randomTop}%`;
+});
+```
+
+</Sandpack>
+
+<SyscatComment type="TADA">
+
+おお！的をクリックすると、ランダムな場所に飛んでいく！これで逃げる的ができたね！
+
+</SyscatComment>
+
+**JavaScriptのポイント：**
+
+1. **Math.random()**: 0以上1未満のランダムな小数を生成
+2. **テンプレートリテラル**: `${変数名}`[^template-literal] で文字列に値を埋め込み
+3. **position: absolute**: CSSで要素を自由な位置に配置
+
+### 実践: ランダム移動を自分で実装してみよう
+
+以下のコメントを参考に、的がクリックされるとランダムに移動する機能を完成させてください：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>練習: ランダム移動</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="rect">
+    <div class="target"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.rect {
+  width: 100vw;
+  height: 100vh;
+  background-color: darkblue;
+  
+  /* CSS Gridで中央配置 */
+  display: grid;
+  place-content: center;
+  position: relative;
+}
+
+.target {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: red;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+```
+
+```js script.js
+// TODO: 的の要素を取得してください
+/*
+const targetElement = document.querySelector("???");
+*/
+
+// TODO: 的がクリックされたときの処理を設定してください
+/*
+targetElement.addEventListener("click", () => {
+  // TODO: 0から85までのランダムな数値を生成（的が画面外に出ないように）
+  const randomLeft = Math.random() * ???;
+  const randomTop = Math.random() * ???;
+  
+  // TODO: 的の位置を変更してください
+  targetElement.style.left = `${???}%`;
+  targetElement.style.top = `${???}%`;
+});
+*/
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```js title="script.js"
+// 的の要素を取得
+const targetElement = document.querySelector(".target");
+
+// 的がクリックされたときの処理を設定
+targetElement.addEventListener("click", () => {
+  // 0から85までのランダムな数値を生成
+  const randomLeft = Math.random() * 85;
+  const randomTop = Math.random() * 85;
+  
+  // 的の位置を変更
+  targetElement.style.left = `${randomLeft}%`;
+  targetElement.style.top = `${randomTop}%`;
+});
+```
+
+**ランダム移動のポイント：**
+- `Math.random() * 85` で0〜85%の範囲に制限（的が画面外に出ないように）
+- `style.left` と `style.top` でCSSの位置を動的に変更
+- クリックするたびに新しいランダムな位置に移動
+
+</details>
+
+## 2. 命中回数のカウント
+
+次に、命中したときにスコアをカウントする機能を追加します。画面にスコアを表示して、ゲームらしくしていきましょう。
+
+### スコア表示の追加
+
+HTMLにスコア表示用の要素を追加し、JavaScriptでスコアを管理します：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>射的ゲーム Step 6 - スコア機能</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- スコア表示を追加 -->
+  <div id="score">score: 0</div>
+
+  <div class="rect">
+    <div class="target"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.rect {
+  width: 100vw;
+  height: 100vh;
+  background-color: darkblue;
+  
+  /* CSS Gridで中央配置 */
+  display: grid;
+  place-content: center;
+  position: relative;
+}
+
+.target {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: red;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* スコア表示のスタイル */
+#score {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px 8px;
+  border-radius: 3px;
+  z-index: 1000;
+}
+```
+
+```js script.js
+// 要素の取得
+const targetElement = document.querySelector(".target");
+const scoreElement = document.querySelector("#score");
+
+// スコアを管理する変数
+let score = 0;
+
+// 的がクリックされたときの処理
+targetElement.addEventListener("click", () => {
+  // スコアを1増やす
+  score++;
+  
+  // 画面のスコア表示を更新
+  scoreElement.textContent = `score: ${score}`;
+  
+  // 的を新しい位置に移動
+  const randomLeft = Math.random() * 90;
+  const randomTop = Math.random() * 90;
+  
+  targetElement.style.left = `${randomLeft}%`;
+  targetElement.style.top = `${randomTop}%`;
+});
+```
+
+</Sandpack>
+
+<SyscatComment type="TADA">
+
+やった！的をクリックするたびにスコアが増えていく！0, 1, 2, 3... って数字が上がっていくのが楽しい！
+
+</SyscatComment>
+
+**JavaScriptのポイント：**
+
+1. **let変数**[^variables]: 後から値を変更できる変数の宣言
+2. **インクリメント**: `score++` でスコアを1増やす
+3. **textContent**[^dom-manipulation]: 要素のテキストを動的に変更
+
+### 実践: スコア機能を自分で実装してみよう
+
+以下のコメントを参考に、的をクリックするとスコアが増える機能を作ってください：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>練習: スコア機能</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="score">score: 0</div>
+  
+  <div class="rect">
+    <div class="target"></div>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.rect {
+  width: 100vw;
+  height: 100vh;
+  background-color: darkblue;
+  
+  /* CSS Gridで中央配置 */
+  display: grid;
+  place-content: center;
+  position: relative;
+}
+
+.target {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: red;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#score {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  font-size: 16px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px 8px;
+  border-radius: 3px;
+}
+```
+
+```js script.js
+// TODO: 要素を取得してください
+/*
+const targetElement = document.querySelector("???");
+const scoreElement = document.querySelector("???");
+*/
+
+// TODO: スコアを管理する変数を宣言してください
+// let score = ???;
+
+// TODO: 的がクリックされたときの処理を設定してください
+/*
+targetElement.addEventListener("click", () => {
+  // TODO: スコアを1増やしてください
+  ???;
+  
+  // TODO: 画面のスコア表示を更新してください
+  scoreElement.textContent = `score: ${???}`;
+  
+  // TODO: 的をランダムな位置に移動させてください
+  const randomLeft = Math.random() * 85;
+  const randomTop = Math.random() * 85;
+  targetElement.style.left = `${randomLeft}%`;
+  targetElement.style.top = `${randomTop}%`;
+});
+*/
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```js title="script.js"
+// 要素を取得
+const targetElement = document.querySelector(".target");
+const scoreElement = document.querySelector("#score");
+
+// スコアを管理する変数を宣言
+let score = 0;
+
+// 的がクリックされたときの処理を設定
+targetElement.addEventListener("click", () => {
+  // スコアを1増やす
+  score++;
+  
+  // 画面のスコア表示を更新
+  scoreElement.textContent = `score: ${score}`;
+  
+  // 的をランダムな位置に移動
+  const randomLeft = Math.random() * 85;
+  const randomTop = Math.random() * 85;
+  targetElement.style.left = `${randomLeft}%`;
+  targetElement.style.top = `${randomTop}%`;
+});
+```
+
+**スコア管理のポイント：**
+- `let score = 0` でスコアの初期値を設定
+- `score++` でクリックするたびにスコアを1増加
+- `textContent` でHTMLの表示を動的に更新
+
+</details>
+
+## 3. 制限時間をつける
+
+ゲームに制限時間を設けて、時間が経過したら終了するようにします。タイマー機能とゲーム終了画面を実装しましょう。
+
+### タイマー機能の基本実装
+
+まずは基本的なタイマー機能を追加します：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>射的ゲーム Step 7 - タイマー機能</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="score">score: 0</div>
+  <!-- タイマー表示を追加 -->
+  <div id="timer">time: 10</div>
+
+  <!-- ゲーム終了画面を追加 -->
+  <div id="game-over-screen" class="hidden">
+    <h2>ゲーム終了！</h2>
+    <p>最終スコア: <span id="final-score">0</span></p>
+  </div>
+
+  <div class="rect">
+    <div class="target"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.rect {
+  width: 100vw;
+  height: 100vh;
+  background-color: darkblue;
+  
+  /* CSS Gridで中央配置 */
+  display: grid;
+  place-content: center;
+  position: relative;
+}
+
+.target {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: red;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#score {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px 8px;
+  border-radius: 3px;
+  z-index: 1000;
+}
+
+#timer {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px 8px;
+  border-radius: 3px;
+  z-index: 1000;
+}
+
+#game-over-screen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border: 2px solid #333;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 16px;
+  z-index: 10;
+}
+
+.hidden {
+  display: none;
+}
+```
+
+```js script.js
+// 要素の取得
+const targetElement = document.querySelector(".target");
+const scoreElement = document.querySelector("#score");
+const timerElement = document.querySelector("#timer");
+const gameOverScreen = document.querySelector("#game-over-screen");
+const finalScoreElement = document.querySelector("#final-score");
+
+// ゲーム状態の管理
+let score = 0;
+let timeLeft = 10;
+let isGameActive = true;
+let timerId = null;
+
+// タイマー開始
+const startTimer = () => {
+  timerId = setInterval(() => {
+    timeLeft--;
+    timerElement.textContent = `time: ${timeLeft}`;
+    
+    if (timeLeft <= 0) {
+      // ゲーム終了処理
+      isGameActive = false;
+      clearInterval(timerId);
+      
+      // UI更新
+      targetElement.classList.add("hidden");
+      finalScoreElement.textContent = score;
+      gameOverScreen.classList.remove("hidden");
+    }
+  }, 1000);
+};
+
+// 的がクリックされたときの処理
+targetElement.addEventListener("click", () => {
+  if (!isGameActive) return;
+  
+  score++;
+  scoreElement.textContent = `score: ${score}`;
+  
+  const randomLeft = Math.random() * 90;
+  const randomTop = Math.random() * 90;
+  
+  targetElement.style.left = `${randomLeft}%`;
+  targetElement.style.top = `${randomTop}%`;
+});
+
+// ゲーム開始
+startTimer();
+```
+
+</Sandpack>
+
+<SyscatComment type="TADA">
+
+すごい！10秒のカウントダウンが始まって、時間が0になったらゲーム終了画面が出た！的も消えて、最終スコアが表示されてる！
+
+</SyscatComment>
+
+**JavaScriptのポイント：**
+
+1. **setInterval**[^timer-functions]: 指定した時間間隔で処理を繰り返し実行
+2. **clearInterval**: 開始したタイマーを停止
+3. **ゲーム状態管理**: `isGameActive` でゲームの状態を制御
+
+### 実践: タイマー機能を自分で実装してみよう
+
+以下のコメントを参考に、10秒のカウントダウンタイマーを作ってみてください：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>練習: タイマー機能</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="score">score: 0</div>
+  <div id="timer">time: 10</div>
+  
+  <div id="game-over-screen" class="hidden">
+    <p>ゲーム終了！</p>
+    <p>最終スコア: <span id="final-score">0</span></p>
+  </div>
+  
+  <div class="rect">
+    <div class="target"></div>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.rect {
+  width: 100vw;
+  height: 100vh;
+  background-color: darkblue;
+  
+  /* CSS Gridで中央配置 */
+  display: grid;
+  place-content: center;
+  position: relative;
+}
+
+.target {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: red;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#score, #timer {
+  position: fixed;
+  font-size: 16px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px 8px;
+  border-radius: 3px;
+}
+
+#score {
+  top: 10px;
+  left: 10px;
+}
+
+#timer {
+  top: 10px;
+  right: 10px;
+}
+
+#game-over-screen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.hidden {
+  display: none;
+}
+```
+
+```js script.js
+// TODO: 要素を取得してください
+/*
+const targetElement = document.querySelector("???");
+const scoreElement = document.querySelector("???");
+const timerElement = document.querySelector("???");
+const gameOverScreen = document.querySelector("???");
+const finalScoreElement = document.querySelector("???");
+*/
+
+// TODO: ゲーム状態を管理する変数を宣言してください
+// let score = 0;
+// let timeLeft = ???;
+// let isGameActive = ???;
+// let timerId = null;
+
+// TODO: タイマーを開始する処理を書いてください
+/*
+const startTimer = () => {
+  timerId = setInterval(() => {
+    // TODO: 残り時間を1減らす
+    ???;
+    
+    // TODO: タイマー表示を更新
+    timerElement.textContent = `time: ${???}`;
+    
+    // TODO: 時間が0以下になったらゲーム終了
+    if (timeLeft <= 0) {
+      isGameActive = false;
+      clearInterval(timerId);
+      
+      // UI更新
+      targetElement.classList.add("hidden");
+      finalScoreElement.textContent = score;
+      gameOverScreen.classList.remove("hidden");
+    }
+  }, 1000);
+};
+*/
+
+// TODO: 的のクリックイベントを設定してください
+/*
+targetElement.addEventListener("click", () => {
+  if (!isGameActive) return;
+  
+  score++;
+  scoreElement.textContent = `score: ${score}`;
+  
+  const randomLeft = Math.random() * 85;
+  const randomTop = Math.random() * 85;
+  targetElement.style.left = `${randomLeft}%`;
+  targetElement.style.top = `${randomTop}%`;
+});
+*/
+
+// TODO: ゲームを開始してください
+// startTimer();
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+```js title="script.js"
+// 要素を取得
+const targetElement = document.querySelector(".target");
+const scoreElement = document.querySelector("#score");
+const timerElement = document.querySelector("#timer");
+const gameOverScreen = document.querySelector("#game-over-screen");
+const finalScoreElement = document.querySelector("#final-score");
+
+// ゲーム状態を管理する変数を宣言
+let score = 0;
+let timeLeft = 10;
+let isGameActive = true;
+let timerId = null;
+
+// タイマーを開始する処理
+const startTimer = () => {
+  timerId = setInterval(() => {
+    // 残り時間を1減らす
+    timeLeft--;
+    
+    // タイマー表示を更新
+    timerElement.textContent = `time: ${timeLeft}`;
+    
+    // 時間が0以下になったらゲーム終了
+    if (timeLeft <= 0) {
+      isGameActive = false;
+      clearInterval(timerId);
+      
+      // UI更新
+      targetElement.classList.add("hidden");
+      finalScoreElement.textContent = score;
+      gameOverScreen.classList.remove("hidden");
+    }
+  }, 1000);
+};
+
+// 的のクリックイベントを設定
+targetElement.addEventListener("click", () => {
+  if (!isGameActive) return;
+  
+  score++;
+  scoreElement.textContent = `score: ${score}`;
+  
+  const randomLeft = Math.random() * 85;
+  const randomTop = Math.random() * 85;
+  
+  targetElement.style.left = `${randomLeft}%`;
+  targetElement.style.top = `${randomTop}%`;
+});
+
+// ゲーム開始
+startTimer();
+```
+
+**タイマー機能のポイント：**
+- `setInterval(関数, 1000)` で1秒ごとに処理を実行
+- `timeLeft--` で毎秒1ずつ減らす
+- `isGameActive` でゲーム終了後のクリックを無効化
+
+</details>
+
+## 4. ゲーム開始ボタン
+
+最後に、ゲーム開始ボタンを追加して、ゲーム状態を適切に管理できるようにします。これで完全な射的ゲームが完成します！
+
+### ゲーム開始ボタンの基本実装
+
+ゲーム開始前の画面とボタンを追加し、ゲームの状態管理を完璧にしましょう：
+
+<Sandpack>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>射的ゲーム Step 8 - 完成版</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="score" class="hidden">score: 0</div>
+  <div id="timer" class="hidden">time: 10</div>
+
+  <div id="start-screen">
+    <h1>射的ゲーム</h1>
+    <button id="start-button">Start!</button>
+  </div>
+
+  <div id="game-over-screen" class="hidden">
+    <p>ゲーム終了！</p>
+    <p>score: <span id="final-score">0</span></p>
+    <button id="restart-button">もう一度遊ぶ</button>
+  </div>
+
+  <div class="rect">
+    <div class="target hidden"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.rect {
+  width: 100vw;
+  height: 100vh;
+  background-color: darkblue;
+  
+  /* CSS Gridで中央配置 */
+  display: grid;
+  place-content: center;
+  position: relative;
+}
+
+.target {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: red;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#score, #timer {
+  position: fixed;
+  font-size: 16px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px 8px;
+  border-radius: 3px;
+}
+
+#score {
+  top: 10px;
+  left: 10px;
+}
+
+#timer {
+  top: 10px;
+  right: 10px;
+}
+
+#start-screen, #game-over-screen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-family: sans-serif;
+  z-index: 10;
+}
+
+#start-screen h1 {
+  font-size: 24px;
+  margin: 0 0 15px 0;
+}
+
+#start-button, #restart-button {
+  font-size: 16px;
+  padding: 8px 16px;
+  background: #ffdd57;
+  color: #333;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.hidden {
+  display: none;
+}
+```
+
+```js script.js
+// 要素の取得
+const targetElement = document.querySelector(".target");
+const scoreElement = document.querySelector("#score");
+const timerElement = document.querySelector("#timer");
+const startScreen = document.querySelector("#start-screen");
+const gameOverScreen = document.querySelector("#game-over-screen");
+const finalScoreElement = document.querySelector("#final-score");
+const startButton = document.querySelector("#start-button");
+const restartButton = document.querySelector("#restart-button");
+
+// ゲーム状態の管理
+let score = 0;
+let timeLeft = 10;
+let isGameActive = false;
+let timerId = null;
+
+// ゲーム開始処理
+function startGame() {
+  // 既存のタイマーをクリア
+  if (timerId) {
+    clearInterval(timerId);
+  }
+  
+  // 変数を初期化
+  score = 0;
+  timeLeft = 10;
+  isGameActive = true;
+  
+  // UI切り替え
+  startScreen.classList.add("hidden");
+  gameOverScreen.classList.add("hidden");
+  scoreElement.classList.remove("hidden");
+  timerElement.classList.remove("hidden");
+  targetElement.classList.remove("hidden");
+  
+  // 表示を更新
+  scoreElement.textContent = `score: ${score}`;
+  timerElement.textContent = `time: ${timeLeft}`;
+  
+  // 的を初期位置に配置
+  targetElement.style.left = "50%";
+  targetElement.style.top = "50%";
+  
+  // タイマーを開始
+  timerId = setInterval(() => {
+    timeLeft--;
+    timerElement.textContent = `time: ${timeLeft}`;
+    
+    if (timeLeft <= 0) {
+      endGame();
+    }
+  }, 1000);
+}
+
+// ゲーム終了処理
+function endGame() {
+  isGameActive = false;
+  if (timerId) {
+    clearInterval(timerId);
+    timerId = null;
+  }
+  
+  // UI更新
+  targetElement.classList.add("hidden");
+  scoreElement.classList.add("hidden");
+  timerElement.classList.add("hidden");
+  finalScoreElement.textContent = score;
+  gameOverScreen.classList.remove("hidden");
+}
+
+// イベントリスナー設定
+startButton.addEventListener("click", startGame);
+restartButton.addEventListener("click", startGame);
+
+targetElement.addEventListener("click", () => {
+  if (!isGameActive) return;
+  
+  score++;
+  scoreElement.textContent = `score: ${score}`;
+  
+  const randomLeft = Math.random() * 85;
+  const randomTop = Math.random() * 85;
+  
+  targetElement.style.left = `${randomLeft}%`;
+  targetElement.style.top = `${randomTop}%`;
+});
+```
+
+</Sandpack>
+
+**ゲーム状態管理のポイント：**
+- `startGame()` 関数[^functions]でゲーム開始時の初期化処理をまとめる
+- `endGame()` 関数でゲーム終了時の処理をまとめる
+- `classList.add("hidden")` / `classList.remove("hidden")` で画面切り替え
+
+### 実践: ゲーム開始ボタンを自分で実装してみよう
+
+以下のコメントを参考に、完全な射的ゲームを完成させてください：
+
+<Sandpack options={{ editorHeight: 600 }}>
+
+```html index.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>総合演習: 射的ゲーム完成版</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- TODO: ゲーム中のUI（最初は非表示にする） -->
+  
+  
+  <!-- TODO: 開始画面を作成 -->
+  
+  
+  <!-- TODO: ゲーム終了画面を作成 -->
+  
+  
+  <!-- TODO: ゲームエリアと的を作成 -->
+  
+
+  <script src="script.js"></script>
+</body>
+</html>
+```
+
+```css style.css
+/* TODO: 基本的なリセットスタイル */
+
+
+/* TODO: ゲームエリアのスタイル */
+
+
+/* TODO: 的のスタイル */
+
+
+/* TODO: スコアとタイマーのスタイル */
+
+
+/* TODO: 開始画面とゲーム終了画面のスタイル */
+
+
+/* TODO: ボタンのスタイル */
+
+
+/* TODO: hiddenクラス */
+
+```
+
+```js script.js
+// TODO: 必要な要素をすべて取得
+
+
+// TODO: ゲーム状態を管理する変数を宣言
+
+
+// TODO: ゲーム開始処理の関数を作成
+
+
+// TODO: ゲーム終了処理の関数を作成
+
+
+// TODO: イベントリスナーを設定
+
+```
+
+</Sandpack>
+
+<details>
+<summary>解答例を見る</summary>
+
+完全なコードは上記の例を参考にしてください。
+
+**重要なポイント：**
+- **関数による処理の整理**: 複雑な処理を `startGame()` と `endGame()` 関数にまとめる
+- **ゲームライフサイクル**: 開始→プレイ中→終了→再開の流れを管理
+- **UI状態の切り替え**: `classList` を使って画面の表示/非表示を制御
+- **イベント処理**: ボタンクリックと的のクリックを適切に処理
+
+</details>
+
+## まとめ
+
+この章では射的ゲームを本格的なゲームに発展させました！
+
+> **今回学んだこと**: 
+> - ✅ `Math.random()`を使ったランダム移動の実装
+> - ✅ スコア管理とDOM操作による動的なUI更新
+> - ✅ `setInterval`/`clearInterval`を使ったタイマー機能
+> - ✅ ゲーム状態管理とライフサイクルの設計
+> - ✅ イベント処理とユーザーインタラクションの改善
+> - ✅ 関数を使ったコードの整理
+
+<SyscatComment>
+
+完璧な射的ゲームができた！ランダムに動く的、スコア表示、制限時間、きれいなUI... 本当にゲームらしくなったね！
+
+</SyscatComment>
+
+次回は、さらに高度な機能（複数の的、難易度設定、ハイスコア機能など）を追加して、より本格的なゲームに発展させていきます！
+
+しっかりと基礎を理解して、次のステップに進みましょう！
+
+<LinkCard
+  title="JavaScript 基本構文"
+  description="MDNで詳しく学ぶ"
+  href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide"
+/>
+
+<LinkCard
+  title="ゲーム開発の基礎"
+  description="MDNで詳しく学ぶ"
+  href="https://developer.mozilla.org/ja/docs/Games"
+/>
+
+<Checkpoint>
+
+- [ ] Math.random()を使ってランダムな値を生成できる
+- [ ] テンプレートリテラルで文字列に変数を埋め込める
+- [ ] let/constを使った適切な変数管理ができる
+- [ ] DOM操作でUIを動的に更新できる
+- [ ] setInterval/clearIntervalでタイマー機能を実装できる
+- [ ] イベントリスナーでユーザーの操作を検知できる
+- [ ] 関数を使ってコードを整理できる
+- [ ] ゲーム状態の管理とライフサイクルを理解している
+
+</Checkpoint>
+
+## 脚注
+
+[^1049]: [JavaScriptとは](https://sysken.esa.io/posts/1049#JavaScript%E3%81%A8%E3%81%AF) - esa#1049
+[^math-random]: [数値に関する演算子](https://sysken.esa.io/posts/1049#%E6%95%B0%E5%80%A4%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E6%BC%94%E7%AE%97%E5%AD%90) - esa#1049
+[^event-listener]: [イベントとJavaScriptを関連付ける方法](https://sysken.esa.io/posts/1049#%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88%E3%81%A8javascript%E3%82%92%E9%96%A2%E9%80%A3%E4%BB%98%E3%81%91%E3%82%8B%E6%96%B9%E6%B3%95) - esa#1049
+[^template-literal]: [文字列に関する演算子](https://sysken.esa.io/posts/1049#%E6%96%87%E5%AD%97%E5%88%97%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E6%BC%94%E7%AE%97%E5%AD%90) - esa#1049
+[^variables]: [変数は宣言して使う](https://sysken.esa.io/posts/1049#%E5%A4%89%E6%95%B0%E3%81%AF%E5%AE%A3%E8%A8%80%E3%81%97%E3%81%A6%E4%BD%BF%E3%81%86) - esa#1049
+[^dom-manipulation]: [HTMLの要素を取得する](https://sysken.esa.io/posts/1049#html%E3%81%AE%E8%A6%81%E7%B4%A0%E3%82%92%E5%8F%96%E5%BE%97%E3%81%99%E3%82%8B) - esa#1049
+[^timer-functions]: [ループ編](https://sysken.esa.io/posts/1049#%E3%83%AB%E3%83%BC%E3%83%97%E7%B7%A8) - esa#1049
+[^functions]: [関数編](https://sysken.esa.io/posts/1049#%E9%96%A2%E6%95%B0%E7%B7%A8) - esa#1049

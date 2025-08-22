@@ -1,5 +1,5 @@
 ---
-title: 射的ゲーム作成の前準備
+title: 射的ゲーム 準備編 (前節までの復習とクリックイベント)
 description: HTMLの基礎復習から始めて、クリックイベントの捕捉、要素の配置、的の見た目作りまで。射的ゲームを作るための土台をしっかりと固めましょう。
 slug: textbook/web/for-classes/shateki-prepare
 sidebar:
@@ -37,8 +37,7 @@ JavaScriptは現在、Webページ制作に欠かせないプログラミング�
 
 <SyscatComment type="CONFUSED">
 
-あれ？いきなりゲームを作るの？  でも、心配しないで！一つ一つ丁寧に進めていくから、きっとできるよ。  
-プログラミングは積み重ねが大切なんだ。
+あれ？いきなりゲームを作るの？&emsp;でも、心配しないで！一つ一つ丁寧に進めていくから、きっとできるよ。プログラミングは積み重ねが大切なんだ。
 
 </SyscatComment>
 
@@ -377,6 +376,12 @@ CSSの `vw`（viewport width）と `vh`（viewport height）という単位を�
 ```
 
 ```css style.css
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 .rect {
   /* vw は 'viewport width' の略で、画面の横幅に対する割合を指定する単位です */
   /* 100vw は「画面の横幅の100%」という意味になります */
@@ -465,7 +470,7 @@ halfElement.addEventListener("click", () => {
 <details>
 <summary>解答例を見る</summary>
 
-```css style.css
+```css title="style.css"
 .half-screen {
   width: 50vw;
   height: 50vh;
@@ -855,6 +860,12 @@ rectElement.addEventListener("click", () => {
 ```
 
 ```css style.css
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 .rect {
   width: 100vw;
   height: 100vh;
@@ -876,12 +887,16 @@ rectElement.addEventListener("click", () => {
 
 ```js script.js
 // TODO: .target 要素を取得してください
-// const targetElement = document.querySelector("???");
+/*
+const targetElement = document.querySelector("???");
+*/
 
 // TODO: 的がクリックされたときのイベントを設定してください
-// targetElement.addEventListener("click", () => {
-//   console.log("???");
-// });
+/*
+targetElement.addEventListener("click", () => {
+  console.log("???");
+});
+*/
 ```
 
 </Sandpack>
@@ -889,7 +904,7 @@ rectElement.addEventListener("click", () => {
 <details>
 <summary>解答例を見る</summary>
 
-```js script.js
+```js title="script.js"
 // .target 要素を取得
 const targetElement = document.querySelector(".target");
 
@@ -939,34 +954,42 @@ targetElement.addEventListener("click", () => {
 ```
 
 ```css style.css
-/* TODO: ゲームエリア（.rect）のスタイルを設定 */
-/* - 画面全体のサイズ */
-/* - 濃い青色の背景 */
-/* - CSS Gridで中央配置の準備 */
+/*
+TODO: ゲームエリア（.rect）のスタイルを設定
+- 画面全体のサイズ
+- 濃い青色の背景
+- CSS Gridで中央配置の準備
+*/
 
 
-/* TODO: 的（.target）のスタイルを設定 */
-/* - 100px × 100px のサイズ */
-/* - 赤い色 */
-/* - 丸い形 */
-/* - カーソルを指の形に */
-/* ※ CSS Gridを使うので、positionでの配置は不要 */
+/*
+TODO: 的（.target）のスタイルを設定
+- 100px × 100px のサイズ
+- 赤い色
+- 丸い形
+- カーソルを指の形に
+※ CSS Gridを使うので、positionでの配置は不要
+*/
 
 ```
 
 ```js script.js
-// TODO: ゲームエリア要素を取得
+/*
+TODO: ゲームエリア要素を取得
+*/
 
+/*
+TODO: 的要素を取得
+*/
 
-// TODO: 的要素を取得
+/*
+TODO: ゲームエリアのクリックイベント（外れの処理）
+*/
 
-
-// TODO: ゲームエリアのクリックイベント（外れの処理）
-
-
-// TODO: 的のクリックイベント（命中の処理）
-// ヒント: event.stopPropagation() を使うと、親要素のイベントを止められます
-
+/*
+TODO: 的のクリックイベント（命中の処理）
+ヒント: event.stopPropagation() を使うと、親要素のイベントを止められます
+*/
 ```
 
 </Sandpack>
@@ -974,13 +997,19 @@ targetElement.addEventListener("click", () => {
 <details>
 <summary>解答例を見る</summary>
 
-```html index.html
+```html title="index.html"
 <div class="rect">
   <div class="target"></div>
 </div>
 ```
 
-```css style.css
+```css title="style.css"
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 /* ゲームエリアのスタイル */
 .rect {
   width: 100vw;
@@ -1002,7 +1031,7 @@ targetElement.addEventListener("click", () => {
 }
 ```
 
-```js script.js
+```js title="script.js"
 // ゲームエリア要素を取得
 const rectElement = document.querySelector(".rect");
 
