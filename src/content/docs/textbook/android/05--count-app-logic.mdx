@@ -60,8 +60,7 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
 
 Column で囲み、modifier を追加しています。Column と Modifier を追加する理由は次のセクションで説明します。
 
-## Tips: Column と Row について
-
+<Aside type="note" title="Column と Row について">
 Column と Row は要素を縦に並べたり横に並べたりするコンポーネントです。
 
 <Image alt="Column と Row の基本" src={slide56} />
@@ -84,9 +83,9 @@ Column {
 ```
 
 この例では、Row の中に "1" と "2" が横に並び、その下に "3" が縦に配置されます。
+</Aside>
 
-## Tips: innerPadding とは？
-
+<Aside type="note" title="innerPadding とは？">
 <Image alt="innerPaddingとは" src={slide58} />
 
 ```kotlin
@@ -102,6 +101,7 @@ Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 アプリを表示させるにあたり、様々な情報が表示されて、かぶってしまう領域が設定されている padding の値が `innerPadding` です。
 
 例えば、画面上部のステータスバー（時刻やバッテリー表示など）の部分を覆い被さらないように padding が設定されます。
+</Aside>
 
 ## 動作確認
 
@@ -156,12 +156,12 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
 以下のところは何度も、Macの人は `option + return`、Winの人は `alt + enter` を押してたくさんインポートしましょう。
 </Aside>
 
-## Tips: イベントとは？
-
+<Aside type="note" title="イベントとは？">
 <Image alt="イベントとは" src={slide62} />
 
 - ユーザの動作などに応じてプログラムを実行する。
 - 「〇〇した時にこれを実行する」ができる。
+</Aside>
 
 ## Compose でのイベントとは？
 
@@ -284,8 +284,7 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
 }
 ```
 
-## Tips: sp と dp について
-
+<Aside type="note" title="sp と dp について">
 <Image alt="sp と dp について" src={slide70} />
 
 ### dp (dip)
@@ -300,12 +299,10 @@ Scale-independent Pixels（スケールに非依存のピクセル）の略で�
 
 dp の単位と似ていますが、画面上のサイズはユーザのフォントサイズ設定に準じます。
 
-<Aside type="tip">
 **文字は sp、それ以外は dp を使います**
 </Aside>
 
-## Tips: Text の引数について
-
+<Aside type="note" title="Text の引数について">
 <Image alt="Text の引数について" src={slide71} />
 
 ```kotlin
@@ -327,9 +324,9 @@ Text(
 他にも色々な引数があります。公式リファレンスで確認してみましょう。
 
 参考: https://developer.android.com/develop/ui/compose/text/style-text?hl=ja
+</Aside>
 
-## Tips: Button の引数について
-
+<Aside type="note" title="Button の引数について">
 <Image alt="Button の引数について" src={slide72} />
 
 ```kotlin
@@ -353,3 +350,4 @@ Button(
 他にも色々な引数があります。公式リファレンスで確認してみましょう。
 
 参考: https://developer.android.com/develop/ui/compose/components/button?hl=ja
+</Aside>

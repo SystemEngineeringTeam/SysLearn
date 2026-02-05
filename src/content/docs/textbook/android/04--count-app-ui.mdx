@@ -104,8 +104,7 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
 }
 ```
 
-## Tips: @Composable関数とは？
-
+<Aside type="note" title="@Composable関数とは？">
 ![](./_images/slide-043.png)
 
 `@Composable`関数について説明します。
@@ -130,9 +129,9 @@ fun QuizScreen() {
 - `@Composable`をつけた関数
 - Composable関数はComposable関数の中でしか呼べない
 - 見た目に関する記述をするときに明示的につけよう
+</Aside>
 
-## Tips: Modifierとは？
-
+<Aside type="note" title="Modifierとは？">
 ![](./_images/slide-044.png)
 
 Compose修飾子で、コンポーザブルの見た目を装飾したり、拡張したりする動作を追加したり、見た目をより綺麗に整える。
@@ -176,7 +175,6 @@ Text(
 )
 ```
 
-<Aside>
 他にもたくさんのModifierがあります。詳しくは以下を参照。
 
 ![](./_images/slide-047.png)
@@ -214,16 +212,15 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
 TextとButtonについては、次のスライドで説明します。また、赤いエラーについても説明します。
 </Aside>
 
-## Tips: importについて
-
+<Aside type="note" title="importについて">
 ![](./_images/slide-049.png)
 
 赤くなっているTextにカーソルを重ねて Macの人は `option + return`、Winの人は `alt + enter` を押して、インポートするライブラリを選択する。
 
 ライブラリは、今回の場合コンポーザブルに関するものなので、`Composable`と最初についているものを選ぼう。
+</Aside>
 
-## Tips: Textについて
-
+<Aside type="note" title="Textについて">
 ![](./_images/slide-050.png)
 
 テキストを表示するための関数。Colorなどの引数をつけることで、色なども指定できる。
@@ -240,9 +237,9 @@ Text(
     color = Color.Red
 )
 ```
+</Aside>
 
-## Tips: TextAlignについて
-
+<Aside type="note" title="TextAlignについて">
 ![](./_images/slide-051.png)
 
 テキストをどちらに寄せるのかを記載する。
@@ -259,9 +256,9 @@ Text(
     textAlign = TextAlign.Center
 )
 ```
+</Aside>
 
-## Tips: Buttonについて
-
+<Aside type="note" title="Buttonについて">
 ![](./_images/slide-052.png)
 
 ボタンを作成できるコンポーネント。`onClick`を用意することで、動作を記述できる。また、Buttonの中にTextを用意することで、文字を表示することができる。
@@ -271,6 +268,7 @@ Button(onClick = { /*TODO*/ }) {
     Text(text = "ボタン")
 }
 ```
+</Aside>
 
 ## 実際に動かしてみる
 
