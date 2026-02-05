@@ -1,0 +1,235 @@
+---
+title: 環境構築
+description: Android Studioのインストールと初期設定を行い、Android開発環境を整えましょう。
+slug: textbook/android/setup
+sidebar:
+    order: 1
+---
+
+import { Aside, Steps, Tabs, TabItem, LinkCard } from '@astrojs/starlight/components'
+
+## Android Studioとは
+
+Android Studioは、Googleが提供するAndroidアプリ開発のための公式統合開発環境（IDE）です。
+コードエディタ、エミュレータ、デバッグツールなど、Androidアプリ開発に必要なすべての機能が含まれています。
+
+## 動作環境
+
+Android Studioをインストールする前に、お使いのPCが以下の要件を満たしているか確認してください。
+
+### Windows
+
+- Windows 10 64-bit 以降
+- x86_64 CPU アーキテクチャ、第2世代Intel Core以降、またはAMD Zen対応
+- 8 GB RAM 以上（16 GB RAM 推奨）
+- 8 GB以上の空きディスク容量（IDE + Android SDK + Emulator）
+- 1280 x 800 以上の画面解像度
+
+### macOS
+
+- macOS 10.14 (Mojave) 以降
+- ARM ベースのチップ、または第2世代Intel Core以降
+- 8 GB RAM 以上（16 GB RAM 推奨）
+- 8 GB以上の空きディスク容量（IDE + Android SDK + Emulator）
+- 1280 x 800 以上の画面解像度
+
+### Linux
+
+- 64-bit Linux（Ubuntu 20.04以降を推奨）
+- x86_64 CPU アーキテクチャ
+- 8 GB RAM 以上（16 GB RAM 推奨）
+- 8 GB以上の空きディスク容量
+
+## Android Studioのインストール
+
+<Tabs>
+   <TabItem label="Windows">
+
+<Steps>
+
+1. **ダウンロード**
+
+   [Android Studio公式サイト](https://developer.android.com/studio)にアクセスし、「Download Android Studio」ボタンをクリックします。
+
+   利用規約に同意し、インストーラーをダウンロードします。
+
+2. **インストーラーの実行**
+
+   ダウンロードした `android-studio-xxxx.x.x.x-windows.exe` を実行します。
+
+   <Aside type="note" title="管理者権限">
+   インストール時に管理者権限が必要な場合があります。
+   </Aside>
+
+3. **セットアップウィザード**
+
+   セットアップウィザードが起動したら、以下の手順で進めます：
+
+   - 「Next」をクリック
+   - インストールするコンポーネントを選択（Android Virtual Deviceにチェックを入れることを推奨）
+   - インストール先を選択（デフォルトのままで問題ありません）
+   - 「Install」をクリック
+
+4. **インストール完了**
+
+   インストールが完了したら「Finish」をクリックしてAndroid Studioを起動します。
+
+</Steps>
+
+   </TabItem>
+   <TabItem label="macOS">
+
+<Steps>
+
+1. **ダウンロード**
+
+   [Android Studio公式サイト](https://developer.android.com/studio)にアクセスし、「Download Android Studio」ボタンをクリックします。
+
+   お使いのMacのチップに合わせて、**Mac with Apple chip** または **Mac with Intel chip** を選択します。
+
+   <Aside type="tip" title="チップの確認方法">
+   左上のAppleメニュー → 「このMacについて」で確認できます。「チップ」の項目に「Apple M1」などと表示されていればApple chip、「Intel」と表示されていればIntel chipです。
+   </Aside>
+
+2. **インストール**
+
+   ダウンロードした `.dmg` ファイルを開き、Android Studioアイコンをアプリケーションフォルダにドラッグ＆ドロップします。
+
+3. **初回起動**
+
+   アプリケーションフォルダからAndroid Studioを起動します。
+
+   <Aside type="note" title="セキュリティ警告">
+   「開発元を検証できないため開けません」と表示された場合は、システム環境設定 → セキュリティとプライバシー → 「このまま開く」をクリックしてください。
+   </Aside>
+
+</Steps>
+
+   </TabItem>
+   <TabItem label="Linux">
+
+<Steps>
+
+1. **ダウンロード**
+
+   [Android Studio公式サイト](https://developer.android.com/studio)にアクセスし、Linux用のtarファイルをダウンロードします。
+
+2. **展開**
+
+   ターミナルで以下のコマンドを実行して展開します：
+
+   ```bash
+   sudo tar -xzf android-studio-xxxx.x.x.x-linux.tar.gz -C /opt/
+   ```
+
+3. **起動**
+
+   以下のコマンドでAndroid Studioを起動します：
+
+   ```bash
+   /opt/android-studio/bin/studio.sh
+   ```
+
+4. **デスクトップエントリの作成（オプション）**
+
+   Android Studio内のメニューから「Tools」→「Create Desktop Entry」を選択すると、アプリケーションメニューからも起動できるようになります。
+
+</Steps>
+
+   </TabItem>
+</Tabs>
+
+## 初回起動時の設定
+
+Android Studioを初めて起動すると、セットアップウィザードが表示されます。
+
+<Steps>
+
+1. **Import Settings**
+
+   以前のAndroid Studioの設定をインポートするか聞かれます。
+   初めての場合は「Do not import settings」を選択して「OK」をクリックします。
+
+2. **Setup Wizard**
+
+   「Next」をクリックしてセットアップを開始します。
+
+3. **Install Type**
+
+   「Standard」を選択して「Next」をクリックします。
+
+   <Aside type="note" title="Standard vs Custom">
+   - **Standard**: 一般的な設定とコンポーネントが自動的にインストールされます（推奨）
+   - **Custom**: SDK の場所やインストールするコンポーネントを細かく設定できます
+   </Aside>
+
+4. **UI Theme**
+
+   お好みのテーマ（Darcula または Light）を選択して「Next」をクリックします。
+
+5. **Verify Settings**
+
+   設定内容を確認し、「Finish」をクリックします。
+
+6. **コンポーネントのダウンロード**
+
+   必要なコンポーネント（Android SDK、エミュレータなど）のダウンロードが始まります。
+   ネットワーク環境によっては時間がかかる場合があります。
+
+7. **完了**
+
+   ダウンロードが完了したら「Finish」をクリックします。
+
+</Steps>
+
+## Android SDKの確認
+
+インストールが完了したら、Android SDKが正しくインストールされているか確認しましょう。
+
+<Steps>
+
+1. Android Studioを起動し、「More Actions」→「SDK Manager」を開きます
+   （またはプロジェクトを開いている場合は「Tools」→「SDK Manager」）
+
+2. **SDK Platforms**タブで、開発対象のAndroidバージョンがインストールされていることを確認します
+
+3. **SDK Tools**タブで、以下のツールがインストールされていることを確認します：
+   - Android SDK Build-Tools
+   - Android SDK Platform-Tools
+   - Android Emulator
+
+</Steps>
+
+## エミュレータの設定
+
+実機がなくてもアプリをテストできるように、エミュレータを設定しましょう。
+
+<Steps>
+
+1. Android Studioのウェルカム画面で「More Actions」→「Virtual Device Manager」を開きます
+
+2. 「Create device」をクリックします
+
+3. お好みのデバイス（例：Pixel 8）を選択し、「Next」をクリックします
+
+4. システムイメージ（Android バージョン）を選択します
+   - 「Download」リンクをクリックしてダウンロードが必要な場合があります
+   - 最新の安定版を選択することを推奨します
+
+5. AVD（Android Virtual Device）の設定を確認し、「Finish」をクリックします
+
+</Steps>
+
+<Aside type="tip" title="エミュレータのパフォーマンス">
+エミュレータを快適に動作させるには、PCのハードウェアアクセラレーション（Intel HAXM または AMD Hypervisor）が有効になっていることを確認してください。
+</Aside>
+
+## 次のステップ
+
+環境構築が完了しました。次のセクションでは、Androidの基礎知識について学んでいきます。
+
+<LinkCard
+  title="Androidの基礎知識"
+  href="/textbook/android/android-basics"
+  description="Androidの仕組みと基本的な概念を学びましょう"
+/>
