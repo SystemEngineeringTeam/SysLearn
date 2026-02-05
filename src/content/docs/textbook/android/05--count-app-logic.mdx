@@ -7,10 +7,32 @@ sidebar:
 ---
 
 import { Aside } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
+
+import slide55 from "./_images/slide-055.png";
+import slide56 from "./_images/slide-056.png";
+import slide57 from "./_images/slide-057.png";
+import slide58 from "./_images/slide-058.png";
+import slide59 from "./_images/slide-059.png";
+import slide60 from "./_images/slide-060.png";
+import slide61 from "./_images/slide-061.png";
+import slide62 from "./_images/slide-062.png";
+import slide63 from "./_images/slide-063.png";
+import slide64 from "./_images/slide-064.png";
+import slide65 from "./_images/slide-065.png";
+import slide66 from "./_images/slide-066.png";
+import slide67 from "./_images/slide-067.png";
+import slide68 from "./_images/slide-068.png";
+import slide69 from "./_images/slide-069.png";
+import slide70 from "./_images/slide-070.png";
+import slide71 from "./_images/slide-071.png";
+import slide72 from "./_images/slide-072.png";
 
 ## 修正を入れてみよう
 
 前回作成したコードに修正を加えて、Column と Modifier を追加しましょう。
+
+<Image alt="修正を入れてみよう" src={slide55} />
 
 ```kotlin
 @Composable
@@ -42,10 +64,14 @@ Column で囲み、modifier を追加しています。Column と Modifier を�
 
 Column と Row は要素を縦に並べたり横に並べたりするコンポーネントです。
 
+<Image alt="Column と Row の基本" src={slide56} />
+
 - **Column**: 要素を縦に並べます（Text が上、Button が下）
 - **Row**: 要素を横に並べます（Text と Button が横並び）
 
 Column と Row を組み合わせて自由にレイアウトを作ることができます。
+
+<Image alt="Column と Row の組み合わせ" src={slide57} />
 
 ```kotlin
 Column {
@@ -60,6 +86,8 @@ Column {
 この例では、Row の中に "1" と "2" が横に並び、その下に "3" が縦に配置されます。
 
 ## Tips: innerPadding とは？
+
+<Image alt="innerPaddingとは" src={slide58} />
 
 ```kotlin
 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -79,17 +107,23 @@ Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
 ここまでの修正で、以下のように表示されましたか？
 
+<Image alt="動作確認" src={slide59} />
+
 画面に「カウント: 0」というテキストと「+」ボタンが縦に並んで表示されていれば成功です。
 
 ---
 
 ## カウントアプリの動きを作ろう
 
+<Image alt="カウントアプリの動きを作ろう" src={slide60} />
+
 画面の見た目が変わるためには**状態管理**というものを使っています。かなり難しい概念なのでゆっくり理解をしていきましょう。
 
 ## カウントする部分を追加する
 
 以下のコードを追加していきましょう。この部分で、値を変更して、表示することができます。
+
+<Image alt="カウントする部分を追加する" src={slide61} />
 
 ```kotlin
 @Composable
@@ -124,10 +158,14 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
 
 ## Tips: イベントとは？
 
+<Image alt="イベントとは" src={slide62} />
+
 - ユーザの動作などに応じてプログラムを実行する。
 - 「〇〇した時にこれを実行する」ができる。
 
 ## Compose でのイベントとは？
+
+<Image alt="Composeでのイベントとは" src={slide63} />
 
 Compose では Button の `onClick` や `clickable` Modifier を使用してイベントを登録します。
 
@@ -143,6 +181,8 @@ Button(
 
 ## 宣言的 UI の思想
 
+<Image alt="宣言的UIの思想" src={slide64} />
+
 Jetpack Compose は**宣言的 UI** という考え方を採用しています。
 
 1. **State（状態）**: テキストフィールドに "こんにちは" が入っている
@@ -153,6 +193,8 @@ Jetpack Compose は**宣言的 UI** という考え方を採用しています�
 この流れを繰り返すことで、アプリの状態と画面表示が常に同期されます。
 
 ## State の定義と更新
+
+<Image alt="Stateの定義と更新" src={slide65} />
 
 ### State の定義
 
@@ -172,6 +214,8 @@ searchText = newSearchText
 
 ## 実際に動かしてみる
 
+<Image alt="実際に動かしてみる" src={slide66} />
+
 Android Studio の上部にある「Run 'app'」ボタンをクリックしてみましょう。
 
 これで、エミュレータが立ち上がり、自動でコードをビルドされます。
@@ -182,6 +226,8 @@ Android Studio の上部にある「Run 'app'」ボタンをクリックして�
 
 ## カウントアプリ完成！
 
+<Image alt="カウントアプリ完成" src={slide67} />
+
 カウントアプリがこれで完成しました！
 
 おめでとうございます...といきたいところですが、ちょっと見た目が寂しいですね。少し見た目を改善してみましょう。
@@ -190,9 +236,13 @@ Android Studio の上部にある「Run 'app'」ボタンをクリックして�
 
 ## カウントアプリをちょっと改造しよう
 
+<Image alt="カウントアプリをちょっと改造しよう" src={slide68} />
+
 ここからは、ちょっとした小ネタを追加したり、見た目を変更していきましょう。
 
 ## テキストとボタンの見た目を修正する
+
+<Image alt="テキストとボタンの見た目を修正する" src={slide69} />
 
 Text や Button の見た目を修正していきます。
 
@@ -236,6 +286,8 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
 
 ## Tips: sp と dp について
 
+<Image alt="sp と dp について" src={slide70} />
+
 ### dp (dip)
 
 Density-independent Pixels（密度に非依存のピクセル）の略です。
@@ -253,6 +305,8 @@ dp の単位と似ていますが、画面上のサイズはユーザのフォ�
 </Aside>
 
 ## Tips: Text の引数について
+
+<Image alt="Text の引数について" src={slide71} />
 
 ```kotlin
 Text(
@@ -275,6 +329,8 @@ Text(
 参考: https://developer.android.com/develop/ui/compose/text/style-text?hl=ja
 
 ## Tips: Button の引数について
+
+<Image alt="Button の引数について" src={slide72} />
 
 ```kotlin
 Button(
