@@ -1,0 +1,299 @@
+---
+title: カウントアプリの動きを作ろう
+description: ボタンをタップしたときの動作を実装します
+slug: textbook/android/count-app-logic
+sidebar:
+    order: 5
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+## 修正を入れてみよう
+
+前回作成したコードに修正を加えて、Column と Modifier を追加しましょう。
+
+```kotlin
+@Composable
+fun CountAppScreen(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = "カウント: 0",
+            textAlign = TextAlign.Center
+        )
+
+        Button(
+            onClick = {
+                // ここに値を追加する処理を書く
+            }
+        ) {
+            Text(
+                text = "+",
+            )
+        }
+    }
+}
+```
+
+Column で囲み、modifier を追加しています。Column と Modifier を追加する理由は次のセクションで説明します。
+
+## Tips: Column と Row について
+
+Column と Row は要素を縦に並べたり横に並べたりするコンポーネントです。
+
+- **Column**: 要素を縦に並べます（Text が上、Button が下）
+- **Row**: 要素を横に並べます（Text と Button が横並び）
+
+Column と Row を組み合わせて自由にレイアウトを作ることができます。
+
+```kotlin
+Column {
+    Row {
+        Text(text = "1")
+        Text(text = "2")
+    }
+    Text(text = "3")
+}
+```
+
+この例では、Row の中に "1" と "2" が横に並び、その下に "3" が縦に配置されます。
+
+## Tips: innerPadding とは？
+
+```kotlin
+Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+    CountAppScreen(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
+    )
+}
+```
+
+アプリを表示させるにあたり、様々な情報が表示されて、かぶってしまう領域が設定されている padding の値が `innerPadding` です。
+
+例えば、画面上部のステータスバー（時刻やバッテリー表示など）の部分を覆い被さらないように padding が設定されます。
+
+## 動作確認
+
+ここまでの修正で、以下のように表示されましたか？
+
+画面に「カウント: 0」というテキストと「+」ボタンが縦に並んで表示されていれば成功です。
+
+---
+
+## カウントアプリの動きを作ろう
+
+画面の見た目が変わるためには**状態管理**というものを使っています。かなり難しい概念なのでゆっくり理解をしていきましょう。
+
+## カウントする部分を追加する
+
+以下のコードを追加していきましょう。この部分で、値を変更して、表示することができます。
+
+```kotlin
+@Composable
+fun CountAppScreen(modifier: Modifier = Modifier) {
+
+    var count by remember { mutableIntStateOf(0) }
+
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = "カウント: $count",
+            textAlign = TextAlign.Center
+        )
+
+        Button(
+            onClick = {
+                count++
+            }
+        ) {
+            Text(
+                text = "+",
+            )
+        }
+    }
+}
+```
+
+<Aside type="tip">
+以下のところは何度も、Macの人は `option + return`、Winの人は `alt + enter` を押してたくさんインポートしましょう。
+</Aside>
+
+## Tips: イベントとは？
+
+- ユーザの動作などに応じてプログラムを実行する。
+- 「〇〇した時にこれを実行する」ができる。
+
+## Compose でのイベントとは？
+
+Compose では Button の `onClick` や `clickable` Modifier を使用してイベントを登録します。
+
+```kotlin
+Button(
+    onClick = {
+        Log.d("Buttonのテスト", "クリックした時に実行されたよ！")
+    },
+) {
+    Text(text = "押してみて")
+}
+```
+
+## 宣言的 UI の思想
+
+Jetpack Compose は**宣言的 UI** という考え方を採用しています。
+
+1. **State（状態）**: テキストフィールドに "こんにちは" が入っている
+2. **State を UI に反映**: UI が "こんにちは" と表示する
+3. **State を更新**: ユーザーの操作などで State が変わる
+4. **UI が自動更新**: State の変更に応じて UI が自動的に更新される
+
+この流れを繰り返すことで、アプリの状態と画面表示が常に同期されます。
+
+## State の定義と更新
+
+### State の定義
+
+```kotlin
+var searchText by remember { mutableStateOf("") }
+```
+
+### State の更新
+
+```kotlin
+searchText = newSearchText
+```
+
+<Aside type="caution">
+ただの変数だと、イベントが発火しないで、見た目レンダリングが行われず、表示が更新されません。必ず `remember` と `mutableStateOf` を使いましょう。
+</Aside>
+
+## 実際に動かしてみる
+
+Android Studio の上部にある「Run 'app'」ボタンをクリックしてみましょう。
+
+これで、エミュレータが立ち上がり、自動でコードをビルドされます。
+
+カウントされるようになりましたか？ボタンを押すたびに数字が増えれば成功です。
+
+---
+
+## カウントアプリ完成！
+
+カウントアプリがこれで完成しました！
+
+おめでとうございます...といきたいところですが、ちょっと見た目が寂しいですね。少し見た目を改善してみましょう。
+
+---
+
+## カウントアプリをちょっと改造しよう
+
+ここからは、ちょっとした小ネタを追加したり、見た目を変更していきましょう。
+
+## テキストとボタンの見た目を修正する
+
+Text や Button の見た目を修正していきます。
+
+```kotlin
+@Composable
+fun CountAppScreen(modifier: Modifier = Modifier) {
+
+    var count by remember { mutableIntStateOf(0) }
+
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = "カウント: $count",
+            fontSize = 40.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            modifier = Modifier
+                .size(120.dp)
+                .scale(1f),
+            onClick = {
+                count++
+            }
+        ) {
+            Text(
+                text = "+",
+                fontSize = 48.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+    }
+}
+```
+
+## Tips: sp と dp について
+
+### dp (dip)
+
+Density-independent Pixels（密度に非依存のピクセル）の略です。
+
+ディスプレイ解像度の物理的な密度に応じた抽象単位になります。160dpi（dots per inch）を基準にした単位で、1dp は 160dpi の画面で 1pixel になります。
+
+### sp
+
+Scale-independent Pixels（スケールに非依存のピクセル）の略です。
+
+dp の単位と似ていますが、画面上のサイズはユーザのフォントサイズ設定に準じます。
+
+<Aside type="tip">
+**文字は sp、それ以外は dp を使います**
+</Aside>
+
+## Tips: Text の引数について
+
+```kotlin
+Text(
+    text = "カウント: $count",
+    fontSize = 40.sp,
+    fontWeight = FontWeight.Bold,
+    color = Color.Black,
+    textAlign = TextAlign.Center
+)
+```
+
+- **text**: 表示する文字
+- **fontSize**: 文字の大きさ
+- **fontWeight**: 文字の太さ
+- **color**: 文字の色
+- **textAlign**: 文字の並び方
+
+他にも色々な引数があります。公式リファレンスで確認してみましょう。
+
+参考: https://developer.android.com/develop/ui/compose/text/style-text?hl=ja
+
+## Tips: Button の引数について
+
+```kotlin
+Button(
+    modifier = Modifier
+        .size(120.dp)
+        .scale(1f),
+    onClick = {
+        count++
+    }
+) {
+    Text(...)
+}
+```
+
+- **modifier**: モディファイラーを挿入する
+- **.size**: ボタンの大きさの設定
+- **.scale**: 拡大率の設定
+- **onClick**: クリック時の処理
+
+他にも色々な引数があります。公式リファレンスで確認してみましょう。
+
+参考: https://developer.android.com/develop/ui/compose/components/button?hl=ja

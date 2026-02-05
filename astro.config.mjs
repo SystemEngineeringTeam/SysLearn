@@ -108,6 +108,17 @@ export default defineConfig({
               },
             ],
           },
+          {
+            label: "Android",
+            link: "/textbook/android",
+            icon: "seti:kotlin",
+            items: [
+              {
+                label: "Androidアプリ開発入門",
+                autogenerate: { directory: "textbook/android" },
+              },
+            ],
+          },
         ]),
         starlightScrollToTop({
           threshold: 500,

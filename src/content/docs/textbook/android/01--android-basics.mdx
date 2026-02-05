@@ -1,0 +1,191 @@
+---
+title: Androidの基礎知識
+description: Androidとは何か、基本的な仕組みを理解しましょう
+slug: textbook/android/android-basics
+sidebar:
+    order: 1
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+Androidを開発するためには、少しの知識が必要です。ここではAndroid開発に必要な基礎知識を学びましょう。
+
+## Androidアプリが動くデバイス
+
+Androidアプリは様々なデバイスで動作します。
+
+- **スマートフォン** - 最も一般的なAndroidデバイス
+- **タブレット** - 大画面でアプリを使用
+- **Android Auto** - 車載システム向け
+- **スマートホーム** - スマートディスプレイなど
+- **ウェアラブル** - スマートウォッチなど
+- **オーディオ機器** - ワイヤレスイヤホンなど
+
+<Aside>
+Androidアプリを作ると、これらの様々なデバイスで動作させることができます。
+</Aside>
+
+## Androidのバージョン
+
+Androidにはバージョンがあり、それぞれにAPIレベルとコードネームが付けられています。
+
+| バージョン | APIレベル | コードネーム |
+|----------|---------|------------|
+| 16 | 36 | Baklava |
+| 15 | 35 | Vanilla Ice Cream |
+| 14 | 34 | Upside Down Cake |
+| 13 | 33 | Tiramisu |
+| ... | ... | ... |
+
+<Aside type="tip">
+コードネームはお菓子の名前がアルファベット順に付けられています。
+</Aside>
+
+## Kotlinとは？
+
+Kotlinは、Androidアプリ開発で主に用いるプログラミング言語です。
+
+- **シンプルに記述できる** - 少ないコード量で書ける
+- **Javaとの互換性** - 既存のJavaコードと一緒に使える
+
+## プログラミングの基本
+
+プログラミングには3つの基本要素があります。
+
+### 変数
+データをメモリにメモする仕組みです。
+
+### 関数
+処理をまとめて名前をつける仕組みです。
+
+### 制御構文
+条件に応じて実行するしないを決めたり、繰り返したりする仕組みです。
+
+## Kotlinの基本文法
+
+Kotlinの基本的な文法を見てみましょう。
+
+```kotlin
+fun main() {
+    val age = 21
+    if(isAdult(age)) {
+        Log.d("check", "adult")
+    } else {
+        Log.d("check", "child")
+    }
+}
+
+fun isAdult(age:Int) :Boolean {
+    return age >= 18
+}
+```
+
+### 変数と定数
+
+Kotlinでは `val` と `var` を使ってデータを保存します。
+
+**定数（val）** - 一度代入したら変更できない
+
+```kotlin
+val name = "東京特許許可局局長"
+```
+
+**変数（var）** - 後から変更できる
+
+```kotlin
+var count = 0
+count = 1
+```
+
+<Aside type="tip">
+基本的には `val` を使い、変更が必要なところだけ `var` を使うようにしましょう。
+</Aside>
+
+### 関数
+
+関数は `fun` キーワードを使って定義します。
+
+```kotlin
+// 関数の定義
+fun loadData() {
+    // ...
+}
+
+// 関数の呼び出し
+loadData()
+```
+
+**引数と戻り値を持つ関数**
+
+```kotlin
+// 関数の引数と戻り値
+fun calcPriceWithTax(price: Int): Int {
+    val tax = 1.10
+    return (price * tax).toInt()
+}
+
+// 呼び出し
+val priceWithTax = calcPriceWithTax(price = 100) // priceWithTax will be 110
+```
+
+### 制御構文
+
+**if文**
+
+条件に応じて処理を分岐させます。
+
+```kotlin
+if(age >= 18) {
+    Log.d("if式のテスト", "成人です")
+} else {
+    Log.d("if式のテスト", "未成年です")
+}
+```
+
+**when文**
+
+複数の条件で分岐させる場合は `when` を使います。
+
+```kotlin
+when {
+    age >= 60 -> {
+        Log.d("when式のテスト", "シニア")
+    }
+    age >= 18 -> {
+        Log.d("when式のテスト", "成人")
+    }
+    else -> {
+        Log.d("when式のテスト", "未成年")
+    }
+}
+```
+
+### コメント文
+
+コードにメモを残すためのコメント文があります。
+
+```kotlin
+// 1行のコメント
+
+/*
+複数行のコメント
+複数行のコメント
+複数行のコメント
+*/
+```
+
+## Jetpack Composeとは？
+
+Jetpack Composeは、AndroidのUIを作成するためのモダンなフレームワークです。
+
+- **Android Viewに変わる** - 従来のXMLベースのUIに代わるもの
+- **KotlinでUIを作成** - コードでUIを記述
+- **宣言的UI** - UIの状態を宣言的に記述
+
+<Aside>
+Jetpack Composeは、少ないコード、パワフルなツール、直感的なKotlin APIでネイティブUIを構築するための、Androidで推奨される最新のツールキットです。スマートフォン、折りたたみ式デバイス、タブレット、テレビ、ウェアラブルなど、あらゆるフォームファクタへの適応を含め、UI開発を簡素化し加速できます。
+</Aside>
+
+---
+
+次のセクションでは、Android Studioの基本操作について学びましょう。
