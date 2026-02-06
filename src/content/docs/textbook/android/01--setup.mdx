@@ -20,25 +20,23 @@ Android Studioをインストールする前に、お使いのPCが以下の要�
 ### Windows
 
 - Windows 10 64-bit 以降
-- x86_64 CPU アーキテクチャ、第2世代Intel Core以降、またはAMD Zen対応
-- 8 GB RAM 以上（16 GB RAM 推奨）
+- x86_64 CPU アーキテクチャ、Intel 第 8 世代 Core i5 / AMD Zen Ryzen（例: Intel i5-8xxx、Ryzen 1xxx）。
+- 8 GB RAM 以上（32 GB RAM 推奨）
 - 8 GB以上の空きディスク容量（IDE + Android SDK + Emulator）
 - 1280 x 800 以上の画面解像度
 
 ### macOS
 
-- macOS 10.14 (Mojave) 以降
-- ARM ベースのチップ、または第2世代Intel Core以降
+- macOS 12 Monterey 以降
+- Apple M1 チップ、または第 6 世代の Intel Core 以降。
 - 8 GB RAM 以上（16 GB RAM 推奨）
 - 8 GB以上の空きディスク容量（IDE + Android SDK + Emulator）
 - 1280 x 800 以上の画面解像度
 
 ### Linux
 
-- 64-bit Linux（Ubuntu 20.04以降を推奨）
-- x86_64 CPU アーキテクチャ
-- 8 GB RAM 以上（16 GB RAM 推奨）
-- 8 GB以上の空きディスク容量
+Linuxの人は、今回はサポートしません。
+自分自身で調べて導入をしてみてください。
 
 ## Android Studioのインストール
 
@@ -102,37 +100,6 @@ Android Studioをインストールする前に、お使いのPCが以下の要�
    <Aside type="note" title="セキュリティ警告">
    「開発元を検証できないため開けません」と表示された場合は、システム環境設定 → セキュリティとプライバシー → 「このまま開く」をクリックしてください。
    </Aside>
-
-</Steps>
-
-   </TabItem>
-   <TabItem label="Linux">
-
-<Steps>
-
-1. **ダウンロード**
-
-   [Android Studio公式サイト](https://developer.android.com/studio)にアクセスし、Linux用のtarファイルをダウンロードします。
-
-2. **展開**
-
-   ターミナルで以下のコマンドを実行して展開します：
-
-   ```bash
-   sudo tar -xzf android-studio-xxxx.x.x.x-linux.tar.gz -C /opt/
-   ```
-
-3. **起動**
-
-   以下のコマンドでAndroid Studioを起動します：
-
-   ```bash
-   /opt/android-studio/bin/studio.sh
-   ```
-
-4. **デスクトップエントリの作成（オプション）**
-
-   Android Studio内のメニューから「Tools」→「Create Desktop Entry」を選択すると、アプリケーションメニューからも起動できるようになります。
 
 </Steps>
 
