@@ -1,0 +1,383 @@
+---
+title: 環境構築
+description: Android Studioのインストールと初期設定を行い、Android開発環境を整えましょう。
+slug: textbook/android/setup
+sidebar:
+    order: 1
+---
+
+import { Aside, Steps, Tabs, TabItem, LinkCard } from '@astrojs/starlight/components'
+import { Image } from "astro:assets";
+import setup003 from "./_images/setup-003.png";
+import setup004 from "./_images/setup-004.png";
+import setup005 from "./_images/setup-005.png";
+import setup006 from "./_images/setup-006.png";
+import setup007 from "./_images/setup-007.png";
+import setup008 from "./_images/setup-008.png";
+import setup009 from "./_images/setup-009.png";
+import setup010 from "./_images/setup-010.png";
+import setup011 from "./_images/setup-011.png";
+import setup012 from "./_images/setup-012.png";
+import setup013 from "./_images/setup-013.png";
+import setup015 from "./_images/setup-015.png";
+import setup016 from "./_images/setup-016.png";
+import setup017 from "./_images/setup-017.png";
+import setup018 from "./_images/setup-018.png";
+import setup019 from "./_images/setup-019.png";
+import setup020 from "./_images/setup-020.png";
+import setup022 from "./_images/setup-022.png";
+import setup023 from "./_images/setup-023.png";
+import setup024 from "./_images/setup-024.png";
+import setup025 from "./_images/setup-025.png";
+import setup026 from "./_images/setup-026.png";
+import setup027 from "./_images/setup-027.png";
+import setup028 from "./_images/setup-028.png";
+import setup029 from "./_images/setup-029.png";
+import setup030 from "./_images/setup-030.png";
+import setup031 from "./_images/setup-031.png";
+import setup032 from "./_images/setup-032.png";
+import setup033 from "./_images/setup-033.png";
+import setup035 from "./_images/setup-035.png";
+import setup036 from "./_images/setup-036.png";
+import setup037 from "./_images/setup-037.png";
+import setup038 from "./_images/setup-038.png";
+import setup039 from "./_images/setup-039.png";
+import setup040 from "./_images/setup-040.png";
+import setup041 from "./_images/setup-041.png";
+
+## Android Studioとは
+
+Android Studioは、Googleが提供するAndroidアプリ開発のための公式統合開発環境（IDE）です。
+コードエディタ、エミュレータ、デバッグツールなど、Androidアプリ開発に必要なすべての機能が含まれています。
+
+## 動作環境
+
+Android Studioをインストールする前に、お使いのPCが以下の要件を満たしているか確認してください。
+
+### Windows
+
+- Windows 10 64-bit 以降
+- x86_64 CPU アーキテクチャ、Intel 第 8 世代 Core i5 / AMD Zen Ryzen（例: Intel i5-8xxx、Ryzen 1xxx）。
+- 8 GB RAM 以上（32 GB RAM 推奨）
+- 8 GB以上の空きディスク容量（IDE + Android SDK + Emulator）
+- 1280 x 800 以上の画面解像度
+
+### macOS
+
+- macOS 12 Monterey 以降
+- Apple M1 チップ、または第 6 世代の Intel Core 以降。
+- 8 GB RAM 以上（16 GB RAM 推奨）
+- 8 GB以上の空きディスク容量（IDE + Android SDK + Emulator）
+- 1280 x 800 以上の画面解像度
+
+### Linux
+
+Linuxの人は、今回はサポートしません。
+自分自身で調べて導入をしてみてください。
+
+## Android Studioのインストール
+
+<Tabs>
+   <TabItem label="Windows">
+
+<Steps>
+
+1. **Android Developersにアクセスする**
+
+   以下のURLにアクセスして、Android Studioのダウンロードページを開きます。
+
+   [https://developer.android.com/studio?hl=ja](https://developer.android.com/studio?hl=ja)
+
+   <Image src={setup003} alt="Android Developersのダウンロードページ" />
+
+2. **ダウンロードボタンを押す**
+
+   ページ内にある「Android Studio ～～をダウンロード」というボタンをクリックします。
+
+   <Image src={setup004} alt="Android Studioのダウンロードボタンをクリック" />
+
+3. **ライセンスに同意する**
+
+   利用規約が表示されるので、内容を確認してライセンスに同意し、ダウンロードボタンを押します。
+
+   <Image src={setup005} alt="ライセンスに同意してダウンロード" />
+
+4. **ダウンロードしたファイルを開く**
+
+   ダウンロードフォルダーを確認して、`android-studio-2025.2.3.9-windows` を開きます。
+
+   <Aside type="note" title="バージョン番号について">
+   ファイル名のバージョン番号（`2025.2.3.9` の部分）は、ダウンロード時期によって変わる場合があります。
+   </Aside>
+
+   <Image src={setup006} alt="ダウンロードしたインストーラーファイルを開く" />
+
+5. **デバイスの変更の許可をする**
+
+   ユーザーアカウント制御のダイアログが表示されます。「このアプリがデバイスに変更を加えることを許可しますか？」と聞かれるので、**「はい」** をクリックしてください。
+
+   <Image src={setup007} alt="ユーザーアカウント制御で「はい」を押す" />
+
+6. **Setupウィザードを開始する**
+
+   Android Studio Setupのウェルカム画面が表示されます。**「Next」** をクリックして次に進みます。
+
+   <Image src={setup008} alt="Setupウィザードの開始画面でNextを押す" />
+
+7. **インストールするコンポーネントを選択する**
+
+   Choose Componentsの画面では、**Android Studio** と **Android Virtual Device** にチェックが入っていることを確認してください。デフォルトのままで問題ありません。**「Next」** をクリックします。
+
+   <Aside type="tip" title="Android Virtual Device">
+   Android Virtual Device は、パソコン上でAndroidをエミュレートするソフトです。実機がなくてもアプリのテストができるようになります。
+   </Aside>
+
+   <Image src={setup009} alt="コンポーネント選択画面でデフォルトのままNextを押す" />
+
+8. **インストール場所を指定する**
+
+   インストール先のフォルダーを指定します。基本的にはデフォルトのままで問題ありません。**「Next」** をクリックします。
+
+   <Image src={setup010} alt="インストール場所の指定画面でNextを押す" />
+
+9. **スタートメニューのショートカットを作成する**
+
+   スタートメニューフォルダーの選択画面が表示されます。基本そのままで **「Install」** をクリックします。
+
+   <Image src={setup011} alt="スタートメニューフォルダー選択画面でInstallを押す" />
+
+10. **インストールが終わるまで待つ**
+
+    インストールが進行します。完了するまでしばらく待ちましょう。完了したら **「Next」** をクリックします。
+
+    <Aside type="note" title="所要時間">
+    この作業は5分から10分ほどかかる場合があります。
+    </Aside>
+
+    <Image src={setup012} alt="インストール完了画面でNextを押す" />
+
+11. **インストール完了**
+
+    インストール作業が終わりました。**「Finish」** をクリックします。自動でAndroid Studioが立ち上がるはずです。
+
+    <Image src={setup013} alt="インストール完了画面でFinishを押す" />
+
+</Steps>
+
+   </TabItem>
+   <TabItem label="macOS">
+
+<Steps>
+
+1. **Android Developersにアクセスする**
+
+   以下のURLにアクセスして、Android Studioのダウンロードページを開きます。
+
+   [https://developer.android.com/studio?hl=ja](https://developer.android.com/studio?hl=ja)
+
+   <Image src={setup015} alt="Android Developers公式サイトのAndroid Studioダウンロードページ" />
+
+2. **Android Studioをダウンロードする**
+
+   ダウンロードボタンをクリックすると、利用規約が表示されます。規約に同意してダウンロードを開始してください。
+
+   <Aside type="caution" title="チップの選択">
+   お使いのMacのCPUによってダウンロードするファイルが異なります。
+   - **M1以降のMac** → 「Mac with Apple chip」を選択
+   - **IntelのCPUのMac** → 「Mac with Intel chip」を選択
+
+   左上のAppleメニュー →「このMacについて」でチップの種類を確認できます。
+   </Aside>
+
+   <Image src={setup016} alt="Android Studioダウンロード画面。ライセンスに同意し、Apple ChipまたはIntel Chipを選択する" />
+
+3. **ダウンロードしたファイルを開く**
+
+   ダウンロードフォルダーを開き、ダウンロードした `.dmg` ファイル（例: `android-studio-2025.2.3.9-mac_arm.dmg`）をダブルクリックして開きます。
+
+   <Aside type="note" title="バージョン番号について">
+   ファイル名に含まれるバージョンの数字は、ダウンロード時期によって変わっている場合があります。
+   </Aside>
+
+   <Image src={setup017} alt="ダウンロードフォルダに保存されたAndroid Studioのdmgファイル" />
+
+4. **アプリケーションフォルダにインストールする**
+
+   dmgファイルを開くとインストール画面が表示されます。左側の **Android Studio アイコン** を右側の **Applications フォルダ** にドラッグ＆ドロップしてください。
+
+   <Image src={setup018} alt="Android StudioアイコンをApplicationsフォルダにドラッグ＆ドロップする画面" />
+
+5. **Android Studioを起動する**
+
+   Launchpadを開き、Android Studioのアイコンをクリックして起動します。
+
+   <Image src={setup019} alt="LaunchpadからAndroid Studioを起動する" />
+
+6. **セキュリティの許可**
+
+   初回起動時に「インターネットからダウンロードされたアプリケーションです。開いてもよろしいですか？」という確認ダイアログが表示される場合があります。
+   安全なファイルですので、**「開く」** をクリックしてください。
+
+   <Image src={setup020} alt="セキュリティ確認ダイアログで「開く」をクリックする" />
+
+</Steps>
+
+   </TabItem>
+</Tabs>
+
+## 初回起動時の設定
+
+ここからは、MacもWindowsも同じ手順になります。
+Android Studioを初めて起動すると、セットアップウィザードが表示されます。
+
+<Steps>
+
+1. **Googleへの情報送信の確認**
+
+   よりよいアプリを作るために、エラー情報などをGoogleに提供していいか求められます。必要に応じて許可をしてください。
+
+   <Image src={setup022} alt="Googleに情報を送っていいか質問される画面" />
+
+2. **Setup ウィザードを開始する**
+
+   Android Studio Setup Wizardが開きます。そのまま **「Next」** を押しましょう。
+
+   <Image src={setup023} alt="Setup ウィザードのWelcome画面でNextを押す" />
+
+3. **インストールタイプを選択する**
+
+   Install Typeの画面が表示されます。Android開発に必要な機能をインストールしてくれるため、**「Standard」** を選択したまま **「Next」** を押しましょう。
+
+   <Aside type="note" title="Standard vs Custom">
+   - **Standard**: 一般的な設定とコンポーネントが自動的にインストールされます（推奨）
+   - **Custom**: SDK の場所やインストールするコンポーネントを細かく設定できます
+   </Aside>
+
+   <Image src={setup024} alt="Install TypeでStandardを選択してNextを押す" />
+
+4. **インストールされるものを確認する**
+
+   Verify Settingsの画面で、Androidのエミュレーター、開発用のライブラリ、Androidのイメージなどが選択されています。そのまま **「Next」** を押しましょう。
+
+   <Image src={setup025} alt="Verify Settingsでインストール内容を確認してNextを押す" />
+
+5. **ライセンスの同意をする**
+
+   License Agreementの画面が表示されます。ライセンスに同意するため 「android-sdk-license」を押してから **「Accept」** を押し、その後 **「Next」** を押します。
+
+   <Image src={setup026} alt="License AgreementでAcceptを押してNextを押す" />
+
+6. **ダウンロードとインストール**
+
+   エミュレーターや開発に使うライブラリなどをインストールします。終わったら **「Finish」** を押します。
+
+   <Aside type="note" title="所要時間">
+   この操作には5分から10分ほどかかる場合があります。
+   </Aside>
+
+   <Image src={setup027} alt="コンポーネントのダウンロードとインストール画面でFinishを押す" />
+
+</Steps>
+
+## 動作確認
+
+実際に動作するか簡単に確認をします。
+
+<Steps>
+
+1. **New Projectを作成する**
+
+   ウェルカム画面で **「New Project」** を押します。
+
+   <Image src={setup028} alt="Welcome画面でNew Projectを押す" />
+
+2. **プロジェクトタイプを選択する**
+
+   今回は、**「Empty Activity」** を押して **「Next」** をクリックします。
+
+   <Image src={setup029} alt="Empty Activityを選択してNextを押す" />
+
+3. **プロジェクトの設定をする**
+
+   実際には細かく設定をしますが、今回は動作検証するだけなので、そのまま **「Finish」** を押しましょう。
+
+   <Image src={setup030} alt="プロジェクト設定画面でFinishを押す" />
+
+4. **プロジェクトが読み込まれるまで待つ**
+
+   開かれた画面の右下のローディングバーがなくなるまで待機しましょう。
+
+   <Aside type="note" title="所要時間">
+   この操作は5分から10分ほどかかる場合があります。
+   </Aside>
+
+   <Image src={setup031} alt="プロジェクトの読み込み中画面" />
+
+5. **アプリを実行してみる**
+
+   アプリの右上の再生ボタンを押して見ましょう。
+
+   <Image src={setup032} alt="再生ボタンを押してアプリを実行する" />
+
+6. **動作確認完了**
+
+   エミュレーターが立ち上がり、Hello Androidが開ければ環境構築完了です。お疲れ様でした。
+
+   <Image src={setup033} alt="エミュレーターでHello Androidが表示されている画面" />
+
+</Steps>
+
+## エミュレータの設定
+
+最新のデバイスを使えるようにしてみましょう。
+
+<Steps>
+
+1. **Device Managerを開く**
+
+   プロジェクト画面の右上にある **Device Manager** アイコンをクリックして開きます。
+
+   <Image src={setup035} alt="右上のDevice Managerを開く" />
+
+2. **デバイスの作成を行う**
+
+   **「+」** ボタンを押し、**「Create Virtual Device」** を押します。
+
+   <Image src={setup036} alt="＋ボタンからCreate Virtual Deviceを選択する" />
+
+3. **デバイスを選択する**
+
+   エミュレートするデバイスを選択します。今回は最新のPixelの **Pixel 9** を使用します。選択したら **「Next」** をクリックします。
+
+   <Image src={setup037} alt="デバイス選択画面でPixel 9を選択する" />
+
+4. **システムイメージを選択する**
+
+   エミュレートするデバイスのイメージを選択します。今回は、**「Google Play Intel x86_64 Atom System Image」** を選択します。
+
+   <Image src={setup038} alt="システムイメージの選択画面" />
+
+5. **イメージのダウンロード**
+
+   イメージがダウンロードされていない場合は、ダウンロードの許可を求められます。**「Yes」** を押してダウンロードを開始してください。
+
+   <Aside type="note" title="所要時間">
+   この操作は5〜10分ほどかかる場合があります。
+   </Aside>
+
+   <Image src={setup039} alt="イメージのダウンロード確認ダイアログでYesを押す" />
+
+6. **ダウンロード完了**
+
+   ダウンロードが終わったら **「Finish」** を押してください。
+
+   <Image src={setup040} alt="ダウンロード完了画面でFinishを押す" />
+
+7. **エミュレータの追加完了**
+
+   選択したデバイスが作成されていたら、エミュレーターの作成が終わりました。
+
+   <Image src={setup041} alt="Device Managerに新しいデバイスが追加された画面" />
+
+</Steps>
+
