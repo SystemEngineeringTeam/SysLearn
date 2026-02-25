@@ -222,7 +222,7 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
 fun CountAppScreen(modifier: Modifier = Modifier) {
 
     var count by remember { mutableIntStateOf(value: 0) }
-    val backgroundColor = remember { mutableStateOf(Color(color: 0xFF1E1E1E)) }
+    val backgroundColor = remember { mutableStateOf(Color(0xFF1E1E1E)) }
 
     LaunchedEffect(count) {
         if (count % 10 == 0 && count != 0) {
