@@ -7,6 +7,15 @@ sidebar:
 ---
 
 import { Aside } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
+
+import share_button from "./_images/08/share_button.gif";
+import announcement from "./_images/08/announcement.png";
+import music_directory from "./_images/08/music_directory.png";
+import chatgpt from "./_images/08/chatgpt.png";
+import chatgpt_tips from "./_images/08/chatgpt_tips.png";
+import chatgpt_question from "./_images/08/chatgpt_question.png";
+import chatgpt_answer from "./_images/08/chatgpt_answer.png";
 
 ### 簡単な機能追加
 
@@ -20,6 +29,8 @@ import { Aside } from "@astrojs/starlight/components";
   - 3の倍数か3がつくときにアホになります
 
 ### 共有ボタンを作ってみる
+
+<Image alt="共有ボタンの動作イメージ" src={share_button} width={300} />
 
 カウント数を他のアプリに共有できるボタンを作ってみましょう。
 
@@ -45,6 +56,8 @@ ShareButton(count)
 ```
 
 ### 回数に応じたアナウンス
+
+<Image alt="回数に応じたアナウンスのイメージ" src={announcement} width={300} />
 
 特定の回数に達したときにメッセージを表示する機能を追加してみましょう。
 
@@ -82,6 +95,9 @@ MediaPlayer.create(context, R.raw.click_sound).apply {
 ```
 
 <Aside type="tip">
+
+<Image alt="音を出すための準備" src={music_directory} />
+
 Resに`raw`フォルダーを追加して、`click_sound.mp3`を導入する必要があります。
 これでこの`click_sound.mp3`が再生されるようになります。
 </Aside>
@@ -135,6 +151,8 @@ AndroidManifest.xmlにPermission VIBRATEを追加する必要があります。
 
 ## ChatGPTとは？
 
+<Image alt="ChatGPTのイメージ" src={chatgpt} />
+
 まるで人間と対話しているかのように質問した内容に回答する対話型のAIサービスです。
 
 例えば「東京の有名な観光地を教えてください。」と質問すると、「東京にはたくさんの有名な観光地がありますね。その中でも特に人気のあるものをいくつか挙げると、東京スカイツリー、浅草の仲見世通りと浅草寺、明治神宮、東京ディズニーランド、秋葉原、上野恩賜公園、東京タワーなどがあります。」といった回答が返ってきます。
@@ -180,7 +198,7 @@ AndroidManifest.xmlにPermission VIBRATEを追加する必要があります。
 2. コードを貼る
 3. エラー文を貼る
 
-例えば、以下のようなエラーが発生した場合：
+#### 例えば、セミコロンが抜けているエラーが発生した場合
 
 ```c
 #include <stdio.h>
@@ -199,13 +217,8 @@ printf("Hello World")
 
 ChatGPTに質問すると、「このエラーは、プログラム内のprintf関数の呼び出しにセミコロンが欠けていることが原因です。」と教えてくれて、修正されたコードを提示してくれます。
 
-```c
-#include <stdio.h>
-int main(void){
-    // Your code here!
-    printf("Hello World");
-}
-```
+<Image alt="ChatGPTでエラー解決の例" src={chatgpt_question} />
+<Image alt="ChatGPTでエラー解決の例" src={chatgpt_answer} />
 
 ## ChatGPTとはうまく付き合おう
 
@@ -239,5 +252,6 @@ int main(void){
 - 目標カウント数を設定し、達成したら通知する機能を追加する。
 
 <Aside type="note">
+<Image alt="ChatGPTの使用例" src={chatgpt_tips} />
 ChatGPTの使用例：https://chatgpt.com/share/67bd277d-3704-8002-bf22-e2191366db3e
 </Aside>
