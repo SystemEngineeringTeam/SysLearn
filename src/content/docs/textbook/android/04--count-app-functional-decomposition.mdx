@@ -1,0 +1,64 @@
+---
+title: カウントアプリの機能分解をしてみよう
+description: カウントアプリの機能を分解してみましょう
+slug: textbook/android/count-app-functional-decomposition
+sidebar:
+    order: 4
+---
+
+import { Aside } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
+import slide032 from "./_images/04/slide-032.png";
+import slide033 from "./_images/04/slide-033.png";
+import slide034 from "./_images/04/slide-034.png";
+import slide035 from "./_images/04/slide-035.png";
+import slide036 from "./_images/04/slide-036.png";
+
+## カウントアプリの機能分解をしてみよう
+
+カウントアプリって単純なものですが、どんな機能があるのでしょうか？実際に触りながら考えてみましょう。
+
+<Image src={slide032} alt="カウントアプリの機能分解" />
+
+### 実際に触ってみよう
+
+以下のWebサイトにアクセスして、実際にカウントアプリを触ってみましょう。
+
+**https://countappreact.pages.dev/**
+
+<Image src={slide033} alt="カウントアプリのWebデモ" />
+
+<Aside type="tip">
+これはViteで作ったWebアプリです。スマートフォンやPCのブラウザからアクセスできます。
+</Aside>
+
+### 機能分解をしてみる
+
+カウントアプリの機能を分解すると、以下のようになります：
+
+| 機能 | 説明 |
+|------|------|
+| 押した数を表示する | 画面中央に「カウント: 51」のように表示 |
+| ボタンを押して、カウントを増やす | +ボタンをタップするとカウントが増える |
+| 背景が変わる | この機能はプラスアルファ |
+| ボタンの大きさが変わる | この機能はプラスアルファ |
+
+<Image src={slide034} alt="機能一覧" />
+
+### 流れを考えてみる
+
+カウントアプリの基本的な流れは以下の通りです：
+
+1. **ボタンを押す**
+2. **値を一つ増やす**
+3. **値を表示する**
+
+<Image src={slide035} alt="カウントアプリの流れ" />
+
+<Aside type="note">
+アプリの必要な機能を作り、その機能がどのような動きをするのかをまとめるのが大切です。
+</Aside>
+
+<Image src={slide036} alt="機能分解のまとめ" />
+
+この考え方は、アプリ開発全般において重要です。作りたいアプリの機能を分解し、それぞれの機能がどのような動作をするのかを整理してから実装に取り掛かりましょう。

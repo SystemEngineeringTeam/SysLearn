@@ -7,12 +7,24 @@ sidebar:
 ---
 
 import { Aside } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
+import slide020 from "./_images/03/slide-020.png";
+import slide021 from "./_images/03/slide-021.png";
+import slide022 from "./_images/03/slide-022.png";
+import slide023 from "./_images/03/slide-023.png";
+import slide024 from "./_images/03/slide-024.png";
+import slide025 from "./_images/03/slide-025.png";
+import slide026 from "./_images/03/slide-026.png";
+import slide027 from "./_images/03/slide-027.png";
+import slide028 from "./_images/03/slide-028.png";
+import slide029 from "./_images/03/slide-029.png";
+import slide030 from "./_images/03/slide-030.png";
+import slide031 from "./_images/03/slide-031.png";
 
 ## Android Studioの基本操作
 
 初めて触ったエディターは知らないボタンが多すぎててんやわんやとなりがちです。とりあえず焦らないで一つ一つ理解をしていきましょう。
 
-![](./_images/slide-019.png)
 
 ## Android Studioを起動させよう
 
@@ -26,7 +38,7 @@ Android Studioを起動すると、「Welcome to Android Studio」というウ�
 
 新規プロジェクトを作成していきましょう。**New Project**を押しましょう。
 
-![](./_images/slide-020.png)
+<Image src={slide020} alt="Welcome to Android Studio" />
 
 ## テンプレートを選択しよう
 
@@ -40,7 +52,7 @@ New Projectを押すと、テンプレート選択画面が表示されます。
 
 今回は「Phone and Tablet」を選択した状態で、**Empty Activity**を押してください。ルービックキューブみたいなアイコンが目印です。
 
-![](./_images/slide-021.png)
+<Image src={slide021} alt="テンプレート選択画面" />
 
 <Aside>
 Empty Activityを選択すると、Jetpack Composeを使った最小限のプロジェクトが作成されます。
@@ -58,7 +70,7 @@ Empty Activityを選択してNextを押すと、プロジェクトの設定画�
 | **Minimum SDK** | 対応するOSバージョン（API 24） | API 24 ("Nougat"; Android 7.0) |
 | **Build configuration language** | ビルド設定の言語 | Kotlin DSL (build.gradle.kts) [Recommended] |
 
-![](./_images/slide-022.png)
+<Image src={slide022} alt="プロジェクト設定画面" />
 
 <Aside type="tip">
 Minimum SDKをAPI 24に設定すると、約97.4%のデバイスでアプリが動作します。「Help me choose」リンクをクリックすると、各APIレベルでのカバー率を確認できます。
@@ -72,7 +84,7 @@ Finishを押すと、Android Studioがプロジェクトを作成し、必要な
 
 画面下部に「Importing 'CountApp' Gradle Project...」などのメッセージが表示されます。**ロード中がなくなるまで待機**してください。
 
-![](./_images/slide-023.png)
+<Image src={slide023} alt="プロジェクト作成中" />
 
 <Aside type="caution">
 初回のプロジェクト作成時は、Gradleの同期やSDKのダウンロードに時間がかかることがあります。インターネット接続が必要です。
@@ -107,7 +119,7 @@ class MainActivity : ComponentActivity() {
 - **onCreate** - Activityが生成された時に実行される
 - **setContent** - setContent内の内容が画面に表示される
 
-![](./_images/slide-024.png)
+<Image src={slide024} alt="Activityの構造" />
 
 ### Composable関数
 
@@ -123,13 +135,13 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 
 `@Composable`アノテーションが付いた関数は、Jetpack Composeで画面のUIを構築するための関数です。詳細は後述します。
 
-![](./_images/slide-025.png)
+<Image src={slide025} alt="Composable関数" />
 
 ## Android Studioの見方・使い方
 
 Android Studioの画面は主に以下の領域で構成されています。
 
-![](./_images/slide-026.png)
+<Image src={slide026} alt="Android Studioの画面構成" />
 
 ### プロジェクトパネル（左側）
 
@@ -144,7 +156,7 @@ Android Studioの画面は主に以下の領域で構成されています。
   - **res** - リソースファイル（画像、レイアウトなど）
 - **Gradle Scripts** - ビルド設定ファイル
 
-![](./_images/slide-027.png)
+<Image src={slide027} alt="プロジェクトパネル" />
 
 ### エディター（中央）
 
@@ -152,7 +164,7 @@ Android Studioの画面は主に以下の領域で構成されています。
 
 `MainActivity.kt`などのファイルを開いて、コードを編集できます。
 
-![](./_images/slide-028.png)
+<Image src={slide028} alt="エディター" />
 
 ### エミュレーター（右側）
 
@@ -160,20 +172,13 @@ Androidのエミュレータが動くところです。実際のAndroidデバイ
 
 エミュレーターには「Pixel 9 API 35」などのデバイス名が表示され、実際のスマートフォンのように操作できます。
 
-![](./_images/slide-029.png)
+<Image src={slide029} alt="エミュレーター" />
 
 ### Runパネル（下部）
 
 Buildした時の結果やコンパイルエラーが表示されます。
 
-アプリを実行すると、以下のような情報が表示されます：
-```
-Launching app on 'Pixel 9'.
-Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=io.github.harutiro.countapp/.MainActivity }
-Connected to process on device 'Pixel_9 [emulator-5554]'.
-```
-
-![](./_images/slide-030.png)
+<Image src={slide030} alt="Runパネル" />
 
 ### Logcat（下部タブ）
 
@@ -181,53 +186,4 @@ Logcatと呼ばれる、端末のログを表示するパネルです。
 
 アプリの動作中に出力されるログメッセージを確認できます。デバッグ時に非常に役立ちます。
 
-![](./_images/slide-031.png)
-
-## カウントアプリの機能分解をしてみよう
-
-カウントアプリって単純なものですが、どんな機能があるのでしょうか？実際に触りながら考えてみましょう。
-
-![](./_images/slide-032.png)
-
-### 実際に触ってみよう
-
-以下のWebサイトにアクセスして、実際にカウントアプリを触ってみましょう。
-
-**https://countappreact.pages.dev/**
-
-![](./_images/slide-033.png)
-
-<Aside type="tip">
-これはViteで作ったWebアプリです。スマートフォンやPCのブラウザからアクセスできます。
-</Aside>
-
-### 機能分解をしてみる
-
-カウントアプリの機能を分解すると、以下のようになります：
-
-| 機能 | 説明 |
-|------|------|
-| 押した数を表示する | 画面中央に「カウント: 51」のように表示 |
-| ボタンを押して、カウントを増やす | +ボタンをタップするとカウントが増える |
-| 背景が変わる | この機能はプラスアルファ |
-| ボタンの大きさが変わる | この機能はプラスアルファ |
-
-![](./_images/slide-034.png)
-
-### 流れを考えてみる
-
-カウントアプリの基本的な流れは以下の通りです：
-
-1. **ボタンを押す**
-2. **値を一つ増やす**
-3. **値を表示する**
-
-![](./_images/slide-035.png)
-
-<Aside type="note">
-アプリの必要な機能を作り、その機能がどのような動きをするのかをまとめるのが大切です。
-</Aside>
-
-![](./_images/slide-036.png)
-
-この考え方は、アプリ開発全般において重要です。作りたいアプリの機能を分解し、それぞれの機能がどのような動作をするのかを整理してから実装に取り掛かりましょう。
+<Image src={slide031} alt="Logcat" />

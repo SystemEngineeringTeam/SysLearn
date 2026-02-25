@@ -3,10 +3,26 @@ title: カウントアプリの見た目を作ろう
 description: Jetpack Composeを使ってUIを作成します
 slug: textbook/android/count-app-ui
 sidebar:
-    order: 5
+    order: 8
 ---
 
 import { Aside } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
+import slide040 from "./_images/slide-040.png";
+import slide041 from "./_images/slide-041.png";
+import slide042 from "./_images/slide-042.png";
+import slide043 from "./_images/slide-043.png";
+import slide044 from "./_images/slide-044.png";
+import slide045 from "./_images/slide-045.png";
+import slide046 from "./_images/slide-046.png";
+import slide047 from "./_images/slide-047.png";
+import slide048 from "./_images/slide-048.png";
+import slide049 from "./_images/slide-049.png";
+import slide050 from "./_images/slide-050.png";
+import slide051 from "./_images/slide-051.png";
+import slide052 from "./_images/slide-052.png";
+import slide053 from "./_images/slide-053.png";
+import slide054 from "./_images/slide-054.png";
 
 ## カウントアプリの見た目を作ろう
 
@@ -14,7 +30,7 @@ Jetpack Composeをうまく活用して、見た目を作っていきましょ�
 
 ## 現状の状態確認
 
-![](./_images/slide-040.png)
+<Image src={slide040} alt="現状の状態確認" />
 
 先ほど、プロジェクトが作成できて、以下のような画面が表示されているか確認をしてください。できていない場合はプロジェクトの新規作成をしてください。
 
@@ -45,7 +61,7 @@ class MainActivity : ComponentActivity() {
 
 ## コードのいらないところを消そう
 
-![](./_images/slide-041.png)
+<Image src={slide041} alt="コードのいらないところを消そう" />
 
 デフォルトで書かれたコードがあるので、使わないため、ここまで綺麗にしておきましょう。
 
@@ -75,7 +91,7 @@ class MainActivity : ComponentActivity() {
 
 ## Composable関数を用いてカウントアプリを表示する部分を作ろう
 
-![](./_images/slide-042.png)
+<Image src={slide042} alt="CountAppScreen関数の追加" />
 
 `MainActivity`クラスの中の`Scaffold`内に`CountAppScreen`を追加し、クラスの外に`CountAppScreen`関数を定義します。
 
@@ -105,7 +121,7 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
 ```
 
 <Aside type="note" title="@Composable関数とは？">
-![](./_images/slide-043.png)
+<Image src={slide043} alt="Composable関数とは" />
 
 `@Composable`関数について説明します。
 
@@ -132,7 +148,7 @@ fun QuizScreen() {
 </Aside>
 
 <Aside type="note" title="Modifierとは？">
-![](./_images/slide-044.png)
+<Image src={slide044} alt="Modifierとは" />
 
 Compose修飾子で、コンポーザブルの見た目を装飾したり、拡張したりする動作を追加したり、見た目をより綺麗に整える。
 
@@ -147,7 +163,7 @@ Compose修飾子で、コンポーザブルの見た目を装飾したり、拡�
 
 ### fillMaxWidth / fillMaxHeight
 
-![](./_images/slide-045.png)
+<Image src={slide045} alt="fillMaxWidth / fillMaxHeight" />
 
 要素を画面いっぱいに広げます。
 
@@ -162,7 +178,7 @@ Button(
 
 ### padding
 
-![](./_images/slide-046.png)
+<Image src={slide046} alt="padding" />
 
 要素に空白をつけます。
 
@@ -177,14 +193,14 @@ Text(
 
 他にもたくさんのModifierがあります。詳しくは以下を参照。
 
-![](./_images/slide-047.png)
+<Image src={slide047} alt="Modifierの詳細" />
 
 https://developer.android.com/develop/ui/compose/modifiers?hl=ja
 </Aside>
 
 ## コンポーネントを配置しよう
 
-![](./_images/slide-048.png)
+<Image src={slide048} alt="コンポーネントを配置" />
 
 `CountAppScreen`の中身を作ろう。Textコンポーネントと、Buttonコンポーネントを配置します。
 
@@ -213,7 +229,7 @@ TextとButtonについては、次のスライドで説明します。また、�
 </Aside>
 
 <Aside type="note" title="importについて">
-![](./_images/slide-049.png)
+<Image src={slide049} alt="importについて" />
 
 赤くなっているTextにカーソルを重ねて Macの人は `option + return`、Winの人は `alt + enter` を押して、インポートするライブラリを選択する。
 
@@ -221,7 +237,7 @@ TextとButtonについては、次のスライドで説明します。また、�
 </Aside>
 
 <Aside type="note" title="Textについて">
-![](./_images/slide-050.png)
+<Image src={slide050} alt="Textについて" />
 
 テキストを表示するための関数。Colorなどの引数をつけることで、色なども指定できる。
 
@@ -240,7 +256,7 @@ Text(
 </Aside>
 
 <Aside type="note" title="TextAlignについて">
-![](./_images/slide-051.png)
+<Image src={slide051} alt="TextAlignについて" />
 
 テキストをどちらに寄せるのかを記載する。
 
@@ -259,7 +275,7 @@ Text(
 </Aside>
 
 <Aside type="note" title="Buttonについて">
-![](./_images/slide-052.png)
+<Image src={slide052} alt="Buttonについて" />
 
 ボタンを作成できるコンポーネント。`onClick`を用意することで、動作を記述できる。また、Buttonの中にTextを用意することで、文字を表示することができる。
 
@@ -272,7 +288,7 @@ Button(onClick = { /*TODO*/ }) {
 
 ## 実際に動かしてみる
 
-![](./_images/slide-053.png)
+<Image src={slide053} alt="実際に動かしてみる" />
 
 Android Studioの上部にある「Run 'app'」ボタン（再生ボタン）をクリックします。
 
@@ -280,7 +296,7 @@ Android Studioの上部にある「Run 'app'」ボタン（再生ボタン）を
 
 ## 変な位置に重なって表示される
 
-![](./_images/slide-054.png)
+<Image src={slide054} alt="変な位置に重なって表示される" />
 
 実行してみると、テキストとボタンが重なって変な位置に表示されることがあります。
 
