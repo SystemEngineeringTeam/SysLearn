@@ -9,11 +9,26 @@ sidebar:
 import { Aside } from "@astrojs/starlight/components";
 import { Image } from "astro:assets";
 
-import slide68 from "./_images/07/slide-068.png";
+import count_app_button_animation from "./_images/07/count_app_button_animation.gif";
+import count_app_color_change from "./_images/07/count_app_color_change.gif";
 import slide69 from "./_images/07/slide-069.png";
 import slide70 from "./_images/07/slide-070.png";
 import slide71 from "./_images/07/slide-071.png";
 import slide72 from "./_images/07/slide-072.png";
+import slide73 from "./_images/07/slide-073.png";
+import slide74 from "./_images/07/slide-074.png";
+import slide75 from "./_images/07/slide-075.png";
+import slide76 from "./_images/07/slide-076.png";
+import slide77 from "./_images/07/slide-077.png";
+import slide78 from "./_images/07/slide-078.png";
+import slide79 from "./_images/07/slide-079.png";
+import slide80 from "./_images/07/slide-080.png";
+import slide81 from "./_images/07/slide-081.png";
+import slide82 from "./_images/07/slide-082.png";
+import slide83 from "./_images/07/slide-083.png";
+import slide84 from "./_images/07/slide-084.png";
+import slide85 from "./_images/07/slide-085.png";
+import slide86 from "./_images/07/slide-086.png";
 
 ## テキストとボタンの見た目を修正する
 
@@ -75,6 +90,8 @@ Scale-independent Pixels（スケールに非依存のピクセル）の略で�
 dp の単位と似ていますが、画面上のサイズはユーザのフォントサイズ設定に準じます。
 
 **文字は sp、それ以外は dp を使います**
+
+参考: https://blog.shonanshachu.com/2012/10/androidpxspdipdp.html
 </Aside>
 
 <Aside type="note" title="Text の引数について">
@@ -130,15 +147,21 @@ Button(
 
 ## 実行確認
 
+<Image alt="実行確認" src={slide73} />
+
 まずは前回までのコードを実行して、「カウント: 0」というテキストと「+」ボタンが表示されていることを確認しましょう。
 
 もしも変化しなかった場合は、すぐに運営に伝えてね。
 
 ## ボタンとテキストの位置を調整する
 
+<Image alt="ボタンとテキストの位置を調整する" src={slide74} />
+
 現状では、ボタンやテキストの位置が画面の左上に配置されています。これを画面の真ん中に配置するように調整していきましょう。
 
 ### コードの追加
+
+<Image alt="以下のコードを追加してみよう" src={slide75} />
 
 以下のコードを追加して、レイアウトを調整します。
 
@@ -167,6 +190,8 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
 - `background()` - 背景の色調整
 
 <Aside type="tip" title="verticalArrangement と horizontalAlignment とは？">
+<Image alt="verticalArrangement と horizontalAlignment とは？" src={slide76} />
+
 レイアウトをどのように並べるかを記述するものです。横並びなのか、左並びなのかなどを指定します。
 
 厳密には、`Arrangement`と`Alignment`は違いますが、似た動作をします。`Row`と`Column`で若干名称が変わるので要注意。
@@ -182,15 +207,15 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
 
 ### 実行確認
 
+<Image alt="このように色や位置が変わりましたか？" src={slide77} />
+
 コードを追加して実行すると、背景色がシアンになり、テキストとボタンが画面中央に配置されます。
 
 ## 数値によって背景色を変えてみよう
 
+<Image alt="数値によって背景色を変えてみよう" src={slide78} />
+
 次は、カウントの数値に応じて背景色が変わる機能を追加しましょう。10回タップするごとに背景色がランダムに変化します。
-
-### コードの追加
-
-以下のコードを追加してください。
 
 ```kotlin
 @Composable
@@ -282,6 +307,8 @@ Column(
 
 ### 実行確認
 
+<Image alt="以下のような動作はしましたか？" src={count_app_color_change} width={300} />
+
 10タップに1回背景が変わるようになったと思います。
 
 ## ボタンにアニメーションをつけてみよう
@@ -289,6 +316,8 @@ Column(
 次は、10回タップするごとにボタンの大きさが変わるアニメーションを追加します。
 
 ### コードの追加
+
+<Image alt="ボタンにアニメーションをつけてみよう" src={slide83} />
 
 以下のコードを追加・編集してみましょう。
 
@@ -352,77 +381,15 @@ Button(
 
 ### 実行確認
 
+<Image alt="このように動作はしましたか？" src={count_app_button_animation} width={300} />
+
 10回目、20回目でボタンの大きさが大きくなったり小さくなったり変更されるようになったと思います。
 
 ## これで、基本となるアプリは完成になります
+
+<Image alt="これで、基本となるアプリは完成になります" src={slide86} />
 
 お疲れ様でした。
 
 今回のレポジトリはこちらからみれます：
 https://github.com/harutiro/CountAppSysHack
-
-## オリジナル機能を作るためのTips集
-
-色々な機能を付け加えて、コードを理解しつつ、オリジナリティを付け足してみてください。
-
-もしもエラーなどで困った時は運営にすぐに連絡入れてね。
-
-### 簡単な機能追加
-
-以下のような機能を追加してみましょう：
-
-- `-`ボタンを追加してみよう
-- クリアボタンを追加してみよう
-- `+10`, `-10`ボタンを追加してみよう
-- 数値によって文字の大きさを変えてみよう
-- ねべあつ機能を追加してみよう
-  - 3の倍数か3がつくときにアホになります
-
-### 共有ボタンを作ってみる
-
-カウント数を他のアプリに共有できるボタンを作ってみましょう。
-
-```kotlin
-@Composable
-fun ShareButton(count: Int) {
-    val context = LocalContext.current
-
-    Button(onClick = {
-        val shareIntent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, "今、$count 回カウントしました！")
-            type = "text/plain"
-        }
-        context.startActivity(Intent.createChooser(shareIntent, "共有"))
-    }) {
-        Text("シェアする")
-    }
-}
-
-// 今まで使ったボタンやTextのように配置をする
-ShareButton(count)
-```
-
-### 回数に応じたアナウンス
-
-特定の回数に達したときにメッセージを表示する機能を追加してみましょう。
-
-```kotlin
-val achievementMessage = remember { mutableStateOf("") }
-
-LaunchedEffect(count) {
-    if (count % 10 == 0 && count != 0) {
-        backgroundColor.value = Color(
-            Random.nextFloat(),
-            Random.nextFloat(),
-            Random.nextFloat(),
-            1f
-        )
-    }
-
-    if (count == 50) achievementMessage.value = "50回達成！"
-    if (count == 100) achievementMessage.value = "100回達成！"
-}
-```
-
-これで50回や100回達成時にメッセージが表示されるようになります。

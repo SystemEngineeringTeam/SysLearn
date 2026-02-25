@@ -1,12 +1,73 @@
 ---
 title: オリジナル機能を作るためのTips集
-description: さらに機能を追加するためのヒント集
+description: 色々な機能を付け加えて、コードを理解しつつ、オリジナリティを付け足してみてください。
 slug: textbook/android/tips
 sidebar:
-    order: 10
+    order: 8
 ---
 
 import { Aside } from "@astrojs/starlight/components";
+
+### 簡単な機能追加
+
+以下のような機能を追加してみましょう：
+
+- `-`ボタンを追加してみよう
+- クリアボタンを追加してみよう
+- `+10`, `-10`ボタンを追加してみよう
+- 数値によって文字の大きさを変えてみよう
+- ねべあつ機能を追加してみよう
+  - 3の倍数か3がつくときにアホになります
+
+### 共有ボタンを作ってみる
+
+カウント数を他のアプリに共有できるボタンを作ってみましょう。
+
+```kotlin
+@Composable
+fun ShareButton(count: Int) {
+    val context = LocalContext.current
+
+    Button(onClick = {
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "今、$count 回カウントしました！")
+            type = "text/plain"
+        }
+        context.startActivity(Intent.createChooser(shareIntent, "共有"))
+    }) {
+        Text("シェアする")
+    }
+}
+
+// 今まで使ったボタンやTextのように配置をする
+ShareButton(count)
+```
+
+### 回数に応じたアナウンス
+
+特定の回数に達したときにメッセージを表示する機能を追加してみましょう。
+
+```kotlin
+val achievementMessage = remember { mutableStateOf("") }
+
+LaunchedEffect(count) {
+    if (count % 10 == 0 && count != 0) {
+        backgroundColor.value = Color(
+            Random.nextFloat(),
+            Random.nextFloat(),
+            Random.nextFloat(),
+            1f
+        )
+    }
+
+    if (count == 50) achievementMessage.value = "50回達成！"
+    if (count == 100) achievementMessage.value = "100回達成！"
+}
+```
+
+これで50回や100回達成時にメッセージが表示されるようになります。
+
 
 ## 音を出してみよう
 
