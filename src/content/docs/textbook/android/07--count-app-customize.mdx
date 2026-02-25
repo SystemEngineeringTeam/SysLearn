@@ -169,7 +169,7 @@ Button(
 @Composable
 fun CountAppScreen(modifier: Modifier = Modifier) {
 
-    var count by remember { mutableIntStateOf(value: 0) }
+    var count by remember { mutableIntStateOf(0) }
 
     Column(
         modifier = modifier
@@ -221,7 +221,7 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
 @Composable
 fun CountAppScreen(modifier: Modifier = Modifier) {
 
-    var count by remember { mutableIntStateOf(value: 0) }
+    var count by remember { mutableIntStateOf(0) }
     val backgroundColor = remember { mutableStateOf(Color(0xFF1E1E1E)) }
 
     LaunchedEffect(count) {
@@ -230,7 +230,7 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
                 Random.nextFloat(),
                 Random.nextFloat(),
                 Random.nextFloat(),
-                alpha: 1f
+                1f
             )
         }
     }
@@ -325,7 +325,7 @@ Column(
 @Composable
 fun CountAppScreen(modifier: Modifier = Modifier) {
 
-    var count by remember { mutableIntStateOf(value: 0) }
+    var count by remember { mutableIntStateOf(0) }
     val scale by animateFloatAsState(
         targetValue = if (count % 10 == 0 && count != 0) 1.5f else 1f,
         label = "scale"
