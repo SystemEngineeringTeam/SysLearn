@@ -1,7 +1,7 @@
 ---
 title: カウントアプリの機能分解をしてみよう
-description: カウントアプリの機能を分解してみましょう
-slug: textbook/android/count-app-functional-decomposition
+description: カウントアプリの機能を分解してどのような動きをするのかを考えてみましょう
+slug: textbook/android/count-app-planning
 sidebar:
     order: 4
 ---
@@ -13,6 +13,7 @@ import slide033 from "./_images/04/slide-033.png";
 import slide034 from "./_images/04/slide-034.png";
 import slide035 from "./_images/04/slide-035.png";
 import slide036 from "./_images/04/slide-036.png";
+import slide037 from "./_images/04/slide-037.png";
 
 ## カウントアプリの機能分解をしてみよう
 
@@ -62,3 +63,14 @@ import slide036 from "./_images/04/slide-036.png";
 <Image src={slide036} alt="機能分解のまとめ" />
 
 この考え方は、アプリ開発全般において重要です。作りたいアプリの機能を分解し、それぞれの機能がどのような動作をするのかを整理してから実装に取り掛かりましょう。
+
+## 実装をするために
+
+<Image src={slide037} alt="実装をするために" />
+
+アプリケーションを作成するには、大きく分けて2つの要素が必要です。
+
+1. **見た目（UI）** - ユーザーが見る画面のデザイン
+2. **動作（関数）** - ボタンを押したときの処理など
+
+見た目を用意して、そこに動作を加えることで、アプリケーションができあがります。
