@@ -8,19 +8,10 @@ sidebar:
 
 import { Aside } from "@astrojs/starlight/components";
 import { Image } from "astro:assets";
-import slide06 from "./_images/slide-006.png";
-import slide07 from "./_images/slide-007.png";
-import slide08 from "./_images/slide-008.png";
-import slide09 from "./_images/slide-009.png";
-import slide10 from "./_images/slide-010.png";
-import slide11 from "./_images/slide-011.png";
-import slide12 from "./_images/slide-012.png";
-import slide13 from "./_images/slide-013.png";
-import slide14 from "./_images/slide-014.png";
-import slide15 from "./_images/slide-015.png";
-import slide16 from "./_images/slide-016.png";
-import slide17 from "./_images/slide-017.png";
-import slide18 from "./_images/slide-018.png";
+import slide06 from "./_images/02/slide-006.png";
+import slide07 from "./_images/02/slide-007.png";
+import slide08 from "./_images/02/slide-008.png";
+import slide18 from "./_images/02/slide-018.png";
 
 <Image src={slide06} alt="Androidの基礎知識" />
 
@@ -48,14 +39,8 @@ Androidアプリを作ると、これらの様々なデバイスで動作させ�
 <Image src={slide08} alt="Androidのバージョン" />
 
 Androidにはバージョンがあり、それぞれにAPIレベルとコードネームが付けられています。
+Androidのバージョンが上がるにつれて、利用できる機能が増えたり、セキュリティが強化されたりします。
 
-| バージョン | APIレベル | コードネーム |
-|----------|---------|------------|
-| 16 | 36 | Baklava |
-| 15 | 35 | Vanilla Ice Cream |
-| 14 | 34 | Upside Down Cake |
-| 13 | 33 | Tiramisu |
-| ... | ... | ... |
 
 <Aside type="tip">
 コードネームはお菓子の名前がアルファベット順に付けられています。
@@ -63,31 +48,33 @@ Androidにはバージョンがあり、それぞれにAPIレベルとコード�
 
 ## Kotlinとは？
 
-<Image src={slide09} alt="Kotlinとは？" />
+Kotlinは、アプリを作るためのプログラミング言語です。
+特にAndroidアプリ開発で広く使われています。
 
-Kotlinは、Androidアプリ開発で主に用いるプログラミング言語です。
+開発したのはJetBrainsというソフトウェア会社です。
+2017年にGoogleがAndroidの公式開発言語として発表し、一気に広まりました。
 
+- **モダンで安全** - Null安全などの機能が組み込まれている
 - **シンプルに記述できる** - 少ないコード量で書ける
 - **Javaとの互換性** - 既存のJavaコードと一緒に使える
 
 ## プログラミングの基本
 
-<Image src={slide10} alt="プログラミングの基本" />
-
 プログラミングには3つの基本要素があります。
+この３つの要素を理解することで、プログラムがどのように動いているのかを理解しやすくなります。
 
 ### 変数
 データをメモリにメモする仕組みです。
+状態や値を保存しておくために使います。
 
 ### 関数
 処理をまとめて名前をつける仕組みです。
+同じ処理を何度も書かなくて済むようになります。
 
 ### 制御構文
 条件に応じて実行するしないを決めたり、繰り返したりする仕組みです。
 
 ## Kotlinの基本文法
-
-<Image src={slide11} alt="Kotlinの基本文法" />
 
 Kotlinの基本的な文法を見てみましょう。
 
@@ -107,8 +94,6 @@ fun isAdult(age:Int) :Boolean {
 ```
 
 ### 変数と定数
-
-<Image src={slide12} alt="変数と定数" />
 
 Kotlinでは `val` と `var` を使ってデータを保存します。
 
@@ -131,8 +116,6 @@ count = 1
 
 ### 関数
 
-<Image src={slide13} alt="関数の定義と呼び出し" />
-
 関数は `fun` キーワードを使って定義します。
 
 ```kotlin
@@ -146,8 +129,6 @@ loadData()
 ```
 
 **引数と戻り値を持つ関数**
-
-<Image src={slide14} alt="引数と戻り値を持つ関数" />
 
 ```kotlin
 // 関数の引数と戻り値
@@ -164,8 +145,6 @@ val priceWithTax = calcPriceWithTax(price = 100) // priceWithTax will be 110
 
 **if文**
 
-<Image src={slide15} alt="if文" />
-
 条件に応じて処理を分岐させます。
 
 ```kotlin
@@ -177,8 +156,6 @@ if(age >= 18) {
 ```
 
 **when文**
-
-<Image src={slide16} alt="when文" />
 
 複数の条件で分岐させる場合は `when` を使います。
 
@@ -197,8 +174,6 @@ when {
 ```
 
 ### コメント文
-
-<Image src={slide17} alt="コメント文" />
 
 コードにメモを残すためのコメント文があります。
 
