@@ -1,0 +1,308 @@
+---
+title: カウントアプリをちょっと改造しよう
+description: アプリに機能を追加してカスタマイズします
+slug: textbook/android/count-app-customize
+sidebar:
+    order: 7
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+## 実行確認
+
+まずは前回までのコードを実行して、「カウント: 0」というテキストと「+」ボタンが表示されていることを確認しましょう。
+
+もしも変化しなかった場合は、すぐに運営に伝えてね。
+
+## ボタンとテキストの位置を調整する
+
+現状では、ボタンやテキストの位置が画面の左上に配置されています。これを画面の真ん中に配置するように調整していきましょう。
+
+### コードの追加
+
+以下のコードを追加して、レイアウトを調整します。
+
+```kotlin
+@Composable
+fun CountAppScreen(modifier: Modifier = Modifier) {
+
+    var count by remember { mutableIntStateOf(value: 0) }
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.Cyan),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            text = "カウント: $count",
+```
+
+赤枠の中で、以下の設定がされています：
+
+- `fillMaxSize()` - サイズの最大化
+- `horizontalAlignment` - 水平方向の調整
+- `verticalArrangement` - 垂直方向の調整
+- `background()` - 背景の色調整
+
+<Aside type="tip" title="verticalArrangement と horizontalAlignment とは？">
+レイアウトをどのように並べるかを記述するものです。横並びなのか、左並びなのかなどを指定します。
+
+厳密には、`Arrangement`と`Alignment`は違いますが、似た動作をします。`Row`と`Column`で若干名称が変わるので要注意。
+
+**verticalArrangement の例：**
+
+| 設定値 | 配置 |
+|--------|------|
+| `Arrangement.Top` | 上寄せ |
+| `Arrangement.Center` | 中央 |
+| `Arrangement.Bottom` | 下寄せ |
+</Aside>
+
+### 実行確認
+
+コードを追加して実行すると、背景色がシアンになり、テキストとボタンが画面中央に配置されます。
+
+## 数値によって背景色を変えてみよう
+
+次は、カウントの数値に応じて背景色が変わる機能を追加しましょう。10回タップするごとに背景色がランダムに変化します。
+
+### コードの追加
+
+以下のコードを追加してください。
+
+```kotlin
+@Composable
+fun CountAppScreen(modifier: Modifier = Modifier) {
+
+    var count by remember { mutableIntStateOf(value: 0) }
+    val backgroundColor = remember { mutableStateOf(Color(color: 0xFF1E1E1E)) }
+
+    LaunchedEffect(count) {
+        if (count % 10 == 0 && count != 0) {
+            backgroundColor.value = Color(
+                Random.nextFloat(),
+                Random.nextFloat(),
+                Random.nextFloat(),
+                alpha: 1f
+            )
+        }
+    }
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(backgroundColor.value),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            text = "カウント: $count",
+            fontSize = 40.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            textAlign = TextAlign.Center
+        )
+```
+
+### 背景が変わる動作の仕組み
+
+#### 背景色の状態を保存
+
+以下のコードで、背景がどの色にしておくのか保存をしておきます。このときに`mutableStateOf`で変数を保存して、状態を管理できるようにします。
+
+```kotlin
+val backgroundColor = remember { mutableStateOf(Color(color: 0xFF1E1E1E)) }
+```
+
+#### 背景の色が変わる仕組み
+
+以下のコードは、`count`の値が変わったら呼び出されるものです。この時は`LaunchedEffect`を利用します。
+
+```kotlin
+LaunchedEffect(count) {
+    if (count % 10 == 0 && count != 0) {
+        backgroundColor.value = Color(
+            Random.nextFloat(),
+            Random.nextFloat(),
+            Random.nextFloat(),
+            alpha: 1f
+        )
+    }
+}
+```
+
+if文で10で割ったときにあまりが0だったら、背景の色を乱数で作成されるようになります。
+
+<Aside type="caution">
+`LaunchedEffect`は副作用の大きいコードになります。どこでどんな動作をしているのか見落としてバグの原因になるので乱用は避けましょう。
+</Aside>
+
+#### Columnで背景色を使用
+
+最後、背景の色の変数を、`Column`で使用してあげれば、10クリックで1回背景色が変わるようになります。
+
+```kotlin
+Column(
+    modifier = modifier
+        .fillMaxSize()
+        .background(backgroundColor.value),
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.Center,
+) {
+    Text(
+        text = "カウント: $count",
+        fontSize = 40.sp,
+        fontWeight = FontWeight.Bold,
+        color = Color.White,
+        textAlign = TextAlign.Center
+    )
+```
+
+### 実行確認
+
+10タップに1回背景が変わるようになったと思います。
+
+## ボタンにアニメーションをつけてみよう
+
+次は、10回タップするごとにボタンの大きさが変わるアニメーションを追加します。
+
+### コードの追加
+
+以下のコードを追加・編集してみましょう。
+
+```kotlin
+@Composable
+fun CountAppScreen(modifier: Modifier = Modifier) {
+
+    var count by remember { mutableIntStateOf(value: 0) }
+    val scale by animateFloatAsState(
+        targetValue = if (count % 10 == 0 && count != 0) 1.5f else 1f,
+        label = "scale"
+    )
+    val backgroundColor = remember { mutableStateOf(Color(color: 0xFF1E1E1E)) }
+
+    LaunchedEffect(count) {
+        if (count % 10 == 0 && count != 0) {
+```
+
+そして、Buttonのmodifierに`.scale(scale)`を追加します。
+
+```kotlin
+Button(
+    modifier = Modifier
+        .size(120.dp)
+        .scale(scale),
+    onClick = {
+        count++
+    }
+) {
+    Text(
+        text: "+",
+        fontSize = 48.sp,
+        fontWeight = FontWeight.Bold,
+        color = Color.White
+    )
+}
+```
+
+### 大きさが変わる理由
+
+`animateFloatAsState`は、`targetValue`が変わったときに滑らかに値を変えてアニメーションをしてくれます。
+
+```kotlin
+val scale by animateFloatAsState(
+    targetValue = if (count % 10 == 0 && count != 0) 1.5f else 1f,
+    label = "scale"
+)
+```
+
+変更された`scale`は`Button`の`scale`と連動しています。
+
+```kotlin
+Button(
+    modifier = Modifier
+        .size(120.dp)
+        .scale(scale),
+    onClick = {
+        count++
+    }
+```
+
+### 実行確認
+
+10回目、20回目でボタンの大きさが大きくなったり小さくなったり変更されるようになったと思います。
+
+## これで、基本となるアプリは完成になります
+
+お疲れ様でした。
+
+今回のレポジトリはこちらからみれます：
+https://github.com/harutiro/CountAppSysHack
+
+## オリジナル機能を作るためのTips集
+
+色々な機能を付け加えて、コードを理解しつつ、オリジナリティを付け足してみてください。
+
+もしもエラーなどで困った時は運営にすぐに連絡入れてね。
+
+### 簡単な機能追加
+
+以下のような機能を追加してみましょう：
+
+- `-`ボタンを追加してみよう
+- クリアボタンを追加してみよう
+- `+10`, `-10`ボタンを追加してみよう
+- 数値によって文字の大きさを変えてみよう
+- ねべあつ機能を追加してみよう
+  - 3の倍数か3がつくときにアホになります
+
+### 共有ボタンを作ってみる
+
+カウント数を他のアプリに共有できるボタンを作ってみましょう。
+
+```kotlin
+@Composable
+fun ShareButton(count: Int) {
+    val context = LocalContext.current
+
+    Button(onClick = {
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "今、$count 回カウントしました！")
+            type = "text/plain"
+        }
+        context.startActivity(Intent.createChooser(shareIntent, "共有"))
+    }) {
+        Text("シェアする")
+    }
+}
+
+// 今まで使ったボタンやTextのように配置をする
+ShareButton(count)
+```
+
+### 回数に応じたアナウンス
+
+特定の回数に達したときにメッセージを表示する機能を追加してみましょう。
+
+```kotlin
+val achievementMessage = remember { mutableStateOf("") }
+
+LaunchedEffect(count) {
+    if (count % 10 == 0 && count != 0) {
+        backgroundColor.value = Color(
+            Random.nextFloat(),
+            Random.nextFloat(),
+            Random.nextFloat(),
+            1f
+        )
+    }
+
+    if (count == 50) achievementMessage.value = "50回達成！"
+    if (count == 100) achievementMessage.value = "100回達成！"
+}
+```
+
+これで50回や100回達成時にメッセージが表示されるようになります。

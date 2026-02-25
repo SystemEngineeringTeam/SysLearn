@@ -1,0 +1,292 @@
+---
+title: カウントアプリの見た目を作ろう
+description: Jetpack Composeを使ってUIを作成します
+slug: textbook/android/count-app-ui
+sidebar:
+    order: 5
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+## カウントアプリの見た目を作ろう
+
+Jetpack Composeをうまく活用して、見た目を作っていきましょう。
+
+## 現状の状態確認
+
+![](./_images/slide-040.png)
+
+先ほど、プロジェクトが作成できて、以下のような画面が表示されているか確認をしてください。できていない場合はプロジェクトの新規作成をしてください。
+
+Android Studioで `MainActivity.kt` を開くと、以下のようなコードが表示されています。
+
+```kotlin
+package io.github.harutiro.countapp
+
+import ...
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            CountAppTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    Greeting(
+                        name = "Android",
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
+            }
+        }
+    }
+}
+```
+
+## コードのいらないところを消そう
+
+![](./_images/slide-041.png)
+
+デフォルトで書かれたコードがあるので、使わないため、ここまで綺麗にしておきましょう。
+
+```kotlin
+package io.github.harutiro.countapp
+
+import ...
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            CountAppTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+
+                }
+            }
+        }
+    }
+}
+```
+
+<Aside>
+`innerPadding`のエラーは無視で大丈夫です。使われてないので、画面が崩れる可能性があるよと教えてくれているだけです。
+</Aside>
+
+## Composable関数を用いてカウントアプリを表示する部分を作ろう
+
+![](./_images/slide-042.png)
+
+`MainActivity`クラスの中の`Scaffold`内に`CountAppScreen`を追加し、クラスの外に`CountAppScreen`関数を定義します。
+
+```kotlin
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            CountAppTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    CountAppScreen(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CountAppScreen(modifier: Modifier = Modifier) {
+
+}
+```
+
+<Aside type="note" title="@Composable関数とは？">
+![](./_images/slide-043.png)
+
+`@Composable`関数について説明します。
+
+```kotlin
+@Composable
+fun QuizScreen() {
+    Scaffold(
+        topBar = { SelfIntroductionAppBar() }
+    ) { paddingValues ->
+        Column(
+            Modifier
+                .padding(paddingValues)
+                .padding(16.dp)
+        ) {
+            SkillQuizSection()
+        }
+    }
+}
+```
+
+- `@Composable`をつけた関数
+- Composable関数はComposable関数の中でしか呼べない
+- 見た目に関する記述をするときに明示的につけよう
+</Aside>
+
+<Aside type="note" title="Modifierとは？">
+![](./_images/slide-044.png)
+
+Compose修飾子で、コンポーザブルの見た目を装飾したり、拡張したりする動作を追加したり、見た目をより綺麗に整える。
+
+### できることの一例
+
+| 機能 | 説明 |
+|------|------|
+| 背景色の変更 | 要素の背景色を設定 |
+| ボーダーをつける | 要素に枠線を追加 |
+| 余白をつける | padding で余白を設定 |
+| 要素を画面いっぱいに広げる | fillMaxWidth, fillMaxHeight |
+
+### fillMaxWidth / fillMaxHeight
+
+![](./_images/slide-045.png)
+
+要素を画面いっぱいに広げます。
+
+```kotlin
+Button(
+    onClick = {},
+    modifier = Modifier.fillMaxWidth(),
+) {
+    Text(text = "button")
+}
+```
+
+### padding
+
+![](./_images/slide-046.png)
+
+要素に空白をつけます。
+
+```kotlin
+Text(
+    text = "padding",
+    modifier = Modifier
+        .border(1.dp, Color.Green)
+        .padding(8.dp)
+)
+```
+
+他にもたくさんのModifierがあります。詳しくは以下を参照。
+
+![](./_images/slide-047.png)
+
+https://developer.android.com/develop/ui/compose/modifiers?hl=ja
+</Aside>
+
+## コンポーネントを配置しよう
+
+![](./_images/slide-048.png)
+
+`CountAppScreen`の中身を作ろう。Textコンポーネントと、Buttonコンポーネントを配置します。
+
+```kotlin
+@Composable
+fun CountAppScreen(modifier: Modifier = Modifier) {
+    Text(
+        text = "カウント: 0",
+        textAlign = TextAlign.Center
+    )
+
+    Button(
+        onClick = {
+            // ここに値を追加する処理を書く
+        }
+    ) {
+        Text(
+            "+",
+        )
+    }
+}
+```
+
+<Aside>
+TextとButtonについては、次のスライドで説明します。また、赤いエラーについても説明します。
+</Aside>
+
+<Aside type="note" title="importについて">
+![](./_images/slide-049.png)
+
+赤くなっているTextにカーソルを重ねて Macの人は `option + return`、Winの人は `alt + enter` を押して、インポートするライブラリを選択する。
+
+ライブラリは、今回の場合コンポーザブルに関するものなので、`Composable`と最初についているものを選ぼう。
+</Aside>
+
+<Aside type="note" title="Textについて">
+![](./_images/slide-050.png)
+
+テキストを表示するための関数。Colorなどの引数をつけることで、色なども指定できる。
+
+```kotlin
+Text("バームクーヘン")
+```
+
+色を指定する場合：
+
+```kotlin
+Text(
+    text = "バームクーヘン",
+    color = Color.Red
+)
+```
+</Aside>
+
+<Aside type="note" title="TextAlignについて">
+![](./_images/slide-051.png)
+
+テキストをどちらに寄せるのかを記載する。
+
+| 設定 | 説明 |
+|------|------|
+| `TextAlign.Start` | 左寄せ |
+| `TextAlign.Center` | 中心寄せ |
+| `TextAlign.End` | 右寄せ |
+
+```kotlin
+Text(
+    text = "カウント: 0",
+    textAlign = TextAlign.Center
+)
+```
+</Aside>
+
+<Aside type="note" title="Buttonについて">
+![](./_images/slide-052.png)
+
+ボタンを作成できるコンポーネント。`onClick`を用意することで、動作を記述できる。また、Buttonの中にTextを用意することで、文字を表示することができる。
+
+```kotlin
+Button(onClick = { /*TODO*/ }) {
+    Text(text = "ボタン")
+}
+```
+</Aside>
+
+## 実際に動かしてみる
+
+![](./_images/slide-053.png)
+
+Android Studioの上部にある「Run 'app'」ボタン（再生ボタン）をクリックします。
+
+これで、エミュレータが立ち上がり、自動でコードをビルドされます。
+
+## 変な位置に重なって表示される
+
+![](./_images/slide-054.png)
+
+実行してみると、テキストとボタンが重なって変な位置に表示されることがあります。
+
+これには2つの原因があります：
+
+1. **隙間が一切ない** - 原因：`innerPadding`が設定されてない
+2. **テキストとボタンが重なってる** - 原因：コンポーネントが縦並びになっていない
+
+次のセクションでこれらの問題を解決していきます。

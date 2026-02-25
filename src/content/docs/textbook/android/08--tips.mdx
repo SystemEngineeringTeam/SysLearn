@@ -1,0 +1,182 @@
+---
+title: オリジナル機能を作るためのTips集
+description: さらに機能を追加するためのヒント集
+slug: textbook/android/tips
+sidebar:
+    order: 8
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+## 音を出してみよう
+
+音を再生したい時は`MediaPlayer`を使用します。
+呼び出したいところで以下のコードを記述します。
+
+```kotlin
+MediaPlayer.create(context, R.raw.click_sound).apply {
+    start()
+    setOnCompletionListener { release() }
+}
+```
+
+<Aside type="tip">
+Resに`raw`フォルダーを追加して、`click_sound.mp3`を導入する必要があります。
+これでこの`click_sound.mp3`が再生されるようになります。
+</Aside>
+
+## バイブをさせてみよう
+
+バイブレーションを実行するAPIの部分です。
+
+```kotlin
+object VibrationUtil {
+    fun vibrate(context: Context, duration: Long) {
+        val vibrator = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            vibratorManager.defaultVibrator
+        } else {
+            context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        }
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            vibrator.vibrate(duration)
+        }
+    }
+}
+```
+
+呼び出したいところで記述をします。
+
+```kotlin
+VibrationUtil.vibrate(context, 100) // 100ms 振動
+```
+
+AndroidManifest.xmlにPermission VIBRATEを追加する必要があります。
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+```
+
+## より高度な改変をしてみたい方へ
+
+ぜひ、ChatGPTとペアプロ（一緒に開発をすること）をやってみると面白いかもです。
+次のセクションからは、ChatGPTについての資料になります。
+
+アイディア出しや、実際に実装の手順も教えてくれます。
+ただし、ChatGPTから出されたコードを何も考えずにコピペしないこと、理解をしてから使うこと。
+
+## ChatGPTとは？
+
+まるで人間と対話しているかのように質問した内容に回答する対話型のAIサービスです。
+
+例えば「東京の有名な観光地を教えてください。」と質問すると、「東京にはたくさんの有名な観光地がありますね。その中でも特に人気のあるものをいくつか挙げると、東京スカイツリー、浅草の仲見世通りと浅草寺、明治神宮、東京ディズニーランド、秋葉原、上野恩賜公園、東京タワーなどがあります。」といった回答が返ってきます。
+
+## ChatGPTのメリットデメリット
+
+### メリット
+
+- 自分が知らない要素も出してくれる
+- 特徴の抽出を自動でやってくれる
+- わかりやすくまとめてくれる
+- 対話形式で話し合える
+
+### デメリット
+
+- 本当に合っているかはわからない
+- 人間が欲している形にして渡されるため、一つだけで満足してしまう時も
+- 計算式は弱い
+- 間違っているのに、合っているように話される
+
+## ChatGPTと人間の会話も同じ
+
+明確な情報がないと、なかなか検索がヒットしません。
+自分は当たり前だと思っている情報は相手は知らない。
+全て明確に伝えてあげましょう。
+
+## ChatGPTに何を伝えるといい？
+
+### 基本は5W1H
+
+- ChatGPTはどのような人になって欲しいか
+    - （エンジニアとか、芸術家とか）
+- 今どのような現状になっているか？
+    - 背景だったり、使用言語だったり
+- どのようになって欲しいか、どのように解決したいか
+- その他、回答の方向性がぶれたらそれを修正していく
+
+## ChatGPTでエラー解決してみよう
+
+エラーが発生した時は、以下の手順でChatGPTに質問してみましょう。
+
+1. エラー内容と、解決方法の方針を書く
+2. コードを貼る
+3. エラー文を貼る
+
+例えば、以下のようなエラーが発生した場合：
+
+```c
+#include <stdio.h>
+int main(void){
+    // Your code here!
+    printf"Hello World")
+}
+```
+
+エラー文：
+```
+Main.c:4:26: error: expected ';' after expression
+printf("Hello World")
+1 error generated.
+```
+
+ChatGPTに質問すると、「このエラーは、プログラム内のprintf関数の呼び出しにセミコロンが欠けていることが原因です。」と教えてくれて、修正されたコードを提示してくれます。
+
+```c
+#include <stdio.h>
+int main(void){
+    // Your code here!
+    printf("Hello World");
+}
+```
+
+## ChatGPTとはうまく付き合おう
+
+- ChatGPTで生成された回答をそのまま鵜呑みにしない
+    - 知らない単語や構文を使っているところがあれば、しっかり理解をしてから使おう
+- ChatGPTに入力した文章は学習に使われる可能性がある
+    - パスワードや鍵などは渡さないようにしよう
+- あなたの代わりに特徴を汲み取って教えてくれるだけです。自分でも把握できるようにしましょう。
+
+## ChatGPTの使用例
+
+カウントアプリに面白い機能を追加するアイデアとして、以下のようなものがあります。
+
+### 1. カウント履歴の保存
+
+- ボタンを押した時間や回数をリストで表示する。
+- 記録されたカウント履歴をローカルに保存し、アプリを再起動してもデータが保持されるようにする。
+
+### 2. カウントのアニメーション
+
+- カウントが増えるたびに、数字が拡大・縮小するアニメーションを追加する。
+- 例えば、カウントが10、20、30などの節目にエフェクト（花火や振動）を入れる。
+
+### 3. 音声・効果音の追加
+
+- カウント時に音声を再生する（例：「1, 2, 3...」と読み上げる）。
+- 特定のカウントに到達した際に面白い音を鳴らす。
+
+### 4. ランキング・目標設定
+
+- 目標カウント数を設定し、達成したら通知する機能を追加する。
+
+<Aside type="note">
+ChatGPTの使用例：https://chatgpt.com/share/67bd277d-3704-8002-bf22-e2191366db3e
+</Aside>
