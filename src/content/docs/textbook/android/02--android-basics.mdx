@@ -1,0 +1,415 @@
+---
+
+title: Androidの基礎知識
+description: Androidを開発するためには、基本的な仕組みを理解する必要があります。ここではAndroid開発に必要となる土台知識を整理します。
+slug: textbook/android/android-basics
+sidebar:
+    order: 2
+---
+
+import { Aside } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
+import slide06 from "./_images/02/slide-006.png";
+import slide07 from "./_images/02/slide-007.png";
+import slide08 from "./_images/02/slide-008.png";
+import slide18 from "./_images/02/slide-018.png";
+
+## Androidアプリが動くデバイス
+
+<Image src={slide07} alt="Androidアプリが動くデバイス" />
+
+Androidアプリは多様なデバイスで動作します。
+同じアプリでも、画面サイズや利用シーンによって設計が変わります。
+
+- **スマートフォン**
+  最も一般的なAndroidデバイスです。タッチ操作を前提とした設計が中心になります。
+
+- **タブレット**
+  画面が大きいため、一覧と詳細を同時表示するなど情報量を増やせます。
+
+- **Android Auto**
+  車載向けシステムです。安全性を重視したシンプルなUI設計が求められます。
+
+- **スマートホーム**
+  スマートディスプレイなどで利用されます。音声操作との連携が重要になります。
+
+- **ウェアラブル**
+  スマートウォッチなどの小型デバイスです。限られた表示領域での設計が必要です。
+
+- **オーディオ機器**
+  ワイヤレスイヤホンなど、画面を持たない機器との連携も存在します。
+
+<Aside>
+1つのアプリでも、対象デバイスに応じた設計を意識する必要があります。
+</Aside>
+
+
+
+## Androidのバージョン
+
+<Image src={slide08} alt="Androidのバージョン" />
+
+Androidには複数のバージョンが存在します。
+それぞれにAPIレベルという番号が付与されています。
+
+APIレベルは、アプリが利用できる機能の範囲を示します。
+数値が高いほど、新しい機能や強化されたセキュリティを利用できます。
+
+### バージョンを意識する理由
+
+すべてのユーザーが最新バージョンを使用しているわけではありません。
+そのため開発では次の点を検討します。
+
+- どのAPIレベルから対応するか
+- 古い端末も対象にするか
+- 最新機能をどこまで利用するか
+
+この判断はアプリの利用者数や目的によって変わります。
+
+<Aside type="tip">
+過去のAndroidバージョンにはお菓子の名前が付けられていました。
+</Aside>
+
+
+
+## Kotlinとは？
+
+KotlinはAndroid開発で標準的に使われるプログラミング言語です。
+
+特徴は次の通りです。
+
+- **モダンで安全**
+  Null安全により、値が存在しない問題を事前に防げます。
+
+- **シンプルに記述できる**
+  少ないコード量で同じ処理を表現できます。
+
+- **Javaとの互換性**
+  既存のJavaライブラリをそのまま利用できます。
+
+初心者でも比較的読みやすく、安全にコードを書きやすい設計です。
+
+
+
+# プログラミングの基本
+
+プログラミングの基礎は次の3要素です。
+
+* 変数
+* 関数
+* 制御構文
+
+
+
+## 変数
+
+変数は値を保存する仕組みです。
+Kotlinでは val と var の2種類があります。
+
+### val（再代入不可）
+
+```kotlin
+val name = "Taro"
+```
+
+* 一度代入すると変更できない
+* 安全性が高い
+* 基本はこちらを使用する
+
+```kotlin
+val age = 20
+// age = 21 ← エラー
+```
+
+### var（再代入可能）
+
+```kotlin
+var score = 0
+score = 10
+```
+
+* 後から値を変更できる
+* 状態が変化するデータに使用する
+
+### 使い分け
+
+* 基本は val を使用する
+* 変更が必要な場合のみ var を使用する
+
+
+
+## 関数
+
+関数は処理をひとまとまりにした仕組みです。
+同じ処理を再利用できます。
+
+### 基本構文の形
+
+```kotlin
+fun 関数名(引数): 戻り値の型 {
+    処理
+    return 戻り値
+}
+```
+
+* fun ：関数を定義するキーワード
+* 関数名 ：好きな名前を付けられる
+* 引数 ：関数に渡す値
+* 戻り値の型 ：関数が返す値の型
+* return ：結果を呼び出し元へ返す
+
+
+
+### 引数なし・戻り値なし
+
+```kotlin
+fun greet() {
+    println("Hello")
+}
+```
+
+* ( ) の中が空なので引数なし
+* 戻り値が無いので型は書かない
+
+
+
+### 引数あり
+
+```kotlin
+fun greet(name: String) {
+    println("Hello $name")
+}
+```
+
+* name ：引数の名前
+* String ：引数の型
+* name: String の形式で記述する
+
+呼び出し例
+
+```kotlin
+greet("Taro")
+```
+
+
+
+### 戻り値あり
+
+```kotlin
+fun add(a: Int, b: Int): Int {
+    return a + b
+}
+```
+
+* a: Int ：1つ目の引数
+* b: Int ：2つ目の引数
+* ): Int ：戻り値の型
+* return a + b ：計算結果を返す
+
+呼び出し例
+
+```kotlin
+val result = add(3, 5)
+```
+
+
+
+## if文
+
+if文は条件によって処理を分岐させる構文です。
+
+### 基本構文
+
+```kotlin
+if (条件式) {
+    条件がtrueのときの処理
+} else {
+    条件がfalseのときの処理
+}
+```
+
+例
+
+```kotlin
+val age = 20
+
+if (age >= 18) {
+    println("成人")
+} else {
+    println("未成年")
+}
+```
+
+* age >= 18 が条件式
+* trueなら上を実行
+* falseならelseを実行
+
+
+<Aside type="tip">
+##### ifは値を返せる
+
+```kotlin
+val result = if (age >= 18) "成人" else "未成年"
+```
+
+* if全体が1つの値になる
+* returnを書かなくても代入できる
+</Aside>
+
+
+## when文
+
+when文は複数条件を分岐させる構文です。
+
+### 基本構文
+
+```kotlin
+when (値) {
+    条件1 -> 処理1
+    条件2 -> 処理2
+    else -> それ以外の処理
+}
+```
+
+例
+
+```kotlin
+val num = 2
+
+when (num) {
+    1 -> println("1")
+    2 -> println("2")
+    else -> println("その他")
+}
+```
+
+* when (num) ：numを基準に比較
+* 1 -> ：numが1の場合
+* else -> ：どれにも当てはまらない場合
+
+
+<Aside type="tip">
+##### whenも値を返せる
+
+```kotlin
+val message = when (num) {
+    1 -> "一"
+    2 -> "二"
+    else -> "不明"
+}
+```
+
+* when全体が1つの値になる
+* returnを書かなくても代入できる
+</Aside>
+
+
+
+## コメント
+
+コメントはプログラムの動作に影響しない説明文です。
+
+### 1行コメント
+
+```kotlin
+// これはコメント
+val age = 20 // 年齢
+```
+
+### 複数行コメント
+
+```kotlin
+/*
+複数行のコメント
+説明をまとめて記述できる
+*/
+```
+
+* コードの意味を説明する
+* 将来の自分や他人に意図を伝える
+* 一時的に処理を無効化する
+
+
+
+## for文
+
+for文は繰り返し処理を行う構文です。
+
+### 数値の繰り返し
+
+```kotlin
+for (i in 1..5) {
+    println(i)
+}
+```
+
+* i ：繰り返し用の変数
+* 1..5 ：1から5まで
+
+
+
+### リストの繰り返し
+
+```kotlin
+val list = listOf("A", "B", "C")
+
+for (item in list) {
+    println(item)
+}
+```
+
+* item に順番に値が入る
+
+
+
+## while文
+
+while文は条件がtrueの間繰り返す構文です。
+
+### 基本構文
+
+```kotlin
+while (条件式) {
+    繰り返し処理
+}
+```
+
+例
+
+```kotlin
+var count = 0
+
+while (count < 3) {
+    println(count)
+    count++
+}
+```
+
+* count < 3 がtrueの間繰り返す
+* count++ で値を増やす
+
+
+
+
+## Jetpack Composeとは？
+
+<Image src={slide18} alt="Jetpack Composeとは？" />
+
+Jetpack ComposeはAndroidのUIを作成するための新しい仕組みです。
+
+従来はXMLで画面を作成していました。
+ComposeではKotlinコードでUIを記述します。
+
+### 特徴
+
+- 宣言的UI設計
+- 少ないコード量
+- 状態管理が分かりやすい
+
+状態が変化すると、UIが自動的に再描画されます。
+
+現代的なUI開発の考え方に基づいたフレームワークです。
+
+
+
+次のセクションでは、Android Studioの基本操作について学びます。

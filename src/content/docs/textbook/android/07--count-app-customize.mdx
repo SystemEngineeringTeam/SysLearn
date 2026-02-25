@@ -1,0 +1,395 @@
+---
+title: カウントアプリをちょっと改造しよう
+description: ここからは、ちょっとした小ネタを追加したり、見た目を変更していきましょう。
+slug: textbook/android/count-app-customize
+sidebar:
+    order: 7
+---
+
+import { Aside } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
+
+import count_app_button_animation from "./_images/07/count_app_button_animation.gif";
+import count_app_color_change from "./_images/07/count_app_color_change.gif";
+import slide69 from "./_images/07/slide-069.png";
+import slide70 from "./_images/07/slide-070.png";
+import slide71 from "./_images/07/slide-071.png";
+import slide72 from "./_images/07/slide-072.png";
+import slide73 from "./_images/07/slide-073.png";
+import slide74 from "./_images/07/slide-074.png";
+import slide75 from "./_images/07/slide-075.png";
+import slide76 from "./_images/07/slide-076.png";
+import slide77 from "./_images/07/slide-077.png";
+import slide78 from "./_images/07/slide-078.png";
+import slide79 from "./_images/07/slide-079.png";
+import slide80 from "./_images/07/slide-080.png";
+import slide81 from "./_images/07/slide-081.png";
+import slide82 from "./_images/07/slide-082.png";
+import slide83 from "./_images/07/slide-083.png";
+import slide84 from "./_images/07/slide-084.png";
+import slide85 from "./_images/07/slide-085.png";
+import slide86 from "./_images/07/slide-086.png";
+
+## テキストとボタンの見た目を修正する
+
+<Image alt="テキストとボタンの見た目を修正する" src={slide69} />
+
+Text や Button の見た目を修正していきます。
+
+```kotlin
+@Composable
+fun CountAppScreen(modifier: Modifier = Modifier) {
+
+    var count by remember { mutableIntStateOf(0) }
+
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = "カウント: $count",
+            fontSize = 40.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            modifier = Modifier
+                .size(120.dp)
+                .scale(1f),
+            onClick = {
+                count++
+            }
+        ) {
+            Text(
+                text = "+",
+                fontSize = 48.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+    }
+}
+```
+
+<Aside type="note" title="sp と dp について">
+<Image alt="sp と dp について" src={slide70} />
+
+### dp (dip)
+
+Density-independent Pixels（密度に非依存のピクセル）の略です。
+
+ディスプレイ解像度の物理的な密度に応じた抽象単位になります。160dpi（dots per inch）を基準にした単位で、1dp は 160dpi の画面で 1pixel になります。
+
+### sp
+
+Scale-independent Pixels（スケールに非依存のピクセル）の略です。
+
+dp の単位と似ていますが、画面上のサイズはユーザのフォントサイズ設定に準じます。
+
+**文字は sp、それ以外は dp を使います**
+
+参考: https://blog.shonanshachu.com/2012/10/androidpxspdipdp.html
+</Aside>
+
+<Aside type="note" title="Text の引数について">
+<Image alt="Text の引数について" src={slide71} />
+
+```kotlin
+Text(
+    text = "カウント: $count",
+    fontSize = 40.sp,
+    fontWeight = FontWeight.Bold,
+    color = Color.Black,
+    textAlign = TextAlign.Center
+)
+```
+
+- **text**: 表示する文字
+- **fontSize**: 文字の大きさ
+- **fontWeight**: 文字の太さ
+- **color**: 文字の色
+- **textAlign**: 文字の並び方
+
+他にも色々な引数があります。公式リファレンスで確認してみましょう。
+
+参考: https://developer.android.com/develop/ui/compose/text/style-text?hl=ja
+</Aside>
+
+<Aside type="note" title="Button の引数について">
+<Image alt="Button の引数について" src={slide72} />
+
+```kotlin
+Button(
+    modifier = Modifier
+        .size(120.dp)
+        .scale(1f),
+    onClick = {
+        count++
+    }
+) {
+    Text(...)
+}
+```
+
+- **modifier**: モディファイラーを挿入する
+- **.size**: ボタンの大きさの設定
+- **.scale**: 拡大率の設定
+- **onClick**: クリック時の処理
+
+他にも色々な引数があります。公式リファレンスで確認してみましょう。
+
+参考: https://developer.android.com/develop/ui/compose/components/button?hl=ja
+</Aside>
+
+
+## 実行確認
+
+<Image alt="実行確認" src={slide73} />
+
+まずは前回までのコードを実行して、「カウント: 0」というテキストと「+」ボタンが表示されていることを確認しましょう。
+
+もしも変化しなかった場合は、すぐに運営に伝えてね。
+
+## ボタンとテキストの位置を調整する
+
+<Image alt="ボタンとテキストの位置を調整する" src={slide74} />
+
+現状では、ボタンやテキストの位置が画面の左上に配置されています。これを画面の真ん中に配置するように調整していきましょう。
+
+### コードの追加
+
+<Image alt="以下のコードを追加してみよう" src={slide75} />
+
+以下のコードを追加して、レイアウトを調整します。
+
+```kotlin
+@Composable
+fun CountAppScreen(modifier: Modifier = Modifier) {
+
+    var count by remember { mutableIntStateOf(value: 0) }
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.Cyan),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            text = "カウント: $count",
+```
+
+赤枠の中で、以下の設定がされています：
+
+- `fillMaxSize()` - サイズの最大化
+- `horizontalAlignment` - 水平方向の調整
+- `verticalArrangement` - 垂直方向の調整
+- `background()` - 背景の色調整
+
+<Aside type="tip" title="verticalArrangement と horizontalAlignment とは？">
+<Image alt="verticalArrangement と horizontalAlignment とは？" src={slide76} />
+
+レイアウトをどのように並べるかを記述するものです。横並びなのか、左並びなのかなどを指定します。
+
+厳密には、`Arrangement`と`Alignment`は違いますが、似た動作をします。`Row`と`Column`で若干名称が変わるので要注意。
+
+**verticalArrangement の例：**
+
+| 設定値 | 配置 |
+|--------|------|
+| `Arrangement.Top` | 上寄せ |
+| `Arrangement.Center` | 中央 |
+| `Arrangement.Bottom` | 下寄せ |
+</Aside>
+
+### 実行確認
+
+<Image alt="このように色や位置が変わりましたか？" src={slide77} />
+
+コードを追加して実行すると、背景色がシアンになり、テキストとボタンが画面中央に配置されます。
+
+## 数値によって背景色を変えてみよう
+
+<Image alt="数値によって背景色を変えてみよう" src={slide78} />
+
+次は、カウントの数値に応じて背景色が変わる機能を追加しましょう。10回タップするごとに背景色がランダムに変化します。
+
+```kotlin
+@Composable
+fun CountAppScreen(modifier: Modifier = Modifier) {
+
+    var count by remember { mutableIntStateOf(value: 0) }
+    val backgroundColor = remember { mutableStateOf(Color(color: 0xFF1E1E1E)) }
+
+    LaunchedEffect(count) {
+        if (count % 10 == 0 && count != 0) {
+            backgroundColor.value = Color(
+                Random.nextFloat(),
+                Random.nextFloat(),
+                Random.nextFloat(),
+                alpha: 1f
+            )
+        }
+    }
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(backgroundColor.value),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            text = "カウント: $count",
+            fontSize = 40.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            textAlign = TextAlign.Center
+        )
+```
+
+### 背景が変わる動作の仕組み
+
+#### 背景色の状態を保存
+
+以下のコードで、背景がどの色にしておくのか保存をしておきます。このときに`mutableStateOf`で変数を保存して、状態を管理できるようにします。
+
+```kotlin
+val backgroundColor = remember { mutableStateOf(Color(color: 0xFF1E1E1E)) }
+```
+
+#### 背景の色が変わる仕組み
+
+以下のコードは、`count`の値が変わったら呼び出されるものです。この時は`LaunchedEffect`を利用します。
+
+```kotlin
+LaunchedEffect(count) {
+    if (count % 10 == 0 && count != 0) {
+        backgroundColor.value = Color(
+            Random.nextFloat(),
+            Random.nextFloat(),
+            Random.nextFloat(),
+            alpha: 1f
+        )
+    }
+}
+```
+
+if文で10で割ったときにあまりが0だったら、背景の色を乱数で作成されるようになります。
+
+<Aside type="caution">
+`LaunchedEffect`は副作用の大きいコードになります。どこでどんな動作をしているのか見落としてバグの原因になるので乱用は避けましょう。
+</Aside>
+
+#### Columnで背景色を使用
+
+最後、背景の色の変数を、`Column`で使用してあげれば、10クリックで1回背景色が変わるようになります。
+
+```kotlin
+Column(
+    modifier = modifier
+        .fillMaxSize()
+        .background(backgroundColor.value),
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.Center,
+) {
+    Text(
+        text = "カウント: $count",
+        fontSize = 40.sp,
+        fontWeight = FontWeight.Bold,
+        color = Color.White,
+        textAlign = TextAlign.Center
+    )
+```
+
+### 実行確認
+
+<Image alt="以下のような動作はしましたか？" src={count_app_color_change} width={300} />
+
+10タップに1回背景が変わるようになったと思います。
+
+## ボタンにアニメーションをつけてみよう
+
+次は、10回タップするごとにボタンの大きさが変わるアニメーションを追加します。
+
+### コードの追加
+
+<Image alt="ボタンにアニメーションをつけてみよう" src={slide83} />
+
+以下のコードを追加・編集してみましょう。
+
+```kotlin
+@Composable
+fun CountAppScreen(modifier: Modifier = Modifier) {
+
+    var count by remember { mutableIntStateOf(value: 0) }
+    val scale by animateFloatAsState(
+        targetValue = if (count % 10 == 0 && count != 0) 1.5f else 1f,
+        label = "scale"
+    )
+    val backgroundColor = remember { mutableStateOf(Color(color: 0xFF1E1E1E)) }
+
+    LaunchedEffect(count) {
+        if (count % 10 == 0 && count != 0) {
+```
+
+そして、Buttonのmodifierに`.scale(scale)`を追加します。
+
+```kotlin
+Button(
+    modifier = Modifier
+        .size(120.dp)
+        .scale(scale),
+    onClick = {
+        count++
+    }
+) {
+    Text(
+        text: "+",
+        fontSize = 48.sp,
+        fontWeight = FontWeight.Bold,
+        color = Color.White
+    )
+}
+```
+
+### 大きさが変わる理由
+
+`animateFloatAsState`は、`targetValue`が変わったときに滑らかに値を変えてアニメーションをしてくれます。
+
+```kotlin
+val scale by animateFloatAsState(
+    targetValue = if (count % 10 == 0 && count != 0) 1.5f else 1f,
+    label = "scale"
+)
+```
+
+変更された`scale`は`Button`の`scale`と連動しています。
+
+```kotlin
+Button(
+    modifier = Modifier
+        .size(120.dp)
+        .scale(scale),
+    onClick = {
+        count++
+    }
+```
+
+### 実行確認
+
+<Image alt="このように動作はしましたか？" src={count_app_button_animation} width={300} />
+
+10回目、20回目でボタンの大きさが大きくなったり小さくなったり変更されるようになったと思います。
+
+## これで、基本となるアプリは完成になります
+
+<Image alt="これで、基本となるアプリは完成になります" src={slide86} />
+
+お疲れ様でした。
+
+今回のレポジトリはこちらからみれます：
+https://github.com/harutiro/CountAppSysHack

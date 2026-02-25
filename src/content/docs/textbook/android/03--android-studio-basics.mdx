@@ -1,0 +1,185 @@
+---
+title: Android Studioの基本操作
+description: 初めて触ったエディターは知らないボタンが多すぎててんやわんやとなりがちです。とりあえず焦らないで一つ一つ理解をしていきましょう。
+slug: textbook/android/android-studio-basics
+sidebar:
+    order: 3
+---
+
+import { Aside } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
+import slide020 from "./_images/03/slide-020.png";
+import slide021 from "./_images/03/slide-021.png";
+import slide022 from "./_images/03/slide-022.png";
+import slide023 from "./_images/03/slide-023.png";
+import slide024 from "./_images/03/slide-024.png";
+import slide025 from "./_images/03/slide-025.png";
+import slide026 from "./_images/03/slide-026.png";
+import slide027 from "./_images/03/slide-027.png";
+import slide028 from "./_images/03/slide-028.png";
+import slide029 from "./_images/03/slide-029.png";
+import slide030 from "./_images/03/slide-030.png";
+import slide031 from "./_images/03/slide-031.png";
+
+
+## Android Studioを起動させよう
+
+Android Studioを起動すると、「Welcome to Android Studio」というウェルカム画面が表示されます。
+
+ここでは以下の操作ができます：
+
+- **New Project** - 新規プロジェクトを作成
+- **Open** - 既存のプロジェクトを開く
+- **Get from VCS** - バージョン管理システムからプロジェクトを取得
+
+新規プロジェクトを作成していきましょう。**New Project**を押しましょう。
+
+<Image src={slide020} alt="Welcome to Android Studio" />
+
+## テンプレートを選択しよう
+
+New Projectを押すと、テンプレート選択画面が表示されます。テンプレートは最初の初期設定や、初期コードを用意してくれます。
+
+左側のメニューでは対象デバイスを選択できます：
+- Phone and Tablet
+- Wear OS
+- Television
+- Automotive
+
+今回は「Phone and Tablet」を選択した状態で、**Empty Activity**を押してください。ルービックキューブみたいなアイコンが目印です。
+
+<Image src={slide021} alt="テンプレート選択画面" />
+
+<Aside>
+Empty Activityを選択すると、Jetpack Composeを使った最小限のプロジェクトが作成されます。
+</Aside>
+
+## プロジェクトの設定をしよう
+
+Empty Activityを選択してNextを押すと、プロジェクトの設定画面が表示されます。
+
+| 項目 | 説明 | 例 |
+|------|------|------|
+| **Name** | プロジェクトの名前 | CountApp |
+| **Package name** | パッケージの名前。今回は、GitHubのURLを逆順で書くことにする | io.github.harutiro.countapp |
+| **Save location** | 保存される場所 | /Users/harutiro/AndroidStudioProjects/CountApp |
+| **Minimum SDK** | 対応するOSバージョン（API 24） | API 24 ("Nougat"; Android 7.0) |
+| **Build configuration language** | ビルド設定の言語 | Kotlin DSL (build.gradle.kts) [Recommended] |
+
+<Image src={slide022} alt="プロジェクト設定画面" />
+
+<Aside type="tip">
+Minimum SDKをAPI 24に設定すると、約97.4%のデバイスでアプリが動作します。「Help me choose」リンクをクリックすると、各APIレベルでのカバー率を確認できます。
+</Aside>
+
+設定が完了したら**Finish**を押そう。
+
+## プロジェクトが作成されます
+
+Finishを押すと、Android Studioがプロジェクトを作成し、必要なファイルをセットアップします。
+
+画面下部に「Importing 'CountApp' Gradle Project...」などのメッセージが表示されます。**ロード中がなくなるまで待機**してください。
+
+<Image src={slide023} alt="プロジェクト作成中" />
+
+<Aside type="caution">
+初回のプロジェクト作成時は、Gradleの同期やSDKのダウンロードに時間がかかることがあります。インターネット接続が必要です。
+</Aside>
+
+## ソースコードの中身
+
+プロジェクトが作成されると、`MainActivity.kt`ファイルが開きます。基本的な構造を見てみましょう。
+
+### Activityの構造
+
+```kotlin
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            CountAppTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    Greeting(
+                        name = "Android",
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
+            }
+        }
+    }
+}
+```
+
+- **Activity** - Androidアプリの画面を管理するクラス
+- **onCreate** - Activityが生成された時に実行される
+- **setContent** - setContent内の内容が画面に表示される
+
+<Image src={slide024} alt="Activityの構造" />
+
+### Composable関数
+
+```kotlin
+@Composable
+fun Greeting(name: String, modifier: Modifier = Modifier) {
+    Text(
+        text = "Hello $name!",
+        modifier = modifier
+    )
+}
+```
+
+`@Composable`アノテーションが付いた関数は、Jetpack Composeで画面のUIを構築するための関数です。詳細は後述します。
+
+<Image src={slide025} alt="Composable関数" />
+
+## Android Studioの見方・使い方
+
+Android Studioの画面は主に以下の領域で構成されています。
+
+<Image src={slide026} alt="Android Studioの画面構成" />
+
+### プロジェクトパネル（左側）
+
+プロジェクトのファイル一覧がみれます。
+
+主なフォルダ構成：
+- **app** - アプリのメインモジュール
+  - **manifests** - AndroidManifest.xml（アプリの設定ファイル）
+  - **kotlin+java** - Kotlinソースコード
+    - パッケージ名のフォルダ - メインのソースコード
+    - ui.theme - テーマ関連のファイル（Color.kt, Theme.kt, Type.kt）
+  - **res** - リソースファイル（画像、レイアウトなど）
+- **Gradle Scripts** - ビルド設定ファイル
+
+<Image src={slide027} alt="プロジェクトパネル" />
+
+### エディター（中央）
+
+ソースコードを記述する場所です。
+
+`MainActivity.kt`などのファイルを開いて、コードを編集できます。
+
+<Image src={slide028} alt="エディター" />
+
+### エミュレーター（右側）
+
+Androidのエミュレータが動くところです。実際のAndroidデバイスがなくても、エミュレーターを使ってアプリをテストできます。
+
+エミュレーターには「Pixel 9 API 35」などのデバイス名が表示され、実際のスマートフォンのように操作できます。
+
+<Image src={slide029} alt="エミュレーター" />
+
+### Runパネル（下部）
+
+Buildした時の結果やコンパイルエラーが表示されます。
+
+<Image src={slide030} alt="Runパネル" />
+
+### Logcat（下部タブ）
+
+Logcatと呼ばれる、端末のログを表示するパネルです。
+
+アプリの動作中に出力されるログメッセージを確認できます。デバッグ時に非常に役立ちます。
+
+<Image src={slide031} alt="Logcat" />

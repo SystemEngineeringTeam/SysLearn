@@ -1,0 +1,132 @@
+---
+title: カウントアプリの動きを作ろう
+description: 画面の見た目が変わるためには状態管理というものを使っています。かなり難しい概念なのでゆっくり理解をしていきましょう。
+slug: textbook/android/count-app-logic
+sidebar:
+    order: 6
+---
+
+import { Aside } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
+
+import remember_import from "./_images/06/remember_import.gif";
+import slide60 from "./_images/06/slide-060.png";
+import slide61 from "./_images/06/slide-061.png";
+import slide62 from "./_images/06/slide-062.png";
+import slide63 from "./_images/06/slide-063.png";
+import slide64 from "./_images/06/slide-064.png";
+import slide65 from "./_images/06/slide-065.png";
+import slide66 from "./_images/06/slide-066.png";
+import slide67 from "./_images/06/slide-067.png";
+
+
+## カウントする部分を追加する
+
+以下のコードを追加していきましょう。この部分で、値を変更して、表示することができます。
+
+<Image alt="カウントする部分を追加する" src={slide61} />
+
+```kotlin
+@Composable
+fun CountAppScreen(modifier: Modifier = Modifier) {
+
+    var count by remember { mutableIntStateOf(0) }
+
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = "カウント: $count",
+            textAlign = TextAlign.Center
+        )
+
+        Button(
+            onClick = {
+                count++
+            }
+        ) {
+            Text(
+                text = "+",
+            )
+        }
+    }
+}
+```
+
+<Aside type="tip">
+<Image alt="rememberのインポート" src={remember_import} />
+以下のところは何度も、Macの人は `option + return`、Winの人は `alt + enter` を押してたくさんインポートしましょう。
+</Aside>
+
+<Aside type="note" title="イベントとは？">
+
+- ユーザの動作などに応じてプログラムを実行する。
+- 「〇〇した時にこれを実行する」ができる。
+</Aside>
+
+## Compose でのイベントとは？
+
+Compose では Button の `onClick` や `clickable Modifier` を使用してイベントを登録します。
+
+```kotlin
+Button(
+    onClick = {
+        Log.d("Buttonのテスト", "クリックした時に実行されたよ！")
+    },
+) {
+    Text(text = "押してみて")
+}
+```
+
+## 宣言的 UI の思想
+
+<Image alt="宣言的UIの思想" src={slide64} />
+
+Jetpack Compose は**宣言的 UI** という考え方を採用しています。
+
+1. **State（状態）**: テキストフィールドに "こんにちは" が入っている
+2. **State を UI に反映**: UI が "こんにちは" と表示する
+3. **State を更新**: ユーザーの操作などで State が変わる
+4. **UI が自動更新**: State の変更に応じて UI が自動的に更新される
+
+この流れを繰り返すことで、アプリの状態と画面表示が常に同期されます。
+
+## State の定義と更新
+
+<Image alt="Stateの定義と更新" src={slide65} />
+
+### State の定義
+
+```kotlin
+var searchText by remember { mutableStateOf("") }
+```
+
+### State の更新
+
+```kotlin
+searchText = newSearchText
+```
+
+<Aside type="caution">
+ただの変数だと、イベントが発火しないで、見た目レンダリングが行われず、表示が更新されません。必ず `remember` と `mutableStateOf` を使いましょう。
+</Aside>
+
+## 実際に動かしてみる
+
+<Image alt="実際に動かしてみる" src={slide66} />
+
+Android Studio の上部にある「Run 'app'」ボタンをクリックしてみましょう。
+
+これで、エミュレータが立ち上がり、自動でコードをビルドされます。
+
+カウントされるようになりましたか？ボタンを押すたびに数字が増えれば成功です。
+
+
+## カウントアプリ完成！
+
+<Image alt="カウントアプリ完成" src={slide67} />
+
+カウントアプリがこれで完成しました！
+
+おめでとうございます...といきたいところですが、ちょっと見た目が寂しいですね。少し見た目を改善してみましょう。
+
