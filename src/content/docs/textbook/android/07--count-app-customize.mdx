@@ -258,7 +258,7 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
 以下のコードで、背景がどの色にしておくのか保存をしておきます。このときに`mutableStateOf`で変数を保存して、状態を管理できるようにします。
 
 ```kotlin
-val backgroundColor = remember { mutableStateOf(Color(color: 0xFF1E1E1E)) }
+val backgroundColor = remember { mutableStateOf(Color(0xFF1E1E1E)) }
 ```
 
 #### 背景の色が変わる仕組み
@@ -272,7 +272,7 @@ LaunchedEffect(count) {
             Random.nextFloat(),
             Random.nextFloat(),
             Random.nextFloat(),
-            alpha: 1f
+            1f
         )
     }
 }
@@ -330,7 +330,7 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
         targetValue = if (count % 10 == 0 && count != 0) 1.5f else 1f,
         label = "scale"
     )
-    val backgroundColor = remember { mutableStateOf(Color(color: 0xFF1E1E1E)) }
+    val backgroundColor = remember { mutableStateOf(Color(0xFF1E1E1E)) }
 
     LaunchedEffect(count) {
         if (count % 10 == 0 && count != 0) {
@@ -348,7 +348,7 @@ Button(
     }
 ) {
     Text(
-        text: "+",
+        "+",
         fontSize = 48.sp,
         fontWeight = FontWeight.Bold,
         color = Color.White
