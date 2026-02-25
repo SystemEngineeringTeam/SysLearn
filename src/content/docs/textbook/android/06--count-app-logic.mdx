@@ -1,6 +1,6 @@
 ---
 title: カウントアプリの動きを作ろう
-description: ボタンをタップしたときの動作を実装します
+description: 画面の見た目が変わるためには状態管理というものを使っています。かなり難しい概念なのでゆっくり理解をしていきましょう。
 slug: textbook/android/count-app-logic
 sidebar:
     order: 6
@@ -9,115 +9,16 @@ sidebar:
 import { Aside } from "@astrojs/starlight/components";
 import { Image } from "astro:assets";
 
-import slide55 from "./_images/slide-055.png";
-import slide56 from "./_images/slide-056.png";
-import slide57 from "./_images/slide-057.png";
-import slide58 from "./_images/slide-058.png";
-import slide59 from "./_images/slide-059.png";
-import slide60 from "./_images/slide-060.png";
-import slide61 from "./_images/slide-061.png";
-import slide62 from "./_images/slide-062.png";
-import slide63 from "./_images/slide-063.png";
-import slide64 from "./_images/slide-064.png";
-import slide65 from "./_images/slide-065.png";
-import slide66 from "./_images/slide-066.png";
-import slide67 from "./_images/slide-067.png";
-import slide68 from "./_images/slide-068.png";
-import slide69 from "./_images/slide-069.png";
-import slide70 from "./_images/slide-070.png";
-import slide71 from "./_images/slide-071.png";
-import slide72 from "./_images/slide-072.png";
+import remember_import from "./_images/06/remember_import.gif";
+import slide60 from "./_images/06/slide-060.png";
+import slide61 from "./_images/06/slide-061.png";
+import slide62 from "./_images/06/slide-062.png";
+import slide63 from "./_images/06/slide-063.png";
+import slide64 from "./_images/06/slide-064.png";
+import slide65 from "./_images/06/slide-065.png";
+import slide66 from "./_images/06/slide-066.png";
+import slide67 from "./_images/06/slide-067.png";
 
-## 修正を入れてみよう
-
-前回作成したコードに修正を加えて、Column と Modifier を追加しましょう。
-
-<Image alt="修正を入れてみよう" src={slide55} />
-
-```kotlin
-@Composable
-fun CountAppScreen(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = "カウント: 0",
-            textAlign = TextAlign.Center
-        )
-
-        Button(
-            onClick = {
-                // ここに値を追加する処理を書く
-            }
-        ) {
-            Text(
-                text = "+",
-            )
-        }
-    }
-}
-```
-
-Column で囲み、modifier を追加しています。Column と Modifier を追加する理由は次のセクションで説明します。
-
-<Aside type="note" title="Column と Row について">
-Column と Row は要素を縦に並べたり横に並べたりするコンポーネントです。
-
-<Image alt="Column と Row の基本" src={slide56} />
-
-- **Column**: 要素を縦に並べます（Text が上、Button が下）
-- **Row**: 要素を横に並べます（Text と Button が横並び）
-
-Column と Row を組み合わせて自由にレイアウトを作ることができます。
-
-<Image alt="Column と Row の組み合わせ" src={slide57} />
-
-```kotlin
-Column {
-    Row {
-        Text(text = "1")
-        Text(text = "2")
-    }
-    Text(text = "3")
-}
-```
-
-この例では、Row の中に "1" と "2" が横に並び、その下に "3" が縦に配置されます。
-</Aside>
-
-<Aside type="note" title="innerPadding とは？">
-<Image alt="innerPaddingとは" src={slide58} />
-
-```kotlin
-Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-    CountAppScreen(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)
-    )
-}
-```
-
-アプリを表示させるにあたり、様々な情報が表示されて、かぶってしまう領域が設定されている padding の値が `innerPadding` です。
-
-例えば、画面上部のステータスバー（時刻やバッテリー表示など）の部分を覆い被さらないように padding が設定されます。
-</Aside>
-
-## 動作確認
-
-ここまでの修正で、以下のように表示されましたか？
-
-<Image alt="動作確認" src={slide59} />
-
-画面に「カウント: 0」というテキストと「+」ボタンが縦に並んで表示されていれば成功です。
-
----
-
-## カウントアプリの動きを作ろう
-
-<Image alt="カウントアプリの動きを作ろう" src={slide60} />
-
-画面の見た目が変わるためには**状態管理**というものを使っています。かなり難しい概念なのでゆっくり理解をしていきましょう。
 
 ## カウントする部分を追加する
 
@@ -153,11 +54,11 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
 ```
 
 <Aside type="tip">
+<Image alt="rememberのインポート" src={remember_import} />
 以下のところは何度も、Macの人は `option + return`、Winの人は `alt + enter` を押してたくさんインポートしましょう。
 </Aside>
 
 <Aside type="note" title="イベントとは？">
-<Image alt="イベントとは" src={slide62} />
 
 - ユーザの動作などに応じてプログラムを実行する。
 - 「〇〇した時にこれを実行する」ができる。
@@ -165,9 +66,7 @@ fun CountAppScreen(modifier: Modifier = Modifier) {
 
 ## Compose でのイベントとは？
 
-<Image alt="Composeでのイベントとは" src={slide63} />
-
-Compose では Button の `onClick` や `clickable` Modifier を使用してイベントを登録します。
+Compose では Button の `onClick` や `clickable Modifier` を使用してイベントを登録します。
 
 ```kotlin
 Button(
@@ -222,7 +121,6 @@ Android Studio の上部にある「Run 'app'」ボタンをクリックして�
 
 カウントされるようになりましたか？ボタンを押すたびに数字が増えれば成功です。
 
----
 
 ## カウントアプリ完成！
 
@@ -232,122 +130,3 @@ Android Studio の上部にある「Run 'app'」ボタンをクリックして�
 
 おめでとうございます...といきたいところですが、ちょっと見た目が寂しいですね。少し見た目を改善してみましょう。
 
----
-
-## カウントアプリをちょっと改造しよう
-
-<Image alt="カウントアプリをちょっと改造しよう" src={slide68} />
-
-ここからは、ちょっとした小ネタを追加したり、見た目を変更していきましょう。
-
-## テキストとボタンの見た目を修正する
-
-<Image alt="テキストとボタンの見た目を修正する" src={slide69} />
-
-Text や Button の見た目を修正していきます。
-
-```kotlin
-@Composable
-fun CountAppScreen(modifier: Modifier = Modifier) {
-
-    var count by remember { mutableIntStateOf(0) }
-
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = "カウント: $count",
-            fontSize = 40.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            modifier = Modifier
-                .size(120.dp)
-                .scale(1f),
-            onClick = {
-                count++
-            }
-        ) {
-            Text(
-                text = "+",
-                fontSize = 48.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
-    }
-}
-```
-
-<Aside type="note" title="sp と dp について">
-<Image alt="sp と dp について" src={slide70} />
-
-### dp (dip)
-
-Density-independent Pixels（密度に非依存のピクセル）の略です。
-
-ディスプレイ解像度の物理的な密度に応じた抽象単位になります。160dpi（dots per inch）を基準にした単位で、1dp は 160dpi の画面で 1pixel になります。
-
-### sp
-
-Scale-independent Pixels（スケールに非依存のピクセル）の略です。
-
-dp の単位と似ていますが、画面上のサイズはユーザのフォントサイズ設定に準じます。
-
-**文字は sp、それ以外は dp を使います**
-</Aside>
-
-<Aside type="note" title="Text の引数について">
-<Image alt="Text の引数について" src={slide71} />
-
-```kotlin
-Text(
-    text = "カウント: $count",
-    fontSize = 40.sp,
-    fontWeight = FontWeight.Bold,
-    color = Color.Black,
-    textAlign = TextAlign.Center
-)
-```
-
-- **text**: 表示する文字
-- **fontSize**: 文字の大きさ
-- **fontWeight**: 文字の太さ
-- **color**: 文字の色
-- **textAlign**: 文字の並び方
-
-他にも色々な引数があります。公式リファレンスで確認してみましょう。
-
-参考: https://developer.android.com/develop/ui/compose/text/style-text?hl=ja
-</Aside>
-
-<Aside type="note" title="Button の引数について">
-<Image alt="Button の引数について" src={slide72} />
-
-```kotlin
-Button(
-    modifier = Modifier
-        .size(120.dp)
-        .scale(1f),
-    onClick = {
-        count++
-    }
-) {
-    Text(...)
-}
-```
-
-- **modifier**: モディファイラーを挿入する
-- **.size**: ボタンの大きさの設定
-- **.scale**: 拡大率の設定
-- **onClick**: クリック時の処理
-
-他にも色々な引数があります。公式リファレンスで確認してみましょう。
-
-参考: https://developer.android.com/develop/ui/compose/components/button?hl=ja
-</Aside>

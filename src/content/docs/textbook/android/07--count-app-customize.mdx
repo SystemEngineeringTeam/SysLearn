@@ -1,12 +1,132 @@
 ---
 title: カウントアプリをちょっと改造しよう
-description: アプリに機能を追加してカスタマイズします
+description: ここからは、ちょっとした小ネタを追加したり、見た目を変更していきましょう。
 slug: textbook/android/count-app-customize
 sidebar:
     order: 7
 ---
 
 import { Aside } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
+
+import slide68 from "./_images/07/slide-068.png";
+import slide69 from "./_images/07/slide-069.png";
+import slide70 from "./_images/07/slide-070.png";
+import slide71 from "./_images/07/slide-071.png";
+import slide72 from "./_images/07/slide-072.png";
+
+## テキストとボタンの見た目を修正する
+
+<Image alt="テキストとボタンの見た目を修正する" src={slide69} />
+
+Text や Button の見た目を修正していきます。
+
+```kotlin
+@Composable
+fun CountAppScreen(modifier: Modifier = Modifier) {
+
+    var count by remember { mutableIntStateOf(0) }
+
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = "カウント: $count",
+            fontSize = 40.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            modifier = Modifier
+                .size(120.dp)
+                .scale(1f),
+            onClick = {
+                count++
+            }
+        ) {
+            Text(
+                text = "+",
+                fontSize = 48.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
+    }
+}
+```
+
+<Aside type="note" title="sp と dp について">
+<Image alt="sp と dp について" src={slide70} />
+
+### dp (dip)
+
+Density-independent Pixels（密度に非依存のピクセル）の略です。
+
+ディスプレイ解像度の物理的な密度に応じた抽象単位になります。160dpi（dots per inch）を基準にした単位で、1dp は 160dpi の画面で 1pixel になります。
+
+### sp
+
+Scale-independent Pixels（スケールに非依存のピクセル）の略です。
+
+dp の単位と似ていますが、画面上のサイズはユーザのフォントサイズ設定に準じます。
+
+**文字は sp、それ以外は dp を使います**
+</Aside>
+
+<Aside type="note" title="Text の引数について">
+<Image alt="Text の引数について" src={slide71} />
+
+```kotlin
+Text(
+    text = "カウント: $count",
+    fontSize = 40.sp,
+    fontWeight = FontWeight.Bold,
+    color = Color.Black,
+    textAlign = TextAlign.Center
+)
+```
+
+- **text**: 表示する文字
+- **fontSize**: 文字の大きさ
+- **fontWeight**: 文字の太さ
+- **color**: 文字の色
+- **textAlign**: 文字の並び方
+
+他にも色々な引数があります。公式リファレンスで確認してみましょう。
+
+参考: https://developer.android.com/develop/ui/compose/text/style-text?hl=ja
+</Aside>
+
+<Aside type="note" title="Button の引数について">
+<Image alt="Button の引数について" src={slide72} />
+
+```kotlin
+Button(
+    modifier = Modifier
+        .size(120.dp)
+        .scale(1f),
+    onClick = {
+        count++
+    }
+) {
+    Text(...)
+}
+```
+
+- **modifier**: モディファイラーを挿入する
+- **.size**: ボタンの大きさの設定
+- **.scale**: 拡大率の設定
+- **onClick**: クリック時の処理
+
+他にも色々な引数があります。公式リファレンスで確認してみましょう。
+
+参考: https://developer.android.com/develop/ui/compose/components/button?hl=ja
+</Aside>
+
 
 ## 実行確認
 
