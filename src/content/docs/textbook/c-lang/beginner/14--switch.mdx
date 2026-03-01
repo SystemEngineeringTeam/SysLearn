@@ -1,0 +1,461 @@
+---
+title: switch文
+description: switch文について学びます!
+slug: textbook/c-lang/beginner/switch
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+## switch
+---
+
+switch文は、条件によって処理を分岐させる構文である。  
+if文と違い、条件式ではなく、式とその値によって処理を分岐させる。  
+
+```c   
+switch (式) {
+    case 値1:
+        // 式の値が値1の場合に実行される処理
+        break;
+    case 値2:
+        // 式の値が値2の場合に実行される処理
+        break;
+    default:
+        // どのcaseにも当てはまらない場合に実行される処理
+        break;
+}
+```
+
+以下は、選択したメニューの値段を返すプログラムである。
+
+```c
+#include <stdio.h> 
+
+int main(void) {
+    int menu_num;
+    
+    printf("メニューを選んでください:\n");
+    printf("1: ラーメン\n");
+    printf("2: チャーハン\n");
+    printf("3: 餃子\n");
+
+    scanf("%d", &menu_num);
+    
+    switch (menu_num) {
+        case 1:
+            printf("1000円\n");
+            break;
+        case 2:
+            printf("500円\n");
+            break;
+        case 3:
+            printf("400円\n");
+            break;
+        default:
+            printf("メニューにありません\n");
+            break;
+    }
+    return 0;
+}
+```
+<details>
+  <summary>実行結果</summary>
+実行結果1
+```
+メニューを選んでください:
+1: ラーメン
+2: チャーハン
+3: 餃子
+1
+1000円
+```
+---
+実行結果2
+```
+メニューを選んでください:
+1: ラーメン
+2: チャーハン
+3: 餃子
+4
+メニューにありません
+```
+---
+フローチャートで表すと以下のようになる。
+![フローチャート](/fc_menu_switch.drawio.svg)
+</details>
+
+## break
+---
+
+break文は、実行されるとループ処理やswitch文を抜け、次の処理へ移る構文である。  
+break文を省略すると、次のcase文が実行される。 
+
+以下は、1から5までの数字が入力されたときに、メッセージを返すコードである。  
+```c
+#include <stdio.h>
+int main(void) {
+    int num;
+    printf("数字を入力してください: ");
+    scanf("%d", &num);
+
+    switch (num) {
+        case 1:
+            printf("1が入力されました\n");
+        break;
+
+        // case 2,3の処理をまとめることもできる
+        case 2:
+        case 3:
+            printf("2か3が入力されました\n");
+        break;
+
+        // case 4の処理後にbreakがないため、case 5の処理も実行される。
+        // しかし、break文が無いコードは、可読性が低いため、
+        // breakを書くか、コメント文を残すことを推奨する。
+        case 4:
+            printf("4が入力されました\n");
+        case 5:
+            printf("4か5が入力されました\n");
+        break;
+        
+        default:
+            printf("不明\n");
+            break;
+    }
+    return 0;
+}
+```
+<details>
+  <summary>実行結果</summary>
+実行結果1
+```
+数字を入力してください: 1
+1が入力されました
+```
+---
+実行結果2
+```
+数字を入力してください: 2
+2か3が入力されました
+```
+---
+実行結果3
+```
+数字を入力してください: 3
+2か3が入力されました
+```
+---
+実行結果4
+```
+数字を入力してください: 4
+4が入力されました
+4か5が入力されました
+```
+---
+実行結果5
+```
+数字を入力してください: 5
+4か5が入力されました
+```
+---
+実行結果6
+```
+数字を入力してください: 6
+不明
+```
+---
+</details>
+
+フローチャートで表すと以下のようになる。
+![フローチャート](/fc_sample_break.drawio.svg)
+
+### 練習問題
+
+変数`num`の値に応じて曜日を表示する`switch`文を作成してください。
+
+```c
+#include <stdio.h>
+
+int main() {
+    int num;
+
+    printf("1から7の数字を入力してください: ");
+    scanf("%d", &num);
+
+    // ここにswitch文を書いてください
+
+    return 0;
+}
+```
+#### 実行結果
+<details>
+```
+1から7の数字を入力してください: 1
+月曜日
+```
+```
+1から7の数字を入力してください: 2
+火曜日
+```
+```
+1から7の数字を入力してください: 3
+水曜日
+```
+```
+1から7の数字を入力してください: 4
+木曜日
+```
+```
+1から7の数字を入力してください: 5
+金曜日
+```
+```
+1から7の数字を入力してください: 6
+土曜日
+```
+```
+1から7の数字を入力してください: 7
+日曜日
+```
+</details>
+<Aside type="tip">
+ <details> switch文では、`case`に値を指定して該当する処理を実行します。 入力した`num`の値によって、対応する曜日を`printf`で表示し、`break`でswitch文を抜けましょう。 </details> 
+ </Aside> 
+<details> 
+ <summary>模範解答</summary>
+```c
+#include <stdio.h>
+
+int main() {
+    int num;
+
+    printf("1から7の数字を入力してください: ");
+    scanf("%d", &num);
+
+    switch (num) {
+        case 1:
+            printf("月曜日\n");
+            break;
+        case 2:
+            printf("火曜日\n");
+            break;
+        case 3:
+            printf("水曜日\n");
+            break;
+        case 4:
+            printf("木曜日\n");
+            break;
+        case 5:
+            printf("金曜日\n");
+            break;
+        case 6:
+            printf("土曜日\n");
+            break;
+        case 7:
+            printf("日曜日\n");
+            break;
+        default:
+            printf("1から7の数字を入力してください\n");
+            break;
+    }
+
+    return 0;
+}
+```
+</details>
+
+## continue
+---
+
+continue文は、ループ処理を抜けずに次の処理へ移る構文である。  
+以下は、1から100までの数字が入力されるとその数字を出力し、入力された数字が1から100まででないときは再入力させるコードである。
+```c
+#include <stdio.h>
+
+int main(void) {
+    int num = 1; // 0以外の数値で初期化
+
+    printf("0 を入力するとループを終了します。");
+
+    while (1) {
+        printf("1～100 の数値を入力してください: ");
+        scanf("%d", &num);
+
+        if (num == 0) {
+            break; // break文はループそのものを抜ける
+        } else if (num < 1 || num > 100) {
+            printf("無効な入力です。もう一度入力してください。\n");
+            continue;  // continue文はループ処理を抜けずに次のループへ移る
+        }
+        
+        printf("入力された数値: %d\n", num);
+    }
+    return 0;
+}
+```
+<details>
+  <summary>実行結果</summary>
+```
+0 を入力するとループを終了します。
+1～100 の数値を入力してください: 50
+入力された数値: 50
+1～100 の数値を入力してください: 200
+無効な入力です。もう一度入力してください。
+1～100 の数値を入力してください: 0
+```
+</details>
+---
+
+<Aside type="caution">
+### continue文の落とし穴
+---
+
+continue文の使用を避けたほうが可読性が向上することもある。
+
+2の倍数でも3の倍数でもない値を表示するコードを、continue文を使用した場合と使用しない場合で示す。  
+
+良い例の 『continue を不使用』の場合は、if文の条件式が、そのまま値を表示する条件になっている。  
+しかし、悪い例の 『continue を使用』の場合は、if文の条件式が値を表示「しない」条件である。そのため、値が表示される条件がぱっと見でわかりにくい。
+
+良い例（continue を不使用）
+```c
+#include <stdio.h>
+
+int main(void) {
+    for (int i = 1; i <= 10; i++) {
+        if (i % 2 != 0 && i % 3 != 0) {  // 2の倍数でも3の倍数でもない
+            printf("%d ", i);
+        }
+    }
+    return 0;
+}
+```
+実行結果
+```
+1 5 7
+```
+
+
+---
+
+悪い例（continueを使用）
+```c
+#include <stdio.h>
+
+int main(void) {
+    for (int i = 1; i <= 10; i++) {
+        // 2の倍数でも3の倍数でもないなら次の処理へ
+        if (i % 2 != 0 && i % 3 != 0){ 
+            continue; 
+        }
+        printf("%d ", i); // 2,3の倍数を表示
+    }
+    return 0;
+}
+```
+実行結果
+```
+2 3 4 6 8 9 10 
+```
+---
+</Aside>
+
+### 練習問題
+
+1から10までの数のうち、偶数だけを表示するように`continue`文を使ってください。
+
+```c
+#include <stdio.h>
+
+int main() {
+    for (int i = 1; i <= 10; i++) {
+        // ここにcontinue文を使って偶数だけ表示してください
+    }
+
+    return 0;
+}
+```
+#### 実行結果
+```
+2
+4
+6
+8
+10
+```
+
+<Aside type="tip"> 
+ <details>if文の条件式に`i % 2 != 0`とすると、偶数でない時に実行する</details> 
+</Aside> 
+<details> 
+ <summary>模範解答</summary>
+```c
+#include <stdio.h>
+
+int main() {
+    for (int i = 1; i <= 10; i++) {
+        if (i % 2 != 0) {
+            continue;
+        }
+        printf("%d\n", i);
+    }
+
+    return 0;
+}
+```
+</details>
+
+## 理解度チェック
+---
+
+{/* <Quize>
+{
+swtich文を用いて月を入力すると対応する季節を表示しなさい。
+}
+</Quize>
+
+<Anser ans={
+```c
+#include <stdio.h>
+
+#include <stdio.h>
+
+int main(void) {
+    int month;
+
+    // ユーザーに入力を求める
+    printf("1～12の数字を入力してください (例: 3 → 春): ");
+    scanf("%d", &month);
+
+    // switch文を使用して季節を判定
+    switch (month) {
+        case 3:
+        case 4:
+        case 5:
+            printf("春です！\n");
+            break;
+        case 6:
+        case 7:
+        case 8:
+            printf("夏です！\n");
+            break;
+        case 9:
+        case 10:
+        case 11:
+            printf("秋です！\n");
+            break;
+        case 12:
+        case 1:
+        case 2:
+            printf("冬です！\n");
+            break;
+        default:
+            printf("エラー: 1～12の範囲で入力してください。\n");
+    }
+
+    return 0;
+}
+```    
+}>
+{case文をまとめることで、同じ処理をまとめることができる。}
+</Anser> */}
