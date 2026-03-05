@@ -1,0 +1,78 @@
+---
+title : Unity勉強会 事前配布資料
+slug: textbook/unity
+prev: false
+sidebar:
+    order: 0
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+### はじめに
+Unity勉強会に興味を持ってくれたみんなありがとう！！
+私は講師の重松怜奈と申します。
+ここでは勉強会当日までにやってほしいダウンロードや初期設定のやり方を載せています。
+もし資料だけじゃよくわからなかったことや、質問などあったらご気軽にSlackのDMでご相談ください！
+
+
+そしてここからUnityのダウンロードに入るのですが、下記の2点について大丈夫か確認してから進んでね！
+<Aside type="caution">
+- 勉強会でのプロジェクト実行までを含むと15GBくらい使うので、PCの容量足りてるかの確認をしてからダウンロードに進むといいと思います！
+- 所要時間は大体30分ほどです。途中でインストールを中断したりするとめんどくさいことになりがちなので、通信環境のいい場所で行ってください！
+</Aside>
+### Unity Hubのダウンロード
+ [こちら]( https://unity.com/ja/download)のサイトから"Unity Hub"をダウンロードしましょう
+<img width="1035" alt="スクリーンショット 2026-02-28 23.51.13.png (773.3 kB)" src="https://img.esa.io/uploads/production/attachments/19973/2026/02/28/168685/9d8d1b14-9e4a-473a-a6b8-b4d915f72f38.png"/>
+Windowsの方は、間違えてMac用をダウンロードしないよう注意⚠️
+
+### Unity Hubの起動とアカウント作成
+Unity Hubのダウンロード後，Unity Hubを起動してアカウントを作成しましょう。
+すでにアカウントがある場合はそのアカウントを使用してOK（Sign Inからログインできるよ）
+<img width="683" alt="スクリーンショット 2026-03-01 0.07.55.png (1.1 MB)" src="https://img.esa.io/uploads/production/attachments/19973/2026/03/01/168685/7ea2770c-8a14-4bf0-b335-b9ae2ed21a10.png"/>
+⬇️日本語版はこんな感じ
+<img width="600" alt="スクリーンショット 2026-03-01 0.13.07.png (2.3 MB)" src="https://img.esa.io/uploads/production/attachments/19973/2026/03/01/168685/0d7934bc-7a41-4cc8-b4da-7776f638244f.png"/>
+
+
+### Unityアカウント作成
+メールアドレスや名前など各項目を埋めて、[Create a Unity ID]を押す
+ <img width="805" alt="スクリーンショット 2026-03-01 0.11.22.png (252.4 kB)" src="https://img.esa.io/uploads/production/attachments/19973/2026/03/01/168685/830f6288-62b0-453b-aaf7-21c1ae46325b.png"/>
+
+ 登録したアドレスにメールが届くのでメール内の「Link to confirm email」をクリック
+ <Aside type="caution">
+ この際、届いたメールはパソコンから開いたほうがスムーズに行けるよ
+ </Aside>
+<img width="795" alt="スクリーンショット 2026-03-01 0.18.11.png (1.5 MB)" src="https://img.esa.io/uploads/production/attachments/19973/2026/03/01/168685/78b5b21c-1e27-4d7c-8c18-a060b9ae5727.png"/>
+
+再度Unity Hubに戻って「Sign in」をクリック。登録したアドレスとパスワードを入れてサインインしよう！
+<img width="753" alt="スクリーンショット 2026-03-01 0.16.22.png (184.0 kB)" src="https://img.esa.io/uploads/production/attachments/19973/2026/03/01/168685/944af9db-b28d-4720-a372-0d29c5d6d85b.png"/>
+
+サインイン直後に出てくる「personal linensens」ウィンドウは
+Agree（同意する）を選択してね
+
+### Unityエディタのインストール
+次にUnityエディタ（Unity本体）をインストールするよ！
+
+まだ終わらないの！？って思ったよね。
+さっきインストールした"UnityHub"はUnityをインストールしたりプロジェクトを作成することができるんだけど、ゲームを開発することはできないんです。
+と言うことで、開発するためのエディター"Unity"をインストールしていきましょう！
+<img width="1297" alt="スクリーンショット 2026-03-01 0.24.26.png (350.8 kB)" src="https://img.esa.io/uploads/production/attachments/19973/2026/03/01/168685/f0834a99-9620-4a7f-b2a8-ed66e8112082.png"/>
+
+インストール画面が出ていない場合，左のナビゲーションからInstalls(インストール)を選択して探してみてね。
+
+<Aside type="danger">
+⚠️インストールするバージョンに注意⚠️\
+私の資料と合わせるために**Unity 6.0**を選んでインストールして欲しいです
+</Aside>
+
+### 開発者ツールとプラットフォームの選択
+<img width="994" alt="スクリーンショット 2026-03-04 17.12.59.png (282.5 kB)" src="https://img.esa.io/uploads/production/attachments/19973/2026/03/04/168685/28606947-032e-497f-82ba-dea76ee94638.png"/>
+インストールを押すとこのような画面になるはず
+
+開発者ツールはコードを書くエディタ、プラットフォームはゲームを動かしたい場所のこと！
+
+開発者ツールは「**Visual Studio Code**」もしくは「**Rider**」がおすすめで、
+プラットフォームはひとまず「**Web Build Support**」にチェックを入れましょう
+(もし今後作って公開したいものがもう決まっていたら、それに合わせたプラットフォームもチェック入れておくと後で困らないかも)
+
+選択できたら右下の「**インストール(もしくはcontinue)**」をおしてインストールしましょう！\
+インストールが終わったらひとまずの事前準備は完了です！おめでとう！
