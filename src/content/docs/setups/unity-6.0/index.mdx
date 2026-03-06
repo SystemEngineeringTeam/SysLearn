@@ -1,0 +1,84 @@
+---
+title : Unity勉強会 環境構築
+slug: setups/unity-6.0
+prev: false
+sidebar:
+    order: 0
+---
+
+import { Aside, Steps, Tabs, TabItem, LinkCard } from '@astrojs/starlight/components'
+import SyscatComment from "@/components/SyscatComment.astro"
+
+
+### はじめに
+Unity勉強会にご興味をお持ちいただき、誠にありがとうございます！
+本資料では、Unityの環境構築の仕方について説明しております。  
+
+それではUnityのダウンロードを開始いたしますが、下記の2点について問題がないかご確認のうえ、お進みください。
+
+
+<Aside type="caution">
+- 勉強会ではプロジェクトの実行まで行うため、約15GB程度の容量を使用します。PCの空き容量をご確認のうえ、ダウンロードを開始することをおすすめします。
+- 所要時間はおおよそ30分程度です。途中でインストールを中断すると不具合が生じる場合がありますので、通信環境の良い場所で実施してください。
+</Aside>
+
+### UnityIDアカウントの作成とUnity Hubのダウンロード
+ [こちら]( https://unity.com/ja/download)のサイトを開いて、アカウントのを作成をお願いします。
+<img width="507" alt="スクリーンショット 2026-03-06 22.55.15.png (114.3 kB)" src="https://img.esa.io/uploads/production/attachments/19973/2026/03/06/168685/194445a0-e631-411a-9646-e95e6a1b6a96.png"/>
+ <Aside type="tip">
+ この際、メールアドレスはパソコンから開きやすいものを選んでおくとスムーズに手続きを進めることができます。
+ </Aside>
+
+<img width="772" alt="スクリーンショット 2026-03-06 22.56.08.png (193.4 kB)" src="https://img.esa.io/uploads/production/attachments/19973/2026/03/06/168685/c7914da1-ad6a-4d3f-8556-a0bb29a1672a.png"/>
+この画面になったら「Accept」を押して次に進んでください。\
+これでUnityIDアカウントの作成は完了です。
+
+<img width="1468" alt="スクリーンショット 2026-03-06 20.54.25.png (859.3 kB)" src="https://img.esa.io/uploads/production/attachments/19973/2026/03/06/168685/df2a5863-3418-4261-9b74-10f24b1bcbfb.png"/>
+この画面になったら真ん中の「Unityをダウンロードする」を押してダウンロードを開始してください。
+
+ <SyscatComment type="SLEEPING">PC やネットワークの速度によっては時間を要するから、カフェラテでも飲んでゆっくり待ってね。</SyscatComment>
+
+
+### Unity Hubの起動とサインイン
+Unity Hubのダウンロード完了後、Unity Hubを起動し、「サインイン(Sign In)」からログインをしてください。
+
+<img width="1163" alt="スクリーンショット 2026-03-07 0.38.24.png (2.0 MB)" src="https://img.esa.io/uploads/production/attachments/19973/2026/03/07/168685/8f06ebdb-60ff-4229-a1fd-3ab8cc439d8a.png"/>
+
+表示された案内に応じて登録したメールアドレスやパスワードを入力し、サインインしてください。
+
+<img width="753" alt="スクリーンショット 2026-03-01 0.16.22.png (184.0 kB)" src="https://img.esa.io/uploads/production/attachments/19973/2026/03/01/168685/944af9db-b28d-4720-a372-0d29c5d6d85b.png"/>
+
+サインイン直後に表示される「personal license」ウィンドウでは  
+「Agree（同意する）」を選択してください。
+
+### Unityエディタのインストール
+続いて、Unityエディタ（Unity本体）をインストールします。
+
+「まだインストールするものがあるの？」と感じた方もいらっしゃるかもしれません。  
+先ほどインストールした「Unity Hub」は、Unityのインストールやプロジェクトの作成を管理するためのツールであり、実際にゲーム開発を行う機能は含まれていません。
+
+そのため、開発環境である「Unityエディタ」をここでインストールしていきます。
+
+<Aside type="caution" title="インストールするバージョンに注意">
+本資料と同じ環境で進めるため、**Unity 6.0** を選択してインストールしてください。
+</Aside>
+
+<img width="1297" alt="スクリーンショット 2026-03-01 0.24.26.png (350.8 kB)" src="https://img.esa.io/uploads/production/attachments/19973/2026/03/01/168685/f0834a99-9620-4a7f-b2a8-ed66e8112082.png"/>
+
+インストール画面が表示されていない場合は、左側のナビゲーションから「Installs（インストール）」を選択して確認してください。
+
+
+
+### 開発者ツールとプラットフォームの選択
+<img width="994" alt="スクリーンショット 2026-03-04 17.12.59.png (282.5 kB)" src="https://img.esa.io/uploads/production/attachments/19973/2026/03/04/168685/28606947-032e-497f-82ba-dea76ee94638.png"/>
+「Install」を押すと、このような画面が表示されます。
+
+開発者ツールとはコードを書くためのエディタ、プラットフォームとはゲームを動作させる対象環境を指します。
+
+開発者ツールは「**Visual Studio Code**」または「**Rider**」の利用をおすすめします。  
+プラットフォームについては、まず「**Web Build Support**」にチェックを入れてください。
+
+もし今後制作したゲームの公開先がすでに決まっている場合は、それに対応するプラットフォームにもチェックを入れておくと、後から追加設定を行う手間を減らすことができます。
+
+選択が完了したら、右下の「**インストール（またはContinue）**」をクリックしてインストールを開始してください。  \
+インストールが完了すれば、事前準備はひとまず完了です！お疲れさまでした！

@@ -119,17 +119,6 @@ export default defineConfig({
               },
             ],
           },
-          {
-            label: "unity",
-            link: "/textbook/unity",
-            icon: "document",
-            items: [
-              {
-                label: "Unity勉強会",
-                autogenerate: { directory: "textbook/unity" },
-              },
-            ],
-          },
         ]),
         starlightScrollToTop({
           threshold: 500,
