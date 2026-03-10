@@ -1,0 +1,125 @@
+---
+title: UI（スコア）を表示させよう
+slug: textbook/game/unity/create-UI
+sidebar:
+    order: 6
+---
+
+import { Aside, Steps, Tabs, TabItem, LinkCard } from '@astrojs/starlight/components'
+import SyscatComment from "@/components/SyscatComment.astro"
+
+
+獲得したコインの数を画面にリアルタイムで表示します。
+
+#### **手順1：テキスト（TextMeshPro）を配置する**
+
+1.  **Hierarchy Window** で右クリックし、**UI ＞ Text - TextMeshPro** を選択します。
+    ![](./_images/Import-TMP.png)
+
+2.  もし「TMP Importer」というウィンドウが出てきたら、**Import TMP Essentials** ボタンと **Import TMP Examples & Extras** ボタンを押して少し待ちます。完了したら「×」で閉じてOKです。
+
+3.  Hierarchy に **Canvas** と **Text (TMP)** が自動的に作成されます。
+
+#### **手順2：見た目を整える**
+
+1.  作成された **Text (TMP)** を選択し、名前を「**ScoreText**」に変更します。
+2.  **Inspector Window** で以下のように設定を変更してみましょう。
+    ![](./_images/TMP-inspector.png)
+
+    -   **Rect Transform**: 画面の隅に配置します。（PosX: -300, PosY: 200 くらいにすると丁度良い位置になります）
+    -   **Text Input**: 「Score: 0」と入力。
+    -   **Font Size**: 好きな大きさに（例: 48）。
+
+    <Aside type="tip">
+    **アンカープリセットの裏技**
+    Rect Transform の左上にある「四角いアイコン」を **Altキー** を押しながらクリックして、隅（左上など）を選ぶと、一瞬でその場所に配置できます！
+    </Aside>
+
+#### **手順3：スクリプトを更新する**
+
+**PlayerController** を開き、テキストを書き換えるための処理を追加します。
+
+```csharp
+using UnityEngine;
+using UnityEngine.InputSystem;
+using TMPro; // --- 追加：テキストを扱うためのおまじない ---
+
+public class PlayerController : MonoBehaviour
+{
+    public float speed = 3f;
+    public TextMeshProUGUI scoreText; // --- 追加：UIを紐付けるための変数 ---
+
+    private Rigidbody rb;
+    private int score = 0; 
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        UpdateScoreText(); // 最初の表示を「Score: 0」にする
+    }
+
+    void Update()
+    {
+        // （移動処理は変更なし）
+        Vector2 moveInput = Vector2.zero;
+        if (Keyboard.current != null)
+        {
+            float x = 0; float y = 0;
+            if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) y = 1;
+            if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) y = -1;
+            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) x = -1;
+            if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) x = 1;
+            moveInput = new Vector2(x, y);
+        }
+        Vector3 movement = new Vector3(moveInput.x, 0, moveInput.y);
+        rb.AddForce(movement * speed);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Coin"))
+        {
+            Destroy(other.gameObject);
+            score = score + 1;
+            UpdateScoreText(); // --- 追加：スコアが増えたら文字を書き換える ---
+        }
+    }
+
+    // --- 追加：テキストを書き換える命令 ---
+    void UpdateScoreText()
+    {
+        scoreText.text = "Score: " + score.ToString();
+    }
+}
+```
+
+#### **手順4：スクリプトとUIを繋ぐ**
+
+<Aside type="caution" title="重要！">
+ここを忘れるとプログラムが「どのテキストを書き換えればいいの？」と迷子になり、エラーが出てしまいます。
+</Aside>
+![](./_images/Drop-TMP.png)
+1.  **Hierarchy** で **Sphere（プレイヤー）** を選択します。
+2.  **Inspector** の一番下にある **Player Controller (Script)** コンポーネントを見ます。
+3.  **Score Text** という空欄ができているので、そこに Hierarchy にある **ScoreText** をドラッグ＆ドロップして合体させます。
+
+
+
+---
+
+### 💡 勉強会でのポイント
+-   **`using TMPro;` の重要性**: これを書かないと、プログラムが「TextMeshProって何？」と名前を認識できずエラーになります。
+-   **`.ToString()`**: プログラム上では「数字」と「文字」は別物です。数字を画面に出すために「文字」に変換する作業です。
+
+これで「玉を転がす」「コインを拾う」「スコアが増える」というゲームの基本サイクルが完成しましたね！
+
+<SyscatComment type="TADA">
+おめでとう！これで君も立派なゲームクリエイターだ！
+</SyscatComment>
+
+---
+
+### 完成イメージ
+実際に動かすと、このようにコインが消えてスコアがリアルタイムで増えていきます！
+
+{/* TODO: 動画を入れられない😭Play-3.avifを入れたかったです */}
