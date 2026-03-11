@@ -9,98 +9,114 @@ import { Aside, Steps, Tabs, TabItem, LinkCard } from '@astrojs/starlight/compon
 import SyscatComment from "@/components/SyscatComment.astro"
 import PLAY1 from "./_movies/play-1.avif";
 
+### 1. 球（Player）を作ってみよう
 
-1.**球を作ってみよう**
-次はプレイヤーになるゲームオブジェクト、球(Sphere)を作ります。先ほどのCubeとは違う方法で作ってみましょう。
+次はプレイヤーになるGameObject「球（Sphere）」を作ります。先ほどのCubeとは違う、ショートカットメニューを使った方法で作ってみましょう。
 
- Hierarchy Windowで右クリックをして出てきたウィンドウから3DObject ＞ Cube を選択しましょう。
-するとScene Viewの真ん中に球(Sphere)が表示されます。
+<Steps>
+1. **Sphereの作成**
+   **Hierarchy Window** で右クリックをして、表示されたメニューから **3D Object ＞ Sphere** を選択しましょう。すると Scene View の真ん中に球が表示されます。
 
-<Aside type="caution">
-球のInspectorのPositionを見て変な位置に置かれていたら**X: 0, Y: 5, Z: 0**に設定してください。
-Yを0にしないのは、床に埋まらないようにするためです。
-</Aside>
+2. **位置の調整**
+   球の Inspector の **Position** を確認し、変な位置に置かれていたら **X: 0, Y: 5, Z: 0** に設定してください。Yを5に設定するのは、床に埋まらないようにするためです。
 
-またこちらの球にも先ほどと同じ手順でマテリアルを作ってつけてあげましょう。
+   <Aside type="caution">
+   Yを0にしないのは、物理演算が始まった瞬間に床と重なって弾け飛ぶのを防ぐためでもあります。
+   </Aside>
 
-2.**球に重力をつけてみよう**
-それでは次にオブジェクトに物理法則を起こす「Rigidbody」を追加します！
-![](./_images/addComponent.png)
-球を選択し、Inspectorの一番下にあるAdd Componentをクリックし、出てきた選択肢から Physics ＞ Rigidbodyを選んでください。見つからない場合は直接「Rigidbody」と打ち込んでもOKです！
+3. **見た目を整える**
+   こちらの球にも、先ほどの手順（Assets > Create > Material）で新しいマテリアルを作って、好きな色をつけてあげましょう。
+</Steps>
 
-![](./_images/useGravity.png)
+### 2. 球に重力をつけてみよう
 
-「Rigidbody」を追加できたらこの「Use Gravity」と書いてあるところにチェックを入れてください。
-これでこの球に重力が働くようになります。
+オブジェクトに物理法則を適用する「Rigidbody（リジッドボディ）」を追加します。
 
- <SyscatComment type="SPARKLES">
-たったこれだけの設定でオブジェクトに自然な動きがつくのすごいよね〜
- </SyscatComment>
+<Steps>
+1. **Rigidbodyコンポーネントの追加**
+   ![](./_images/addComponent.png)
+   
+   球を選択し、Inspectorの一番下にある **Add Component** をクリックします。検索窓に「**Rigidbody**」と打ち込むか、**Physics ＞ Rigidbody** を選んでください。
 
-3.**プレイヤーを操作するためのスクリプト(C#)を作ってみよう**
-ここまでプログラミングっぽいことがひとつも出てきていませんでしたがとうとうコードを書きます。
-といってもC#を使いこなせる人は少ないと思うので本資料では全てコピペで済むようにしています。
+2. **重力の設定を確認**
+   ![](./_images/useGravity.png)
+   
+   追加された Rigidbody コンポーネント内の **Use Gravity** にチェックが入っていることを確認してください。これで球に重力が働くようになります。
 
-<SyscatComment type="OK">
-コピペOKだけど最低限コメントを読んで理解できるようにしておいた方が自分のためになるよ〜
- </SyscatComment>
+   <SyscatComment type="SPARKLES">
+   たったこれだけの設定で、オブジェクトに自然な重力や衝突の動きがつくのはUnityのすごいところだね！
+   </SyscatComment>
+</Steps>
 
-![](./_images/create-Folder.png)
+### 3. プレイヤーを動かすスクリプト（C#）を作ろう
 
-ではまず、Project Windowで右クリックをして、**Create＞Folder**を選択します。すると「New Folder」というフォルダがProject Windowにできたと思うので名前を「**Scripts**」に変更しましょう。
+いよいよプログラミングの工程です。Unity 6では最新の入力方式（Input System）に対応したコードを使用します。
 
-![](./_images/create-Cs.png)
+<Steps>
+1. **Scriptsフォルダの作成**
+   ![](./_images/create-Folder.png)
+   
+   Project Window で **右クリック ＞ Create ＞ Folder** を選択し、名前を「**Scripts**」に変更します。
 
-次にScriptsフォルダを開いてその中で**右クリック＞Create＞Scripting＞Empty C# Script**を選択して空のC#スクリプトを制作しましょう。
-スクリプトの名前は「PlayerController」に変更してください。
-ダブルクリックするとスクリプトがダウンロード時に設定したエディターで開かれると思います。
+2. **スクリプトファイルの作成**
+   ![](./_images/create-Cs.png)
+   
+   作成した Scripts フォルダを開き、その中で **右クリック ＞ Create ＞ Scripting ＞ Empty C# Script** を選択します。名前は「**PlayerController**」に変更してください。
 
-ではそこに書いてあるコードを全て消して、下記に置き換えてみてください。
-```
-using UnityEngine;
-using UnityEngine.InputSystem; // 
+3. **コードの書き換え**
+   作成したファイルをダブルクリックしてエディタで開き、元からあるコードをすべて消して、下記のコードを貼り付けて保存（Ctrl+S / Cmd+S）してください。
 
-public class PlayerController : MonoBehaviour
-{
-    // 転がる速さを調整する変数（Inspectorから変更可能）
-    public float speed = 3f;
+   <SyscatComment type="OK">
+   コピペでOKだけど、最低限コメント（//の後の文）を読んで「何をしているか」理解しておくと、自分の力になるよ！
+   </SyscatComment>
 
-    // 物理演算コンポーネントを入れる変数
-    private Rigidbody rb;
+   ```csharp
+   using UnityEngine;
+   using UnityEngine.InputSystem; 
 
-    void Start()
-    {
-        // ゲーム開始時に自分自身のRigidbodyを取得して変数に入れる 
-        rb = GetComponent<Rigidbody>();
-    }
+   public class PlayerController : MonoBehaviour
+   {
+       // 転がる速さを調整する変数（Inspectorから変更可能）
+       public float speed = 3f;
 
-    void Update()
-    {
-        // キーボードの入力を取得（新しい方式）
-        Vector2 moveInput = Vector2.zero;
+       // 物理演算コンポーネントを入れる変数
+       private Rigidbody rb;
 
-        if (Keyboard.current != null)
-        {
-            // 上下左右のキー入力を数値（-1 ～ 1）として受け取ります
-            float x = 0;
-            float y = 0;
+       void Start()
+       {
+           // ゲーム開始時に自分自身のRigidbodyを取得して変数に入れる 
+           rb = GetComponent<Rigidbody>();
+       }
 
-            if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) y = 1;
-            if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) y = -1;
-            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) x = -1;
-            if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) x = 1;
+       void Update()
+       {
+           // キーボードの入力を取得（新しい方式）
+           Vector2 moveInput = Vector2.zero;
 
-            moveInput = new Vector2(x, y);
-        }
+           if (Keyboard.current != null)
+           {
+               // 上下左右のキー入力を数値（-1 ～ 1）として受け取ります
+               float x = 0;
+               float y = 0;
 
-        // 入力方向を3D空間のベクトル（横・奥行き）に変換
-        Vector3 movement = new Vector3(moveInput.x, 0, moveInput.y);
+               if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) y = 1;
+               if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) y = -1;
+               if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) x = -1;
+               if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) x = 1;
 
-        // Rigidbodyに力を加えて玉を転がす
-        rb.AddForce(movement * speed);
-    }
-}
-```
+               moveInput = new Vector2(x, y);
+           }
+
+           // 入力方向を3D空間のベクトル（横・奥行き）に変換
+           Vector3 movement = new Vector3(moveInput.x, 0, moveInput.y);
+
+           // Rigidbodyに力を加えて玉を転がす
+           rb.AddForce(movement * speed);
+       }
+   }
+    ```
+</Steps>
+
 <Aside type="note" title="このコードの「ここだけ」は知っておこう！">
 全部を理解しなくても大丈夫ですが、Unity特有の3つのルールだけ紹介します。
 
@@ -115,22 +131,38 @@ public class PlayerController : MonoBehaviour
     - Unity 6では、最新の入力ルールを使っています。`Keyboard.current` という命令で、直接キーボードに「今、WASDキーが押されている？」と問いかけて、玉を転がす力に変えています。
 </Aside>
 
-### 4. スクリプトを玉に合体させよう
+### 4. スクリプトを球に適用させよう
 
-コードを編集して保存（Ctrl+S または Cmd+S）できたら、Unityの画面に戻りましょう。変更を反映するための短いロードが入ります。
+コードの編集が終わったら、Unityエディタに戻る前に必ず **セーブ（保存）** をしましょう。
 
-1. **スクリプトのアタッチ**
-   Hierarchyで「**Sphere**」をクリックしてInspectorを表示させます。作成したスクリプトを「Add Component」のあたりへドラッグ＆ドロップします。
+<Steps>
+1. **スクリプトの保存**
+   コードエディタ（Visual Studio Codeなど）で、**Ctrl + S**（Macは **Cmd + S**）を押して保存します。
+
+2. **シーン（ステージ）の保存**
+   Unityエディタに戻ったら、エディタ上でも **Ctrl + S**（Macは **Cmd + S**）を押して、現在のシーンを保存しておきましょう。
+   
+   **※ 初めてセーブする場合**
+  「Save Scene」というウィンドウが開きます。
+  ![](./_images/SaveAs.png)
+    - 保存場所: Assets ＞ Scenes フォルダの中を選択します。(おそらくセーブ画面で自動的に開いているはずです)
+    - ファイル名: 「MainScene」など、好きな名前をつけて「保存」を押してください。
+   <Aside type="caution">
+   Unityは予期せず終了することがあります。大きな作業の後は必ず「セーブの癖」をつけておきましょう！
+   </Aside>
+
+3. **スクリプトのアタッチ**
+   Hierarchyで「**Sphere**」をクリックしてInspectorを表示させます。作成したスクリプト（PlayerController）を、Inspectorの「Add Component」付近にドラッグ＆ドロップして合体させます。
    ![](./_images/addCs.png)
 
-2. **テストプレイ！**
-   画面上部の **▶︎（プレイボタン）** を押して、実際に動かしてみましょう！
-   
-   {/* ここに動画置きたい */}
+4. **テストプレイ！**
+   画面上部の **▶︎（プレイボタン）** を押して動かしてみましょう！十字キーやWASDキーで玉が転がれば成功です。
+    
+    {/* ここに動画おきたい */}
 
-3. **速さを調整する**
-   十字キーやWASDキーで玉が転がります。速すぎると感じたら、SphereのInspectorにある「**Speed**」の値を **1** に書き換えてみてください。プログラムを触らなくても動きが変わるはずです！
-
+5. **速さを調整する**
+   玉の動きが速すぎたり遅すぎたりしたら、SphereのInspectorにある「**Speed**」の値を変更して、自分好みの操作感に調整してみてください。
+</Steps>
 ---
 
 ### 5. ステージに「壁」を作ろう
