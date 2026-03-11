@@ -1,0 +1,191 @@
+---
+title: プレイヤーを作ってみよう
+slug: textbook/game/unity/create-player
+sidebar:
+    order: 4
+---
+
+import { Aside, Steps, Tabs, TabItem, LinkCard } from '@astrojs/starlight/components'
+import SyscatComment from "@/components/SyscatComment.astro"
+import V_play1 from "./_videos/play-1.avif";
+
+### 1. 球（Player）を作ってみよう
+
+次はプレイヤーになるGameObject球（Sphere）を作ります。先ほどのCubeとは違う、ショートカットメニューを使った方法で作ってみましょう。
+
+<Steps>
+1. **Sphereの作成**
+   **Hierarchy Window** で右クリックをして、表示されたメニューから **3D Object ＞ Sphere** を選択しましょう。すると Scene View の真ん中に球が表示されます。
+
+2. **位置の調整**
+   球の Inspector の **Position** を確認し、変な位置に置かれていたら **X: 0, Y: 5, Z: 0** に設定してください。Yを5に設定するのは、床に埋まらないようにするためです。
+
+   <Aside type="caution">
+   Yを0にしないのは、物理演算が始まった瞬間に床と重なって弾け飛ぶのを防ぐためでもあります。
+   </Aside>
+
+3. **見た目を整える**
+   こちらの球にも、先ほどの手順（Assets > Create > Material）で新しいマテリアルを作って、好きな色をつけてあげましょう。
+</Steps>
+
+### 2. 球に重力をつけてみよう
+
+オブジェクトに物理法則を適用する「Rigidbody（リジッドボディ）」を追加します。
+
+<Steps>
+1. **Rigidbodyコンポーネントの追加**
+   ![](./_images/addComponent.webp)
+   
+   球を選択し、Inspectorの一番下にある **Add Component** をクリックします。検索窓に「**Rigidbody**」と打ち込むか、**Physics ＞ Rigidbody** を選んでください。
+
+2. **重力の設定を確認**
+   ![](./_images/useGravity.webp)
+   
+   追加された Rigidbody コンポーネント内の **Use Gravity** にチェックが入っていることを確認してください。これで球に重力が働くようになります。
+
+   <SyscatComment type="SPARKLES">
+   たったこれだけの設定で、オブジェクトに自然な重力や衝突の動きがつくのはUnityのすごいところだね！
+   </SyscatComment>
+</Steps>
+
+### 3. プレイヤーを動かすスクリプト（C#）を作ろう
+
+いよいよプログラミングの工程です。Unity 6では最新の入力方式（Input System）に対応したコードを使用します。
+
+<Steps>
+1. **Scriptsフォルダの作成**
+   ![](./_images/create-Folder.webp)
+   
+   Project Window で **右クリック ＞ Create ＞ Folder** を選択し、名前を「**Scripts**」に変更します。
+
+2. **スクリプトファイルの作成**
+   ![](./_images/create-Cs.webp)
+   
+   作成した Scripts フォルダを開き、その中で **右クリック ＞ Create ＞ Scripting ＞ Empty C# Script** を選択します。名前は「**PlayerController**」に変更してください。
+
+3. **コードの書き換え**
+   作成したファイルをダブルクリックしてエディタで開き、元からあるコードをすべて消して、下記のコードを貼り付けて保存（Ctrl+S / Cmd+S）してください。
+
+   <SyscatComment type="OK">
+   コピペでOKだけど、最低限コメント（//の後の文）を読んで「何をしているか」理解しておくと、自分の力になるよ！
+   </SyscatComment>
+
+   ```csharp
+   using UnityEngine;
+   using UnityEngine.InputSystem; 
+
+   public class PlayerController : MonoBehaviour
+   {
+       // 転がる速さを調整する変数（Inspectorから変更可能）
+       public float speed = 3f;
+
+       // 物理演算コンポーネントを入れる変数
+       private Rigidbody rb;
+
+       void Start()
+       {
+           // ゲーム開始時に自分自身のRigidbodyを取得して変数に入れる 
+           rb = GetComponent<Rigidbody>();
+       }
+
+       void Update()
+       {
+           // キーボードの入力を取得（新しい方式）
+           Vector2 moveInput = Vector2.zero;
+
+           if (Keyboard.current != null)
+           {
+               // 上下左右のキー入力を数値（-1 ～ 1）として受け取ります
+               float x = 0;
+               float y = 0;
+
+               if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) y = 1;
+               if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) y = -1;
+               if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) x = -1;
+               if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) x = 1;
+
+               moveInput = new Vector2(x, y);
+           }
+
+           // 入力方向を3D空間のベクトル（横・奥行き）に変換
+           Vector3 movement = new Vector3(moveInput.x, 0, moveInput.y);
+
+           // Rigidbodyに力を加えて玉を転がす
+           rb.AddForce(movement * speed);
+       }
+   }
+    ```
+</Steps>
+
+<Aside type="note" title="このコードの「ここだけ」は知っておこう！">
+全部を理解しなくても大丈夫ですが、Unity特有の3つのルールだけ紹介します。
+
+1. **「Start」と「Update」の使い分け**
+    - **Start**: ゲーム開始時の「準備」をする場所です。ここでは物理演算（Rigidbody）を操作する準備をしています。
+    - **Update**: ゲーム中の「リアルタイムの動き」を書く場所です。1秒間に何度も「キーが押されたか？」を確認して、玉を転がし続けます。
+
+2. **`public float speed` の魔法**
+    - コードの中に `public` と書くと、なんと **Unityのエディタ（Inspector）上で数字を書き換えられるようになります。** プログラムを書き直さなくても、遊びながら調整が可能です。
+
+3. **最新の入力方式「Input System」**
+    - Unity 6では、最新の入力ルールを使っています。`Keyboard.current` という命令で、直接キーボードに「今、WASDキーが押されている？」と問いかけて、玉を転がす力に変えています。
+</Aside>
+
+### 4. スクリプトを球に適用させよう
+
+コードの編集が終わったら、Unityエディタに戻る前に必ず **セーブ（保存）** をしましょう。
+
+<Steps>
+1. **スクリプトの保存**
+   コードエディタ（Visual Studio Codeなど）で、**Ctrl + S**（Macは **Cmd + S**）を押して保存します。
+
+2. **シーン（ステージ）の保存**
+   Unityエディタに戻ったら、エディタ上でも **Ctrl + S**（Macは **Cmd + S**）を押して、現在のシーンを保存しておきましょう。
+   
+   **※ 初めてセーブする場合**
+  「Save Scene」というウィンドウが開きます。
+  ![](./_images/SaveAs.webp)
+    - 保存場所: Assets ＞ Scenes フォルダの中を選択します。(おそらくセーブ画面で自動的に開いているはずです)
+    - ファイル名: 「MainScene」など、好きな名前をつけて「保存」を押してください。
+   <Aside type="caution">
+   Unityは予期せず終了することがあります。大きな作業の後は必ず「セーブの癖」をつけておきましょう！
+   </Aside>
+
+3. **スクリプトのアタッチ**
+   Hierarchyで「**Sphere**」をクリックしてInspectorを表示させます。作成したスクリプト（PlayerController）を、Inspectorの「Add Component」付近にドラッグ＆ドロップして合体させます。
+   ![](./_images/addCs.webp)
+
+4. **テストプレイ！**
+   画面上部の **▶︎（プレイボタン）** を押して動かしてみましょう！十字キーやWASDキーで玉が転がれば成功です。
+    
+    {/* ここに動画おきたい */}
+
+5. **速さを調整する**
+   玉の動きが速すぎたり遅すぎたりしたら、SphereのInspectorにある「**Speed**」の値を変更して、自分好みの操作感に調整してみてください。
+</Steps>
+---
+
+### 5. ステージに「壁」を作ろう
+
+このままだと玉がすぐに場外へ落ちてしまうので、4つの壁を設置しましょう。
+**GameObject ＞ 3D Object ＞ Cube** を4つ作成し、名前と数値を以下の表に合わせて設定してください。
+
+#### **壁のトランスフォーム設定一覧**
+
+| オブジェクト名 | Position (X, Y, Z) | Scale (X, Y, Z) | 役割 |
+| :--- | :--- | :--- | :--- |
+| **Wall-1** | ( 0, 1, 4.5 ) | ( 10, 1, 1 ) | 奥側の壁 |
+| **Wall-2** | ( 0, 1, -4.5 ) | ( 10, 1, 1 ) | 手前側の壁 |
+| **Wall-3** | ( 4.5, 1, 0 ) | ( 1, 1, 10 ) | 右側の壁 |
+| **Wall-4** | ( -4.5, 1, 0 ) | ( 1, 1, 10 ) | 左側の壁 |
+
+
+
+<Aside type="tip" title="テクニック：Align With View">
+Scene画面で「この角度から見たい！」という視点を決めたら、**Main Camera** を選択した状態で **GameObject > Align With View** を選んでみてください。今の作業視点がそのままカメラの視点（Game View）に設定されます。
+</Aside>
+
+<SyscatComment type="LOVE">
+マテリアルも作って、壁を好きな色に変えてみてね！
+</SyscatComment>
+
