@@ -7,7 +7,7 @@ sidebar:
 
 import { Aside, Steps, Tabs, TabItem, LinkCard } from '@astrojs/starlight/components'
 import SyscatComment from "@/components/SyscatComment.astro"
-import PLAY2 from "./_movies/play-2.avif"
+import V_play2 from "./_videos/play-2.avif"
 
 現在のカメラの位置だとステージが見づらいので、全体を俯瞰（ふかん）できるように調整しましょう。
 
@@ -38,7 +38,7 @@ Hierarchyで「Main Camera」を選択して、Game Viewを見ながらステー
    | :--- | :--- | :--- | :--- |
    | **数値** | ( 0, 1, 0 ) | ( 90, 0, 0 ) | ( 1, 0.1, 1 ) |
 
-   ![](./_images/CameraView.png)
+   ![](./_images/CameraView.webp)
 
    <Aside>
    **マテリアルの設定**
@@ -64,7 +64,7 @@ Hierarchyで「Main Camera」を選択して、Game Viewを見ながらステー
 2. ドラッグ＆ドロップで登録
    Hierarchy にある「**Coin**」を、作成した **Prefabs フォルダの中へドラッグ＆ドロップ** します。
 
-   ![](./_images/Prefab-Coin.png)
+   ![](./_images/Prefab-Coin.webp)
 
 3. 確認
    Hierarchy の「Coin」の文字が **青色** に変わっていれば成功です！
@@ -93,14 +93,14 @@ Hierarchyで「Main Camera」を選択して、Game Viewを見ながらステー
 2. Inspector の一番上にある **Tag** をクリック。
 3. リストから「**Player**」を選択。
 
-![](./_images/Tag-Player.png)
+![](./_images/Tag-Player.webp)
 
 #### **手順2：コイン用のタグを新規作成**
 1. Hierarchy で **Coin** を選択。
 2. Inspector の **Tag ＞ Add Tag...** を選択。
 3. **＋** ボタンを押し、「**Coin**」と入力して **Save**。
 
-![](./_images/Tag-Coin.png)
+![](./_images/Tag-Coin.webp)
 
 #### **手順3：コインにタグを適用する**
 **※作成しただけでは適用されません！**
@@ -122,7 +122,7 @@ Hierarchyで「Main Camera」を選択して、Game Viewを見ながらステー
 2.  **Inspector Window** の **Box Collider** コンポーネントを探します。
 3.  **Is Trigger** にチェックを入れます。
 
-![](./_images/IsTrigger.png)
+![](./_images/IsTrigger.webp)
 
 <Aside type="tip" title="Is Triggerとは？">
 チェックを入れると物理的にぶつからなくなり、代わりに「重なった（通り抜けた）こと」をプログラムで検知できるようになります。
@@ -131,7 +131,7 @@ Hierarchyで「Main Camera」を選択して、Game Viewを見ながらステー
 #### **手順2：PlayerController スクリプトを更新する**
 **Scripts** フォルダ内の **PlayerController** を開き、中身を以下のコードに書き換えます。
 
-```
+```cs
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -196,4 +196,4 @@ public class PlayerController : MonoBehaviour
 
 これで、玉を転がしてコインに触れると、コインが消えてコンソールにスコアが表示されるようになります！
 
-{/* TODO: ここに動画を入れられない😭Play-2.avifを入れたかったです */}
+<img src={V_play2.src} alt="完成イメージ" />

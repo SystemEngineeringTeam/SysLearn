@@ -7,11 +7,11 @@ sidebar:
 
 import { Aside, Steps, Tabs, TabItem, LinkCard } from '@astrojs/starlight/components'
 import SyscatComment from "@/components/SyscatComment.astro"
-import PLAY1 from "./_movies/play-1.avif";
+import V_play1 from "./_videos/play-1.avif";
 
 ### 1. 球（Player）を作ってみよう
 
-次はプレイヤーになるGameObject「球（Sphere）」を作ります。先ほどのCubeとは違う、ショートカットメニューを使った方法で作ってみましょう。
+次はプレイヤーになるGameObject球（Sphere）を作ります。先ほどのCubeとは違う、ショートカットメニューを使った方法で作ってみましょう。
 
 <Steps>
 1. **Sphereの作成**
@@ -34,12 +34,12 @@ import PLAY1 from "./_movies/play-1.avif";
 
 <Steps>
 1. **Rigidbodyコンポーネントの追加**
-   ![](./_images/addComponent.png)
+   ![](./_images/addComponent.webp)
    
    球を選択し、Inspectorの一番下にある **Add Component** をクリックします。検索窓に「**Rigidbody**」と打ち込むか、**Physics ＞ Rigidbody** を選んでください。
 
 2. **重力の設定を確認**
-   ![](./_images/useGravity.png)
+   ![](./_images/useGravity.webp)
    
    追加された Rigidbody コンポーネント内の **Use Gravity** にチェックが入っていることを確認してください。これで球に重力が働くようになります。
 
@@ -54,12 +54,12 @@ import PLAY1 from "./_movies/play-1.avif";
 
 <Steps>
 1. **Scriptsフォルダの作成**
-   ![](./_images/create-Folder.png)
+   ![](./_images/create-Folder.webp)
    
    Project Window で **右クリック ＞ Create ＞ Folder** を選択し、名前を「**Scripts**」に変更します。
 
 2. **スクリプトファイルの作成**
-   ![](./_images/create-Cs.png)
+   ![](./_images/create-Cs.webp)
    
    作成した Scripts フォルダを開き、その中で **右クリック ＞ Create ＞ Scripting ＞ Empty C# Script** を選択します。名前は「**PlayerController**」に変更してください。
 
@@ -153,7 +153,7 @@ import PLAY1 from "./_movies/play-1.avif";
 
 3. **スクリプトのアタッチ**
    Hierarchyで「**Sphere**」をクリックしてInspectorを表示させます。作成したスクリプト（PlayerController）を、Inspectorの「Add Component」付近にドラッグ＆ドロップして合体させます。
-   ![](./_images/addCs.png)
+   ![](./_images/addCs.webp)
 
 4. **テストプレイ！**
    画面上部の **▶︎（プレイボタン）** を押して動かしてみましょう！十字キーやWASDキーで玉が転がれば成功です。
@@ -189,4 +189,3 @@ Scene画面で「この角度から見たい！」という視点を決めたら
 マテリアルも作って、壁を好きな色に変えてみてね！
 </SyscatComment>
 
-{/* TODO: 動画を入れられない😭Play-1.avifを入れたかったです */}
