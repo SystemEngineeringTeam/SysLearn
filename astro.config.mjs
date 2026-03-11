@@ -119,6 +119,18 @@ export default defineConfig({
               },
             ],
           },
+          {
+            label: "ゲーム制作",
+            link: "/textbook/game/unity/tutorial",
+            icon: "puzzle",
+            items: [
+              {
+                label: "Unity で玉転がしゲーム作るコース",
+                autogenerate: { directory: "textbook/game/unity" },
+              },
+            ],
+          },
+
         ]),
         starlightScrollToTop({
           threshold: 500,

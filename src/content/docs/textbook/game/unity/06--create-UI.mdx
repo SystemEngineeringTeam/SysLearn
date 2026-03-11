@@ -7,14 +7,14 @@ sidebar:
 
 import { Aside, Steps, Tabs, TabItem, LinkCard } from '@astrojs/starlight/components'
 import SyscatComment from "@/components/SyscatComment.astro"
-
+import V_play3 from "./_videos/play-3.avif";
 
 獲得したコインの数を画面にリアルタイムで表示します。
 
 #### **手順1：テキスト（TextMeshPro）を配置する**
 
 1.  **Hierarchy Window** で右クリックし、**UI ＞ Text - TextMeshPro** を選択します。
-    ![](./_images/Import-TMP.png)
+    ![](./_images/Import-TMP.webp)
 
 2.  もし「TMP Importer」というウィンドウが出てきたら、**Import TMP Essentials** ボタンと **Import TMP Examples & Extras** ボタンを押して少し待ちます。完了したら「×」で閉じてOKです。
 
@@ -24,7 +24,7 @@ import SyscatComment from "@/components/SyscatComment.astro"
 
 1.  作成された **Text (TMP)** を選択し、名前を「**ScoreText**」に変更します。
 2.  **Inspector Window** で以下のように設定を変更してみましょう。
-    ![](./_images/TMP-inspector.png)
+    ![](./_images/TMP-inspector.webp)
 
     -   **Rect Transform**: 画面の隅に配置します。（PosX: -300, PosY: 200 くらいにすると丁度良い位置になります）
     -   **Text Input**: 「Score: 0」と入力。
@@ -39,7 +39,7 @@ import SyscatComment from "@/components/SyscatComment.astro"
 
 **PlayerController** を開き、テキストを書き換えるための処理を追加します。
 
-```csharp
+```cs
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro; // --- 追加：テキストを扱うためのおまじない ---
@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
 <Aside type="caution" title="重要！">
 ここを忘れるとプログラムが「どのテキストを書き換えればいいの？」と迷子になり、エラーが出てしまいます。
 </Aside>
-![](./_images/Drop-TMP.png)
+![](./_images/Drop-TMP.webp)
 1.  **Hierarchy** で **Sphere（プレイヤー）** を選択します。
 2.  **Inspector** の一番下にある **Player Controller (Script)** コンポーネントを見ます。
 3.  **Score Text** という空欄ができているので、そこに Hierarchy にある **ScoreText** をドラッグ＆ドロップして合体させます。
@@ -122,4 +122,4 @@ public class PlayerController : MonoBehaviour
 ### 完成イメージ
 実際に動かすと、このようにコインが消えてスコアがリアルタイムで増えていきます！
 
-{/* TODO: 動画を入れられない😭Play-3.avifを入れたかったです */}
+<img src={V_play3.src} alt="完成イメージ" />

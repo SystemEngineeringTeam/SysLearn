@@ -7,10 +7,10 @@ sidebar:
 
 import { Aside, Steps, Tabs, TabItem, LinkCard } from '@astrojs/starlight/components'
 import SyscatComment from "@/components/SyscatComment.astro"
-import PLAY1 from "./_movies/play-1.avif";
+import V_play1 from "./_videos/play-1.avif";
 
 
-1.**球を作ってみよう**
+### 1. 球を作ってみよう
 次はプレイヤーになるゲームオブジェクト、球(Sphere)を作ります。先ほどのCubeとは違う方法で作ってみましょう。
 
  Hierarchy Windowで右クリックをして出てきたウィンドウから3DObject ＞ Cube を選択しましょう。
@@ -23,12 +23,12 @@ Yを0にしないのは、床に埋まらないようにするためです。
 
 またこちらの球にも先ほどと同じ手順でマテリアルを作ってつけてあげましょう。
 
-2.**球に重力をつけてみよう**
+### 2. 球に重力をつけてみよう
 それでは次にオブジェクトに物理法則を起こす「Rigidbody」を追加します！
-![](./_images/addComponent.png)
+![](./_images/addComponent.webp)
 球を選択し、Inspectorの一番下にあるAdd Componentをクリックし、出てきた選択肢から Physics ＞ Rigidbodyを選んでください。見つからない場合は直接「Rigidbody」と打ち込んでもOKです！
 
-![](./_images/useGravity.png)
+![](./_images/useGravity.webp)
 
 「Rigidbody」を追加できたらこの「Use Gravity」と書いてあるところにチェックを入れてください。
 これでこの球に重力が働くようになります。
@@ -37,7 +37,7 @@ Yを0にしないのは、床に埋まらないようにするためです。
 たったこれだけの設定でオブジェクトに自然な動きがつくのすごいよね〜
  </SyscatComment>
 
-3.**プレイヤーを操作するためのスクリプト(C#)を作ってみよう**
+### 3. プレイヤーを操作するためのスクリプト(C#)を作ってみよう
 ここまでプログラミングっぽいことがひとつも出てきていませんでしたがとうとうコードを書きます。
 といってもC#を使いこなせる人は少ないと思うので本資料では全てコピペで済むようにしています。
 
@@ -45,18 +45,18 @@ Yを0にしないのは、床に埋まらないようにするためです。
 コピペOKだけど最低限コメントを読んで理解できるようにしておいた方が自分のためになるよ〜
  </SyscatComment>
 
-![](./_images/create-Folder.png)
+![](./_images/create-Folder.webp)
 
 ではまず、Project Windowで右クリックをして、**Create＞Folder**を選択します。すると「New Folder」というフォルダがProject Windowにできたと思うので名前を「**Scripts**」に変更しましょう。
 
-![](./_images/create-Cs.png)
+![](./_images/create-Cs.webp)
 
 次にScriptsフォルダを開いてその中で**右クリック＞Create＞Scripting＞Empty C# Script**を選択して空のC#スクリプトを制作しましょう。
 スクリプトの名前は「PlayerController」に変更してください。
 ダブルクリックするとスクリプトがダウンロード時に設定したエディターで開かれると思います。
 
 ではそこに書いてあるコードを全て消して、下記に置き換えてみてください。
-```
+```cs
 using UnityEngine;
 using UnityEngine.InputSystem; // 
 
@@ -119,19 +119,22 @@ public class PlayerController : MonoBehaviour
 
 コードを編集して保存（Ctrl+S または Cmd+S）できたら、Unityの画面に戻りましょう。変更を反映するための短いロードが入ります。
 
-1. **スクリプトのアタッチ**
-   Hierarchyで「**Sphere**」をクリックしてInspectorを表示させます。作成したスクリプトを「Add Component」のあたりへドラッグ＆ドロップします。
-   ![](./_images/addCs.png)
+<Steps>
 
-2. **テストプレイ！**
+1. スクリプトのアタッチ\
+   Hierarchyで「**Sphere**」をクリックしてInspectorを表示させます。作成したスクリプトを「Add Component」のあたりへドラッグ＆ドロップします。
+   ![](./_images/addCs.webp)
+
+2. テストプレイ！\
    画面上部の **▶︎（プレイボタン）** を押して、実際に動かしてみましょう！
    
-   {/* ここに動画置きたい */}
+   <img src={V_play1.src} alt="完成イメージ" />
 
-3. **速さを調整する**
+
+3. 速さを調整する\
    十字キーやWASDキーで玉が転がります。速すぎると感じたら、SphereのInspectorにある「**Speed**」の値を **1** に書き換えてみてください。プログラムを触らなくても動きが変わるはずです！
 
----
+</Steps>
 
 ### 5. ステージに「壁」を作ろう
 
@@ -157,4 +160,3 @@ Scene画面で「この角度から見たい！」という視点を決めたら
 マテリアルも作って、壁を好きな色に変えてみてね！
 </SyscatComment>
 
-{/* TODO: 動画を入れられない😭Play-1.avifを入れたかったです */}
