@@ -1,0 +1,96 @@
+---
+title: 環境構築
+description: このチャプターでは、快適に XCode/VSCode で快適な C 言語を書くための秘訣を教えます。
+slug: textbook/web/for-hackathons/setup
+
+---
+
+import { Aside } from "@astrojs/starlight/components";
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+### Node.js, npmのインストール
+
+1. [Node.js](https://nodejs.org/)の公式サイトにアクセスします。
+2. 画像のボタンをクリックすると、お使いのOSに適したLTS版インストールできるインストーラ(.pkg,.msi)がインストールされます。
+<img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/2f057e55-54a7-4316-8c72-47b06026f254.png"></img>
+<Tabs>
+<TabItem label="Mac">
+   3. インストーラ(.pkg)をクリックすると以下の画像のウィンドウが現れるので順番にインストール処理を行います。
+   <img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/2b8d7d51-7c5d-47da-b0bc-29755c173753.png"></img>
+   <img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/2b8d7d51-7c5d-47da-b0bc-29755c173753.png"></img>
+   <img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/0186f00d-6dce-4cd5-8b3d-9f559b382259.png"></img>
+   <img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/0f6d798a-4be7-4b3a-8056-5949524efc15.png"></img>
+   <img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/f6a46775-7397-4230-b48b-cb1848002d2f.png"></img>
+   <img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/286805e8-d0d9-40c3-9a5a-120e5bd91016.png"></img>
+</TabItem>
+
+<TabItem label="Windows">
+   3. インストーラ(.msi)をクリックすると以下の画像のウィンドウが現れるので順番にインストール処理を行います。
+   <img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/37453411-22ae-4d4a-ba73-d3e162ab6877.png"></img>
+   <img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/2807d2ca-fa6b-4b04-b0e1-bab3e0da080b.png"></img>
+   <img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/ace86c97-5f8b-4981-8f52-23b6e96aedc0.png"></img>
+   <img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/ce980dc2-14a1-498b-9cec-32e1c5f3ccc4.png"></img>
+   <img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/cf2f4f3a-0406-41ca-9a41-eedc9bb14d03.png"></img>
+   <img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/a4aafa1c-3ae8-41f7-9dd2-7639f881235d.png"></img>
+   <img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/60e67b2a-011c-4800-9435-08b6214f2dc5.png"></img>
+   <img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/c4953a86-52e6-4d06-8796-b8df25e5834e.png"></img>
+</TabItem>
+
+</Tabs>
+
+4. インストール後、以下のコマンドでバージョンを確認できれば正常にインストールされています。表示されているバージョンが画像と同じでなくても大丈夫です。
+
+   ```sh
+   node -v
+   npm -v
+   ```
+
+<img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/03004132-64ef-426c-9a53-54b4f59daa20.png
+"></img>
+
+### Reactプロジェクトのスタート
+
+1. ターミナルまたはコマンドプロンプトを開き、以下のコマンドを実行します。\
+   これにより、Viteを使用して新しいReactプロジェクトが作成されます。\
+   ここでは、プロジェクト名を`my-app`としていますが、任意の名前に変更できます。
+
+   ```sh
+   npm create vite@latest my-app
+   ```
+
+<img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/80d06c22-21b6-4a91-befe-226afb96a3bf.png"></img>
+
+  1. Reactを選択します。
+<img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/35e2167f-d785-48b5-bb6c-d170c284c888.png"></img>
+
+  2. JavaScriptを選択します。
+<img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/44e77390-48e8-44dc-bfff-936a0740dfb8.png"></img>
+
+  3. Doneが表示されたら完了です。
+<img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/12d514ad-5f29-47dd-b378-aaee65c89c5d.png"></img>
+
+2. 作成したプロジェクトのディレクトリに移動します。
+{/* タブ選択したい */}
+
+   ```sh
+   cd my-app
+   ```
+<img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/1bfb49c8-74bc-4062-be77-701fcdaa1206.png"></img>
+
+3. 依存関係をインストールします。
+
+   ```sh
+   npm install
+   ```
+<img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/197c208f-b7f6-4ba2-9a52-b693dea05562.png"></img>
+<img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/5187855f-d6b1-4166-a7a8-9ccedf11558b.png"></img>
+
+4. 実行すると、開発サーバーが立ち上がり、`➜  Local:   http://localhost:5173/`の`http://http://localhost:⚪︎⚪︎⚪︎⚪︎`にブラウザでアクセスすると、Reactアプリが確認できます。
+   ```sh
+   npm run dev
+   ```
+<img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/4627b189-7c69-4c36-b5a4-d86493943d90.png"></img>
+<img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/1017ea65-362f-406c-9fc8-baf21beccab0.png"></img>
+<img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/854fe47e-d7fb-4583-a114-3942f98da014.png"></img>
+
+---

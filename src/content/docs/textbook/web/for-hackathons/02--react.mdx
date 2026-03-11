@@ -1,0 +1,174 @@
+---
+title: React
+description: このチャプターでは、快適に XCode/VSCode で快適な C 言語を書くための秘訣を教えます。
+slug: textbook/web/for-hackathons/react
+
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+### Reactとは  
+
+**React** は、Facebook（現Meta）によって開発された **JavaScriptライブラリ** で、UIを効率的に構築するために使われます。  
+
+#### Reactの特徴  
+
+1. **コンポーネントベース**  
+   - UIを小さな **コンポーネント** に分けて作成できる。  
+   - それぞれのコンポーネントは独立しており、再利用が可能。
+<img width="480" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/3530d227-197f-41c7-9043-d21a9d776d63.png"></img>
+
+2. **宣言的UI**  
+   - UIの状態を直接操作するのではなく、データの変化に応じて自動で更新される。  
+
+3. **仮想DOM（Virtual DOM）**  
+   - リアルDOMを直接操作するのではなく、**仮想的なDOM** を使って差分のみを更新するため、高速に動作する。  
+<img width="600" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/dc7ab56b-a356-4dd9-a860-5c1bebe46f61.png"></img>
+
+4. **状態管理（State）**  
+   - コンポーネントの状態（state）を管理し、動的なUIを実現できる。  
+
+5. **エコシステムが充実**  
+   - `React Router`（ルーティング）や `Redux`（状態管理）など、多くのライブラリがある。  
+
+---
+
+### 命令的 UI / 宣言的 UI  
+
+以下のようなものを実装するとする。
+<img width="600" src="https://img.esa.io/uploads/production/attachments/19973/2025/03/26/148415/d0532148-5148-410a-a0f8-5020c6b86037.gif"></img>
+
+#### 1. 命令的 UI（Imperative UI）  
+従来の JavaScript や jQuery のように、手続き的に UI を変更する方法。  
+**UIを更新する手順を細かく記述** しなければならず、コードが複雑になりやすい。  
+
+**例: jQueryを使った命令的UI**  
+```js
+const button = document.getElementById("myButton");
+button.addEventListener("click", function () {
+  document.getElementById("message").innerText = "ボタンがクリックされました！";
+});
+```
+上記のコードでは、ボタンがクリックされるたびに `document.getElementById()` を使って、DOMを直接操作している。  
+
+#### 2. 宣言的 UI（Declarative UI）  
+Reactのように、**データの変化に応じてUIを自動更新する方法**。  
+UIがどのように見えるべきかを **宣言的に記述** し、Reactが適切にレンダリングを行う。  
+
+**例: Reactを使った宣言的UI**  
+```jsx
+import { useState } from 'react';
+
+function App() {
+  const [message, setMessage] = useState("");
+
+  return (
+    <div>
+      <button onClick={() => setMessage("ボタンがクリックされました！")}>
+        クリック
+      </button>
+      <p>{message}</p>
+    </div>
+  );
+}
+
+export default App;
+```
+このコードでは、ボタンがクリックされると `message` の状態が変化し、それに応じて自動的に `<p>{message}</p>` の内容が更新される。  
+
+**Reactのポイント:**  
+- `useState` を使って **状態（state）** を管理  
+- UIの変更をReactに任せるため、**命令的なDOM操作が不要**  
+
+**Reactの宣言的UIのメリット:**  
+- コードがシンプルで可読性が高い  
+- UIの更新を意識せずに済むため、バグが減る  
+- 状態の変化に応じたUIの自動更新が可能  
+
+---
+
+### コンポーネントのインポート  
+
+Reactの基本は **コンポーネント** であり、コンポーネントをインポートすることで再利用可能なUIを作成できる。  
+
+#### **1. コンポーネントの作成**  
+`MyComponent.js` という新しいファイルを作成し、Reactコンポーネントを定義する。  
+
+```jsx
+function MyComponent() {
+  return <h1>これは MyComponent です！</h1>;
+}
+
+export default MyComponent;
+```
+
+#### **2. コンポーネントのインポート**  
+`App.js` で `MyComponent` をインポートして使用する。  
+
+```jsx
+import MyComponent from './MyComponent';
+
+function App() {
+  return (
+    <div>
+      <MyComponent />
+    </div>
+  );
+}
+
+export default App;
+```
+
+#### **3. デフォルトエクスポートと名前付きエクスポート**  
+
+**デフォルトエクスポート（default export）**  
+- 1つのファイルに1つのエクスポートを持つ。  
+- インポート時に任意の名前を使える。  
+
+```jsx
+// MyComponent.js
+export default function MyComponent() {
+  return <h1>デフォルトエクスポートのコンポーネント</h1>;
+}
+```
+```jsx
+// App.js
+import MyComponent from './MyComponent';
+```
+
+**名前付きエクスポート（named export）**  
+- 1つのファイルに複数のエクスポートが可能。  
+- インポート時に **`{}` を使う必要がある**。  
+
+```jsx
+// MyComponent.js
+export function FirstComponent() {
+  return <h1>最初のコンポーネント</h1>;
+}
+
+export function SecondComponent() {
+  return <h1>2番目のコンポーネント</h1>;
+}
+```
+```jsx
+// App.js
+import { FirstComponent, SecondComponent } from './MyComponent';
+
+function App() {
+  return (
+    <div>
+      <FirstComponent />
+      <SecondComponent />
+    </div>
+  );
+}
+
+export default App;
+```
+
+**デフォルトエクスポートと名前付きエクスポートの違い**  
+| 項目 | デフォルトエクスポート | 名前付きエクスポート |
+|------|------------------|------------------|
+| エクスポートの数 | 1つのファイルに1つだけ | 1つのファイルに複数可能 |
+| インポート時の記述 | `import 任意の名前 from './ファイル名'` | `import { 名前 } from './ファイル名'` |
+| インポート名の変更 | **可能** | **不可（指定した名前と一致する必要あり）** |
