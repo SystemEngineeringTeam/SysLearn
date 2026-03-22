@@ -1,0 +1,265 @@
+---
+title : 文字と文字列
+slug: http://localhost:4321/textbook/c-lang/beginner/character-string
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Card } from '@astrojs/starlight/components';
+
+
+一連の文字の並びを表すものを文字列と呼びます。
+そんな文字列の基本を学んでいきましょう。
+
+
+## 文字列リテラル
+---
+
+`"hoge"`のような、文字の並びを二重引用符`"`で囲んだものを**文字列リテラル**（string literal）と呼びます。
+
+文字列リテラルの末尾には、**ヌル文字**（null character）という値`0`（８進拡張表記では`\0`）の文字が付いています。
+そのため、`"hoge"`のような見かけ上４文字の文字列リテラルは、ヌル文字を含めた５文字分の記憶域を占有していることに注意しましょう。
+また、見かけ上０文字の文字列リテラル`""`も同様に、ヌル文字を含めた１文字分の記憶域を占有しています。
+
+
+## 文字列
+---
+
+**文字列**（string）とは、複数の文字を並べたデータのようなものです。
+
+文字列をオブジェクトとして格納する場合、要素型が`char`である配列を利用します。
+
+```c
+// 配列の宣言
+char str[6];
+```
+```c
+// 初期化をともなう配列の宣言
+char str[] = "abcde";  // {'a', 'b', 'c', 'd', 'e', '\0'} と同じ
+```
+
+<Aside type="note" title="文字列">
+- 文字列は要素型が`char`である配列に格納
+- 文字列の末尾にはヌル文字が存在
+</Aside>
+
+
+## 文字および文字列の入出力
+---
+
+単一の文字の表示のために使う関数が`putchar`関数になります。
+実引数として、`()`の中には、表示すべき文字を与える必要があります。
+
+<Aside type="note" title="文字の出力">
+```c
+putchar('A');  // 文字 `A` を出力
+```
+```c
+putchar("A");  // エラー: 文字列 "A" を putchar 関数に渡してはいけない
+printf('A');   // エラー: 文字 'A' を printf 関数に渡してはいけない
+```
+</Aside>
+
+文字列の出力（印字）は次のようにして実現します。
+
+```c title="list17_01.c"
+#include <stdio.h>
+
+int main(void) {
+    // "hoge"
+    char str[] = {'h', 'o', 'g', 'e', '\0'};
+    
+    // 文字列の出力（%s）
+    printf("str: %s\n", str);
+    // 文字の出力（%c）
+    printf("str[0]: %c\n", str[0]);
+    // putchar を用いた文字の出力
+    putchar(str[1]);
+    
+    putchar('\n'); // 改行文字
+    
+    return 0;
+}
+```
+
+**実行結果**
+```
+str: hoge
+str[0]: h
+o
+```
+
+また、文字列の入力は次のようにして実現します。
+
+```c
+char str[128];
+
+// 文字列の入力（%s）
+scanf("%s", str);
+```
+```c
+// 文字の入力（%c）
+scanf("%c", &str[0]);
+```
+
+
+## 文字列の代入
+---
+
+代入演算子`=`による文字列の代入ができないことに注意しましょう。
+
+```c
+char str[6];
+str = "abcde";  // エラー
+```
+
+面倒ではありますが、１文字ごとに代入するようにしましょう。
+なお、１文字を扱う場合は、文字を一重引用符`'`で囲みます。
+
+```c
+char str[6];
+str[0] = 'a';
+str[1] = 'b';
+str[2] = 'c';
+str[3] = 'd';
+str[4] = 'e';
+str[5] = '\0';
+```
+
+
+<Card>
+### 練習問題1
+
+以下の文字列リテラルについて、空白（`' '`）を除いた文字数をカウントして出力してください。
+
+```
+"the quick brown fox jumps over the lazy dog"
+```
+
+**実行結果**
+```
+文字数: 35
+```
+ファイル名: `17_issue1.c`
+<details>
+<summary>ヒント（文字列リテラルの走査）</summary>
+<Aside type="tip">
+文字列の長さがわからない場合は、`for`文を用いて`'\0'`が現れるまで繰返し処理してみましょう。
+```c
+for (int i = 0; str[i] != '\0'; i++) {
+    // TODO
+}
+```
+</Aside>
+</details>
+<details>
+<summary>模範解答</summary>
+```c title="17_issue1.c"
+#include <stdio.h>
+
+int main(void) {
+    char str[] = "the quick brown fox jumps over the lazy dog";
+    
+    // 文字数
+    int cnt = 0;
+    
+    // ヌル文字になるまで文字列リテラルを走査
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] != ' ') {
+            // 空白ではない場合
+            cnt++;
+        }
+    }
+    
+    printf("文字数: %d\n", cnt);
+    
+    return 0;
+}
+```
+</details>
+</Card>
+
+
+<Card>
+### 練習問題2
+
+キーボードから入力された文字列の文字数をカウントしてください。
+また、入力された文字列を逆順に出力してください。
+
+**実行結果**
+```
+str? nyancat
+文字数: 7
+tacnayn
+```
+ファイル名: `17_issue2.c`
+<details>
+<summary>ヒント（文字列の入力）</summary>
+<Aside type="tip">
+文字列の入力は、以下の方法によって実現されました。
+```c
+char str[128];
+
+// 文字列の入力（%s）
+printf("str? ");
+scanf("%s", str);
+```
+</Aside>
+</details>
+<details>
+<summary>ヒント（文字列を逆順に出力）</summary>
+<Aside type="tip">
+文字列を逆順に出力するには、いくつかの方法があります。
+今回は、文字列全体の文字数を用いる方法を紹介します。
+
+練習問題１を応用して、空白を含む文字列全体の文字数をカウントしましょう。
+
+```c
+int len = 0;  // 文字数
+
+// 文字数のカウント
+for (int i = 0; str[i] != '\0'; i++) {
+    len++;
+}
+```
+
+全体の文字数が分かったら、`for`文によって逆順に文字列を走査して、一文字ずつ出力してみましょう。
+
+```c
+// 逆順に印字
+for (int i = len - 1; i >= 0; i--) {
+    // TODO
+}
+```
+</Aside>
+</details>
+<details>
+<summary>模範解答</summary>
+```c title="17_issue2.c"
+#include <stdio.h>
+
+int main(void) {
+    char str[128];
+    int len = 0;  // 文字数
+    
+    // 文字列の入力（%s）
+    printf("str? ");
+    scanf("%s", str);
+    
+    // 文字数のカウント
+    for (int i = 0; str[i] != '\0'; i++) {
+        len++;
+    }
+    printf("文字数: %d\n", len);
+    
+    // 逆順に印字
+    for (int i = len - 1; i >= 0; i--) {
+        putchar(str[i]);
+    }
+    putchar('\n');  // 改行
+    
+    return 0;
+}
+```
+</details>
+</Card>
