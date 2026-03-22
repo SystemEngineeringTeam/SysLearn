@@ -1,0 +1,214 @@
+---
+title : 入力
+description: C言語の入力について、scanf関数 の使い方、色んな型の入力を解説する。
+slug: textbook/c-lang/beginner/input
+---
+
+import { Aside, Card } from "@astrojs/starlight/components";
+
+## 入力
+
+---
+
+C言語におけるキーボード入力の基本は、`scanf`関数を使って行う。
+
+### `scanf`関数
+
+`scanf`関数は、標準入力（キーボード）からデータを受け取り、それを指定した変数に格納する関数である。基本的な構文は以下の通り。
+
+```c
+scanf("フォーマット指定子", &変数);
+```
+
+例えば、整数を入力する場合は次のように書く。
+
+```c
+int num;
+scanf("%d", &num);
+```
+
+このコードの流れは以下のようになる。
+
+1. `scanf`関数が実行されると、プログラムは標準入力からのデータを待機する。
+1. キーボードで数値を入力し、`Enter`を押す。
+1. 入力された数値が変数`num`に格納される。
+
+<Aside type="caution">
+
+`&`を付けずに次のように書くと、エラーが発生する。
+
+```c 
+int num;
+scanf("%d", num);  // エラー：numに&が付いていない
+```
+
+</Aside>
+
+## 色んな型の入力
+
+---
+
+C言語では、異なるデータ型ごとに適切なフォーマット指定子を使って入力を受け取る。
+
+| データ型       | フォーマット指定子 | 例                     |
+|---------------|----------------|----------------------|
+| `int`           | `%d`             | `scanf("%d", &num);`  |
+| `float`         | `%f`             | `scanf("%f", &num);`  |
+| `double`        | `%lf`            | `scanf("%lf", &num);` |
+| `char`(１文字)    | `%c`             | `scanf("%c", &ch);`   |
+| `char`(文字列)   | `%s`             | `scanf("%s", str);`   |
+
+### 整数の入力
+
+```c
+int i;
+scanf("%d", &i);
+printf("入力された整数: %d\n", i);
+```
+
+**入力例**
+
+```sh
+42
+```
+
+**実行結果**
+
+```sh
+入力された整数: 42
+```
+
+### 小数の入力
+
+```c
+float d;
+scanf("%f", &d);
+printf("入力された小数: %f\n", d);
+```
+
+**入力例**
+
+```sh
+3.14
+```
+
+**実行結果**
+
+```sh
+入力された小数: 3.140000
+```
+
+### 文字の入力
+
+```c
+char c;
+scanf("%c", &c);
+printf("入力された文字: %c\n", c);
+```
+
+**入力例**
+
+```sh
+A
+```
+
+**実行結果**
+
+```sh
+入力された文字: A
+```
+
+### 複数の入力
+
+`scanf`関数は複数の値を一度に入力でき、入力は`space`で区切られる。
+
+```c
+int x;
+float y;
+char z;
+scanf("%d %f %c", &x, &y, &z);
+printf("x: %d, y: %f, z: %c\n", x, y, z);
+```
+
+**入力例**
+
+```sh
+10 3.14 A
+```
+
+**実行結果**
+
+```sh
+x: 10, y: 3.140000, z: A
+```
+
+<Card>
+### 練習問題1
+`int`型の変数`x`に数値を入力し、`x`を2乗した結果を出力するプログラムを書いてください。  
+
+**入力例**
+```sh
+3
+```
+**実行結果**
+```sh
+x^2 = 9
+```
+ファイル名: `04_issue1.c`
+<details>
+<summary>ヒント</summary>
+<Aside type="tip">
+- `scanf("%d", &x);` を使うと、キーボードから `x` の値を入力できる。
+- `x`の2乗を求めるには、`x * x` と書くとよい。
+</Aside>
+</details>
+
+<details>
+<summary>模範解答</summary>
+```c title="04_issue1.c"
+#include <stdio.h>
+
+int main(void) {
+    int x;
+    scanf("%d", &x);
+    printf("x^2 = %d\n", x*x);
+    return 0;
+}
+```
+</details>
+</Card>
+
+<Card>
+### 練習問題2
+`int`型の変数`x`、`y`に数値を入力し、`x`と`y`の差を出力するプログラムを書いてください。  
+
+**入力例**
+```sh
+5 2
+```
+**実行結果**
+```sh
+5 - 2 = 3
+```
+ファイル名: `04_issue2.c`
+<details>
+<summary>ヒント</summary>
+<Aside type="tip">
+`scanf("%d %d", &x, &y);` を使うと、`x` と `y` を1行で入力できる。
+</Aside>
+</details>
+
+<details>
+<summary>模範解答</summary>
+```c title="04_issue2.c"
+#include <stdio.h>
+
+int main(void) {
+    int x, y;
+    scanf("%d %d", &x, &y);
+    printf("%d - %d = %d\n", x, y, x - y);
+    return 0;
+}
+```
+</details>
+</Card>
