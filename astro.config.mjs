@@ -149,6 +149,9 @@ export default defineConfig({
       ],
     }),
   ],
+  redirects: {
+    '/setups/unity-6.0': '/setups/unity-6',
+  },
   site: "https://learn.sysken.net",
   image: {
     remotePatterns: [{ protocol: "https" }, { protocol: "http" }],
