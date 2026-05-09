@@ -1,0 +1,316 @@
+---
+title: for文
+description: for文について学びます!
+slug: textbook/c-lang/beginner/for
+---
+
+import { Aside } from "@astrojs/starlight/components";
+// import Quize from "@/components/astro/Quize.astro";
+// import Anser from "@/components/astro/Anser.astro";
+
+## for
+---
+for文は、繰り返し処理を行うための構文である。  
+繰り返し処理は、書き間違えが無限ループの原因になるので注意が必要である。  
+
+以下のように記述する。  
+
+```c
+for (初期化; 条件式; 更新式) {
+        // 条件式が真の場合に実行される処理
+    }
+```
+
+基本的な構造は、以下の通りである。  
+- 初期化には、ループ変数の初期値を設定する。  
+- 条件式には、真の場合にループを繰り返す条件を設定する。  
+- 更新式には、ループ変数の値を更新する処理を記述する。  
+
+以下は、1から10までの数字を表示するプログラムである。
+
+```c
+#include <stdio.h>
+int main(void) {
+    int i;
+    for (i = 1; i <= 10; i++) {
+        printf("%d\n", i);
+    }
+    return 0;
+}
+```
+<details>
+  <summary>実行結果</summary>
+```
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+```
+</details>
+
+フローチャートで表すと以下のようになる。
+![フローチャート](/fc_1_10_for.drawio.svg)
+
+
+<Aside type="note">
+ <details>
+  <summary>for文の初期値, 条件式, 更新式は省略だが... </summary>
+    初期化,条件式,更新式を省略するならば、while文を用いたほうがわかりやすい。
+
+    ```c
+    #include <stdio.h>
+    int main(void){
+        for(int i = 0;;){
+            printf("%d",i);
+            break;
+        }
+    }
+    ```
+    実行結果
+    ```
+    0
+    ```
+ </details>
+</Aside>
+
+<Aside type="tip">
+++をインクリメント演算子,--をデクリメント演算子と呼ぶ。  
+これらの演算子は1ずつ増減するコードを省略して書くことができる。 
+
+| 演算子  | 実際の動作 |
+|:-------|:--------|
+| `i++`   | `i = i + 1` |
+| `i--`   | `i = i - 1` |
+| `a = i++` | `i = i + 1` <br></br> `a = i` |
+| `a = ++i` | `a = i` <br></br> `i = i + 1` |
+| `a = i--` | `i = i - 1` <br></br> `a = i` |
+| `a = --i` | `a = i` <br></br> `i = i - 1` |
+
+演算子を変数の前に書くか後に書くかで、動作が異なることに注意しよう。 
+a = i++ と a = ++i では、aの値が異なる。  
+
+
+</Aside>
+
+### 練習問題
+
+1から5までの数字を順番に表示するよう、`for`文を使って出力部分を完成させてください。
+
+```c
+#include <stdio.h>
+
+int main() {
+    // ここにfor文を使って1から5まで表示してください
+
+    return 0;
+}
+```
+#### 実行結果
+```
+1
+2
+3
+4
+5
+```
+<Aside type="tip">
+ <details> `for`文の基本構文は `for (初期化; 条件; 増分)` です。<br /> 例えば `for (int i = 1; i <= 5; i++)` のように書きます。 </details> 
+</Aside> 
+<details> 
+ <summary>模範解答</summary>
+```c
+#include <stdio.h>
+
+int main() {
+    for (int i = 1; i <= 5; i++) {
+        printf("%d\n", i);
+    }
+
+    return 0;
+}
+```
+</details>
+
+## 複合代入演算子
+---
+
+複合代入演算子は、代入演算子と算術演算子を組み合わせた演算子である。  
+代入と演算のコードを省略して記述できる。
+
+| 演算子 | 実際の動作 |
+|:-------|:--------|
+| `a += b` | `a = a + b` |
+| `a -= b` | `a = a - b` |
+| `a *= b` | `a = a * b` |
+| `a /= b` | `a = a / b` |
+| `a %= b` | `a = a % b` |
+
+## for文のネスト
+---
+
+ループの中にループを記述する構造のことをネスト(入れ子)構造と呼ぶ。  
+以下は、九九の表を表示するプログラムである。  
+
+```c
+#include <stdio.h>
+int main(void) {
+    int i, j;
+    for (i = 1; i <= 9; i++) {
+        for (j = 1; j <= 9; j++) {
+            printf("%d * %d = %d\n", i, j, i * j);
+        }
+    }
+    return 0;
+}
+```
+
+<details>
+  <summary>実行結果</summary>
+```
+1 * 1 = 1
+1 * 2 = 2
+1 * 3 = 3
+1 * 4 = 4
+~~~
+省略
+~~~
+9 * 8 = 72
+9 * 9 = 81
+```
+</details>
+
+### 練習問題
+
+二重の`for`文を使って、3×3の掛け算表を表示してください。
+
+```c
+#include <stdio.h>
+
+int main() {
+    // ここにfor文のネストを書いてください
+
+    return 0;
+}
+```
+#### 実行結果
+```
+1 2 3 
+2 4 6 
+3 6 9 
+```
+<Aside type="tip">
+ <details> ネストしたfor文の外側が行、内側が列を表します。カウント用の変数を使って連続した数字を表示しましょう。 </details> 
+ </Aside>
+<details> 
+ <summary>模範解答</summary>
+```c
+ #include <stdio.h>
+
+int main() {
+    int i, j, num = 1;
+
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            printf("%d ", num);
+            num++;
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
+```
+</details>
+
+
+フローチャートで表すと以下のようになる。
+![フローチャート](/fc_99_for.drawio.svg)
+
+## 理解度チェック
+---
+
+{/* <Quize>
+{
+for文を使用して、1から10までの合計を求め、その値を出力しなさい。
+}
+</Quize>
+
+<Anser ans={
+```c
+#include <stdio.h>
+
+int main(void) {
+    int sum = 0;
+
+    // 1 から 10 までの合計を求める
+    for (int i = 1; i <= 10; i++) {
+        sum += i;  // sum = sum + i
+    }
+
+    // 結果を表示
+    printf("1 から 10 までの合計: %d\n",sum);
+
+    return 0;
+}
+```    
+}
+}>
+{+= は合計を求めるときに便利}
+</Anser> */}
+
+{/* <Quize>
+{
+for文を2つ使用して、ユーザーが指定した行数 N で 右上がりの三角形 を * で描画しなさい。  
+実行例
+```
+行数を入力してください: 5
+* 
+* * 
+* * * 
+* * * * 
+* * * * * 
+```
+}
+</Quize>
+
+<Anser ans={
+```c
+#include <stdio.h>
+
+int main(void) {
+    int N;
+
+    // ユーザーに行数を入力してもらう
+    printf("行数を入力してください: ");
+    scanf("%d", &N);
+
+    // 三角形を描画
+    for (int i = 1; i <= N; i++) {   // 行のループ
+        for (int j = 1; j <= i; j++) { // 列のループ
+            printf("*");
+        }
+        printf("\n");  // 1行描画したら改行
+    }
+
+    return 0;
+}
+```
+}>
+{j <= i を条件式にすると、iの値が1からNまで増えるごとに、*の数が増やすことができる}
+</Anser> */}
+
+
+
+
+
+
+
+
+
+
